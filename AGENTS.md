@@ -4,3 +4,7 @@
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
+
+# Brand Typography Rule
+
+Never introduce a new font family. Use the global Ultron typography tokens. Funnel Display is the only approved primary brand typeface and must be used across all public pages, admin pages, reusable components and future CMS content.

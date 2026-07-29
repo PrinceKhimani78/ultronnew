@@ -60,6 +60,23 @@ confident typography, one accent colour used sparingly. Gold is punctuation, not
 decoration — it marks the single most important word in a sentence and nothing
 else.
 
+### Brand Typography System
+
+Funnel Display is the official Ultron Financial brand typeface and must be used across all public pages, admin pages, reusable components and future CMS content.
+
+- **Official Typeface**: Funnel Display (`next/font/google` loaded with `font-display: swap` and fallback stack `"Funnel Display", Arial, Helvetica, sans-serif`).
+- **Supported Font Weights**:
+  - `Regular (400)` — Body text, long-form reading, comfortable line height.
+  - `Medium (500)` — Navigation, buttons, labels, captions, form controls.
+  - `Semibold (600)` — Section headings, subheadings, primary buttons.
+  - `Bold (700)` — Display headings, hero titles, primary statistics.
+- **Global CSS Variables**:
+  - `--font-brand`: `var(--font-funnel-display), "Funnel Display", Arial, Helvetica, sans-serif`
+  - `--font-sans`: `var(--font-brand)`
+  - `--font-display`: `var(--font-brand)`
+  - `--font-body`: `var(--font-brand)`
+  - `--font-heading`: `var(--font-brand)`
+
 **Voice:** plain English, short sentences, no jargon without immediately paying
 it off. Never "leverage", "solutions", "seamless", "cutting-edge". We say what
 we do: _"We open doors to UAE corporate banking."_

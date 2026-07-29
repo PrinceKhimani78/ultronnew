@@ -8,20 +8,15 @@ import { env } from '@/lib/env';
 import './globals.css';
 
 /**
- * Funnel Display drives the entire project typography system.
+ * Funnel Display is the official Ultron Financial brand typeface.
+ * It is loaded via next/font/google with supported weights: 400, 500, 600, 700.
  */
-const display = Funnel_Display({
-  variable: '--font-display-family',
+const funnelDisplay = Funnel_Display({
+  variable: '--font-funnel-display',
   subsets: ['latin'],
   display: 'swap',
   weight: ['400', '500', '600', '700'],
-});
-
-const sans = Funnel_Display({
-  variable: '--font-sans-family',
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  fallback: ['Arial', 'Helvetica', 'sans-serif'],
 });
 
 export const metadata: Metadata = {
@@ -58,7 +53,7 @@ export default function RootLayout({
        * animating to the top instead of jumping.
        */
       data-scroll-behavior="smooth"
-      className={`${display.variable} ${sans.variable} h-full antialiased`}
+      className={`${funnelDisplay.variable} h-full antialiased`}
     >
       <head>
         {/*

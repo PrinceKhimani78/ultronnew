@@ -52,19 +52,14 @@
   --color-line: rgb(3 85 81 / 0.12);
 
   /* ── Type ──────────────────────────────────────────────────────────────
-     Two families. Display carries the brand; sans carries everything a
-     visitor actually has to read at length.
-
-     The `*-family` variables are injected by `next/font` in the root layout.
-     They are deliberately named differently from the tokens that consume them:
-     both land on <html> with equal specificity, so a same-named alias would be
-     a self-reference whose resolution depends on stylesheet order — a cycle,
-     and a silently unstyled page, if the order ever flipped. */
-  --font-display:
-    var(--font-display-family), ui-sans-serif, system-ui, sans-serif;
-  --font-sans:
-    var(--font-display-family), var(--font-sans-family), ui-sans-serif,
-    system-ui, sans-serif;
+     Funnel Display is the official Ultron Financial brand typeface.
+     All global font tokens resolve to Funnel Display with safe fallbacks. */
+  --font-brand:
+    var(--font-funnel-display), 'Funnel Display', Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-brand);
+  --font-display: var(--font-brand);
+  --font-body: var(--font-brand);
+  --font-heading: var(--font-brand);
 
   /* ── Motion ────────────────────────────────────────────────────────────
      One house curve. A fast start and a long settle is what reads as
@@ -117,14 +112,39 @@
     /* Stops the sticky header covering the target of an in-page anchor. */
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+    font-family: var(--font-brand);
   }
 
   body {
     background-color: var(--color-surface);
     color: var(--color-ink);
-    font-family: var(--font-sans);
+    font-family: var(--font-brand);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label {
+    font-family: var(--font-brand);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 
   /* One visible focus treatment for the whole site. Never removed — only
@@ -138,15 +158,6 @@
   ::selection {
     background-color: var(--color-brand);
     color: var(--color-surface);
-  }
-
-  /* Headings default to the display face so no section has to remember. */
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-family: var(--font-display);
-    text-wrap: balance;
   }
 
   p {
