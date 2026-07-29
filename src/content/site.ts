@@ -100,7 +100,7 @@ export const FOOTER_NAV: readonly {
     heading: 'Quick Links',
     items: [
       { label: 'Home', href: '/' },
-      { label: 'Services', href: '/services' },
+      { label: 'All Services', href: '/services' },
       { label: 'About Us', href: '/#about' },
       { label: 'Contact Us', href: '/#contact' },
       { label: 'Blogs', href: '/blog', pending: true },
@@ -109,12 +109,19 @@ export const FOOTER_NAV: readonly {
   {
     heading: 'Services',
     items: [
-      { label: 'Business Banking', href: '/services' },
-      { label: 'Business Setup', href: '/services' },
-      { label: 'Financial Advisory', href: '/services' },
-      { label: 'Tax Structuring Advisory', href: '/services' },
-      { label: 'Business Finance', href: '/services' },
-      { label: 'Real Estate Mortgages', href: '/services' },
+      { label: 'All Services', href: '/services' },
+      { label: 'Business Banking', href: '/services/business-banking' },
+      { label: 'Business Setup', href: '/services/business-setup' },
+      { label: 'Financial Advisory', href: '/services/financial-advisory' },
+      {
+        label: 'Tax Structuring Advisory',
+        href: '/services/tax-structuring-advisory',
+      },
+      { label: 'Business Finance', href: '/services/business-finance' },
+      {
+        label: 'Real Estate Mortgages',
+        href: '/services/real-estate-mortgages',
+      },
     ],
   },
 ] as const;

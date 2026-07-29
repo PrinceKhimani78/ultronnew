@@ -80,12 +80,12 @@ export function Footer() {
                           {item.label}
                         </span>
                       ) : (
-                        <a
+                        <Link
                           href={item.href}
                           className="text-surface/70 hover:text-surface text-sm transition-colors"
                         >
                           {item.label}
-                        </a>
+                        </Link>
                       )}
                     </li>
                   ))}

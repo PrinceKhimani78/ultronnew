@@ -1,6 +1,6 @@
 'use client';
 
-import { Menu, Phone, X } from 'lucide-react';
+import { ChevronDown, Menu, Phone, X, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
@@ -8,49 +8,18 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Container } from '@/components/layout/Container';
 import { Logo } from '@/components/layout/Logo';
 import { PRIMARY_CTA, PRIMARY_NAV, SITE } from '@/content/site';
+import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
 
 /**
- * The floating navigation bar.
- *
- * The design draws the header as a dark-green pill inset from the page edges and
- * sitting *on* the cream background, rather than a full-bleed bar that changes
- * colour on scroll. The only scroll response is a shadow, which keeps the pill
- * legible once content passes beneath it.
- *
- * Client-side because it owns three pieces of browser state: scroll position,
- * drawer open/closed, and focus. It is the only client component in the page
- * shell — every band below it renders on the server.
- *
- * The drawer is hand-rolled: the installed Radix primitives are Accordion, Label
- * and Slot, with no Dialog. That makes the focus contract this component's
- * responsibility — trap Tab, close on Escape, restore focus to the trigger.
+ * Past this, content sits under the bar and it needs separating from the page.
  */
-
-/** Past this, content sits under the bar and it needs separating from the page. */
 const SCROLL_THRESHOLD_PX = 24;
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-/**
- * Whether a nav entry points at the page currently being viewed.
- *
- * Entries are a mix of routes (`/services`) and home-page anchors (`/#about`).
- * An anchor is never "current" — it is a position on a page, not a page — so
- * only the path before the hash is compared, and a bare `/` must match exactly
- * or Home would be marked current on every route.
- */
 function isCurrentRoute(href: string, pathname: string) {
-  /**
-   * Any href carrying a hash is an in-page anchor — a position on a page, not a
-   * page — so it is never "current".
-   *
-   * This is checked before anything else because stripping the hash first turns
-   * `/#about` into `/`, which then matches the home route: on the home page that
-   * marked About, Blogs and Contact as current simultaneously, gold-underlining
-   * four nav items and putting `aria-current="page"` on all of them.
-   */
   if (href.includes('#')) return false;
   if (href === '/') return pathname === '/';
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -60,6 +29,8 @@ export function Header() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
 
   const drawerId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -68,14 +39,13 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > SCROLL_THRESHOLD_PX);
     onScroll();
-    // Passive: this listener never calls preventDefault, and saying so lets the
-    // browser scroll without waiting on it.
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const closeDrawer = useCallback(() => {
     setIsDrawerOpen(false);
+    setIsMobileServicesOpen(false);
     triggerRef.current?.focus();
   }, []);
 
@@ -85,7 +55,6 @@ export function Header() {
     const panel = panelRef.current;
     panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
 
-    // A background that scrolls under an open drawer reads as broken.
     const { overflow } = document.body.style;
     document.body.style.overflow = 'hidden';
 
@@ -96,11 +65,6 @@ export function Header() {
       }
       if (event.key !== 'Tab' || !panel) return;
 
-      /**
-       * The close button lives in the bar, outside the panel. Including it in
-       * the cycle is what makes the drawer dismissable by keyboard — trapping to
-       * the panel alone would leave Escape as the only way out.
-       */
       const focusable = [
         ...(triggerRef.current ? [triggerRef.current] : []),
         ...Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)),
@@ -110,7 +74,6 @@ export function Header() {
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
 
-      // Wrap at both ends, so Tab can never reach the inert page behind.
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
@@ -135,7 +98,6 @@ export function Header() {
             'bg-brand text-surface rounded-full',
             'ease-house transition-shadow duration-300',
             isScrolled ? 'shadow-lift' : 'shadow-soft',
-            // Square off the bottom corners while the drawer is attached.
             isDrawerOpen && 'rounded-b-none lg:rounded-b-full',
           )}
         >
@@ -148,19 +110,96 @@ export function Header() {
               <Logo />
             </Link>
 
+            {/* Desktop Navigation with Dropdown */}
             <nav aria-label="Primary" className="hidden lg:block">
               <ul className="flex items-center gap-8">
                 {PRIMARY_NAV.map((item) => {
                   const isCurrent = isCurrentRoute(item.href, pathname);
+                  const isServices = item.href === '/services';
+
+                  if (isServices) {
+                    return (
+                      <li
+                        key={item.href}
+                        className="relative"
+                        onMouseEnter={() => setIsDropdownOpen(true)}
+                        onMouseLeave={() => setIsDropdownOpen(false)}
+                      >
+                        <Link
+                          href={item.href}
+                          aria-current={isCurrent ? 'page' : undefined}
+                          aria-expanded={isDropdownOpen}
+                          className={cn(
+                            'ease-house flex items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase transition-colors',
+                            'border-b-2 py-1',
+                            isCurrent
+                              ? 'border-accent text-surface'
+                              : 'text-surface/75 hover:text-surface border-transparent',
+                          )}
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className={cn(
+                              'h-3.5 w-3.5 transition-transform duration-200',
+                              isDropdownOpen && 'text-accent rotate-180',
+                            )}
+                          />
+                        </Link>
+
+                        {/* Services Dropdown Panel */}
+                        {isDropdownOpen && (
+                          <div
+                            className={cn(
+                              'bg-brand-deep/95 border-surface/20 shadow-lift text-surface absolute top-full left-1/2 z-50 mt-2.5 w-72 -translate-x-1/2 rounded-2xl border p-3 backdrop-blur-xl',
+                            )}
+                          >
+                            <div className="border-surface/15 mb-2 flex items-center justify-between border-b px-3 pt-1.5 pb-2">
+                              <span className="text-surface/60 text-[0.65rem] font-bold tracking-wider uppercase">
+                                Our Services
+                              </span>
+                              <Link
+                                href="/services"
+                                className="text-accent flex items-center gap-1 text-[0.65rem] font-semibold uppercase hover:underline"
+                              >
+                                All Services{' '}
+                                <ArrowRight className="h-2.5 w-2.5" />
+                              </Link>
+                            </div>
+
+                            <ul className="space-y-0.5">
+                              <li>
+                                <Link
+                                  href="/services"
+                                  className="group text-accent hover:bg-surface/10 flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-colors"
+                                >
+                                  <span>View All Services</span>
+                                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                                </Link>
+                              </li>
+                              {SERVICES.map((s) => (
+                                <li key={s.slug}>
+                                  <Link
+                                    href={`/services/${s.slug}`}
+                                    className="group text-surface/85 hover:bg-surface/10 hover:text-surface flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors"
+                                  >
+                                    <span>{s.title}</span>
+                                    <span className="text-accent text-xs opacity-0 transition-opacity group-hover:opacity-100">
+                                      →
+                                    </span>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  }
+
                   return (
                     <li key={item.href}>
                       <a
                         href={item.href}
-                        /**
-                         * The design underlines the current page in gold.
-                         * `aria-current` carries that to a screen reader,
-                         * because the gold rule alone conveys nothing.
-                         */
                         aria-current={isCurrent ? 'page' : undefined}
                         className={cn(
                           'ease-house text-xs font-medium tracking-[0.12em] uppercase transition-colors',
@@ -207,12 +246,7 @@ export function Header() {
             </button>
           </div>
 
-          {/*
-            Rendered even when closed, hidden with the `hidden` attribute rather
-            than unmounted: `aria-controls` must point at an element that exists,
-            or it is a dangling reference. `hidden` also removes the subtree from
-            the accessibility tree, so nothing is announced while it is shut.
-          */}
+          {/* Mobile Drawer */}
           <div
             ref={panelRef}
             id={drawerId}
@@ -224,20 +258,76 @@ export function Header() {
           >
             <nav aria-label="Primary (mobile)" className="pt-2">
               <ul className="flex flex-col">
-                {PRIMARY_NAV.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      onClick={closeDrawer}
-                      aria-current={
-                        isCurrentRoute(item.href, pathname) ? 'page' : undefined
-                      }
-                      className="border-surface/10 text-surface block border-b py-4 text-sm font-medium tracking-[0.12em] uppercase"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
+                {PRIMARY_NAV.map((item) => {
+                  const isServices = item.href === '/services';
+
+                  if (isServices) {
+                    return (
+                      <li
+                        key={item.href}
+                        className="border-surface/10 border-b py-3"
+                      >
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsMobileServicesOpen((prev) => !prev)
+                          }
+                          className="text-surface flex w-full items-center justify-between py-1 text-sm font-medium tracking-[0.12em] uppercase"
+                        >
+                          <span>{item.label}</span>
+                          <ChevronDown
+                            className={cn(
+                              'h-4 w-4 transition-transform duration-200',
+                              isMobileServicesOpen && 'text-accent rotate-180',
+                            )}
+                          />
+                        </button>
+
+                        {isMobileServicesOpen && (
+                          <ul className="border-surface/20 mt-2 space-y-2 border-l pl-4">
+                            <li>
+                              <Link
+                                href="/services"
+                                onClick={closeDrawer}
+                                className="text-accent block py-1.5 text-xs font-semibold tracking-wider uppercase"
+                              >
+                                View All Services →
+                              </Link>
+                            </li>
+                            {SERVICES.map((s) => (
+                              <li key={s.slug}>
+                                <Link
+                                  href={`/services/${s.slug}`}
+                                  onClick={closeDrawer}
+                                  className="text-surface/80 hover:text-surface block py-1.5 text-xs"
+                                >
+                                  {s.title}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        onClick={closeDrawer}
+                        aria-current={
+                          isCurrentRoute(item.href, pathname)
+                            ? 'page'
+                            : undefined
+                        }
+                        className="border-surface/10 text-surface block border-b py-4 text-sm font-medium tracking-[0.12em] uppercase"
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
               <a
                 href={PRIMARY_CTA.href}
