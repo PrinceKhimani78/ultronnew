@@ -54,62 +54,54 @@ export function WhoWeHelpSection() {
         <div className="grid items-stretch gap-6 lg:grid-cols-12">
           {/* Left Column (7 cols / ~60% width) */}
           <div className="flex flex-col gap-6 lg:col-span-7">
-            {/* Row 1: International Entrepreneurs (Wide) */}
-            {cardMap['international-entrepreneurs'] && (
-              <WhoWeHelpCard
-                item={cardMap['international-entrepreneurs']}
-                index={0}
-                className="flex-1"
-              />
-            )}
+            {/* Row 1: Card 1 (Wide) */}
+            <WhoWeHelpCard
+              item={
+                cardMap['uae-smes-operating-businesses'] || WHO_WE_HELP_CARDS[0]
+              }
+              index={0}
+              className="flex-1"
+            />
 
-            {/* Row 2: Foreign Investors & SMEs (2 Equal Columns) */}
+            {/* Row 2: Card 3 & Card 4 (2 Equal Columns) */}
             <div className="grid gap-6 sm:grid-cols-2">
-              {cardMap['foreign-investors'] && (
-                <WhoWeHelpCard
-                  item={cardMap['foreign-investors']}
-                  index={2}
-                  className="h-full"
-                />
-              )}
-              {cardMap['smes-growing-businesses'] && (
-                <WhoWeHelpCard
-                  item={cardMap['smes-growing-businesses']}
-                  index={3}
-                  className="h-full"
-                />
-              )}
+              <WhoWeHelpCard
+                item={cardMap['foreign-investors'] || WHO_WE_HELP_CARDS[2]}
+                index={2}
+                className="h-full"
+              />
+              <WhoWeHelpCard
+                item={
+                  cardMap['smes-growing-businesses'] || WHO_WE_HELP_CARDS[3]
+                }
+                index={3}
+                className="h-full"
+              />
             </div>
 
-            {/* Row 3: Startups & Founders (Wide) */}
-            {cardMap['startups-founders'] && (
-              <WhoWeHelpCard
-                item={cardMap['startups-founders']}
-                index={4}
-                className="flex-1"
-              />
-            )}
+            {/* Row 3: Card 5 (Wide) */}
+            <WhoWeHelpCard
+              item={cardMap['startups-founders'] || WHO_WE_HELP_CARDS[4]}
+              index={4}
+              className="flex-1"
+            />
           </div>
 
           {/* Right Column (5 cols / ~40% width) */}
           <div className="flex flex-col gap-6 lg:col-span-5">
-            {/* High-Net-Worth Individuals (Tall Card) */}
-            {cardMap['high-net-worth'] && (
-              <WhoWeHelpCard
-                item={cardMap['high-net-worth']}
-                index={1}
-                className="flex-1"
-              />
-            )}
+            {/* Card 2 (Tall Card) */}
+            <WhoWeHelpCard
+              item={cardMap['high-net-worth'] || WHO_WE_HELP_CARDS[1]}
+              index={1}
+              className="flex-1"
+            />
 
-            {/* Global Companies Expanding to the UAE */}
-            {cardMap['global-companies'] && (
-              <WhoWeHelpCard
-                item={cardMap['global-companies']}
-                index={5}
-                className="flex-1"
-              />
-            )}
+            {/* Card 6 */}
+            <WhoWeHelpCard
+              item={cardMap['global-companies'] || WHO_WE_HELP_CARDS[5]}
+              index={5}
+              className="flex-1"
+            />
           </div>
         </div>
       </Container>

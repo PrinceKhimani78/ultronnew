@@ -1,4 +1,4 @@
-import { SITE, WHATSAPP_URL } from '@/content/site';
+import { SITE } from '@/content/site';
 import type { HeadingSegment } from '@/types/content';
 
 /**
@@ -9,38 +9,26 @@ import type { HeadingSegment } from '@/types/content';
  */
 
 export const HOME_HERO = {
-  /**
-   * Carries the firm name explicitly: the home page shares a segment with the
-   * root layout, so `title.template` does not apply to it.
-   */
   metaTitle: `${SITE.name} — UAE company formation, banking and compliance`,
   metaDescription:
-    'End-to-end business advisory for banking, company setup, compliance and financial structuring in the UAE. We handle what others won’t.',
+    "Every case we take starts the same way: something that should have worked, didn't. We step in where standard applications get rejected, structure it properly, and stay in the case until it's resolved.",
 
   heading: [
     { text: 'Where ' },
     { text: 'Complex ', accent: true },
-    { text: 'Becomes ', accent: true },
-    { text: 'Possible.' },
+    { text: 'Becomes ' },
+    { text: 'Possible.', accent: true },
   ] as readonly HeadingSegment[],
 
-  body: 'End-to-end business advisory for banking, company setup, compliance and financial structuring in the UAE. We handle what others won’t.',
+  body: "Every case we take starts the same way: something that should have worked, didn't. We step in where standard applications get rejected, structure it properly, and stay in the case until it's resolved.",
 
-  cta: { label: 'WhatsApp Us Now', href: WHATSAPP_URL },
+  cta: { label: 'Get a Same-Day Feasibility Read', href: '#contact' },
 
-  /**
-   * Client-supplied figures, replacing the numbers taken from the design comp.
-   *
-   * These are now the firm's own claims rather than invented placeholders, so
-   * the hard "must not ship" block is lifted. They remain performance claims on
-   * a financial services site: the firm should be able to evidence "130+" and
-   * "35+" on request, and the figures need a review date so they do not quietly
-   * go stale.
-   */
   stats: [
-    { icon: 'bank', value: '100+', label: 'Complex Bank Accounts Opened' },
-    { icon: 'briefcase', value: '30+', label: 'Structured Business Setups' },
-    { icon: 'globe', value: 'All', label: 'Nationalities Welcome' },
+    { icon: 'bank', value: '130+', label: 'Bank Accounts Opened' },
+    { icon: 'briefcase', value: '35+', label: 'Businesses Structured' },
+    { icon: 'globe', value: 'All', label: 'Nationalities, All Risk Profiles' },
+    { icon: 'globe', value: 'Dubai,', label: 'UAE' },
   ],
 } as const;
 
@@ -221,21 +209,14 @@ export const WHY_CHOOSE = {
 export const CTA_CONTACT = {
   eyebrow: 'Get started',
   heading: [
-    { text: 'Start Your UAE Business ' },
-    { text: 'Journey ', accent: true },
+    { text: 'Start your UAE Business Journey ' },
     { text: 'Today', accent: true },
   ] as readonly HeadingSegment[],
-  /** Client-approved copy, replacing the design's lorem ipsum. */
-  body: 'Most of our best work starts with a client who was told no elsewhere. Share your situation and we will give you an honest assessment.',
-  cta: { label: 'Contact us', href: `mailto:${SITE.email}` },
+  body: "If a case has stalled, or hasn't been tried yet, talk to us before writing it off. Banking, financing, structuring or compliance—that's exactly where we start.",
+  cta: { label: 'Get a Same-Day Feasibility Read', href: '#contact' },
   form: {
-    title: 'Get a free consultation',
-    submitLabel: 'Submit enquiry',
-    /**
-     * ⚠️ A response-time promise the firm has not stated in its own copy.
-     * TODO(client): confirm one working day is accurate, or delete this line —
-     * an unmet commitment on the conversion band is worse than no commitment.
-     */
+    title: 'Get a Same-Day Feasibility Read',
+    submitLabel: 'Get a Same-Day Feasibility Read',
     reassurance: 'We reply to every enquiry within one working day.',
   },
 } as const;
