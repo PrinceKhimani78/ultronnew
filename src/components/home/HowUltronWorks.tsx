@@ -9,6 +9,14 @@ import { Section } from '@/components/layout/Section';
 import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
 import { PROCESS_INTRO, PROCESS_STEPS } from '@/content/process';
 
+/**
+ * "How ULTRON Works" section redesigned to match Figma inspect specs:
+ * - Full section background: Dark Teal #035551
+ * - Timeline Card: 20px radius, 5px gradient border (#FFFFFF 5% to #DCCB8E 100%), pure white inner background & soft drop shadow
+ * - Circular 3D Illustration Badges: Round white cards containing process 3D assets
+ * - Center vertical spine with gold nodes (#DCCB8E)
+ */
+
 export function HowUltronWorks() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
@@ -36,15 +44,15 @@ export function HowUltronWorks() {
       id="process"
       spacing="spacious"
       tone="brand"
-      className="from-brand-mid to-brand-deep relative overflow-hidden bg-gradient-to-b"
+      className="relative overflow-hidden bg-[#035551] py-20 sm:py-28"
     >
       <Container width="wide">
         <div className="text-center">
           <Eyebrow align="center">{PROCESS_INTRO.eyebrow}</Eyebrow>
-          <h2 className="font-display text-surface mt-3 text-[clamp(2rem,3.8vw,2.85rem)] leading-[1.12] font-bold tracking-[-0.02em]">
+          <h2 className="font-display mt-3 text-[clamp(2rem,3.8vw,2.85rem)] leading-[1.12] font-bold tracking-[-0.02em] text-white">
             <HeadingText segments={PROCESS_INTRO.heading} inverted />
           </h2>
-          <p className="text-surface/80 mx-auto mt-4 max-w-2xl text-base leading-relaxed">
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/85">
             {PROCESS_INTRO.body}
           </p>
         </div>
@@ -54,7 +62,7 @@ export function HowUltronWorks() {
           {/* Static Background Spine Line */}
           <div
             aria-hidden="true"
-            className="bg-surface/20 pointer-events-none absolute inset-y-0 left-4 w-[2px] -translate-x-1/2 lg:left-1/2"
+            className="pointer-events-none absolute inset-y-0 left-4 w-[2px] -translate-x-1/2 bg-white/30 lg:left-1/2"
           />
 
           {/* Dynamic Scroll Progress Line */}
@@ -62,12 +70,12 @@ export function HowUltronWorks() {
             <motion.div
               aria-hidden="true"
               style={{ scaleY }}
-              className="bg-accent-deep pointer-events-none absolute inset-y-0 left-4 w-[3px] origin-top -translate-x-1/2 shadow-[0_0_10px_rgba(201,179,126,0.8)] lg:left-1/2"
+              className="pointer-events-none absolute inset-y-0 left-4 w-[3px] origin-top -translate-x-1/2 bg-[#DCCB8E] shadow-[0_0_12px_rgba(220,203,142,0.9)] lg:left-1/2"
             />
           ) : (
             <div
               aria-hidden="true"
-              className="bg-accent-deep pointer-events-none absolute inset-y-0 left-4 w-[3px] -translate-x-1/2 lg:left-1/2"
+              className="pointer-events-none absolute inset-y-0 left-4 w-[3px] -translate-x-1/2 bg-[#DCCB8E] lg:left-1/2"
             />
           )}
 
@@ -77,25 +85,25 @@ export function HowUltronWorks() {
 
               return (
                 <li key={step.step} className="relative">
-                  {/* Glowing Node Marker on Spine */}
+                  {/* Gold Spine Node Marker */}
                   {!isReducedMotion ? (
                     <motion.div
                       aria-hidden="true"
-                      initial={{ scale: 0.6, opacity: 0.4 }}
-                      whileInView={{ scale: 1.2, opacity: 1 }}
+                      initial={{ scale: 0.6, opacity: 0.5 }}
+                      whileInView={{ scale: 1.1, opacity: 1 }}
                       viewport={{ amount: 0.6 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-accent border-brand-deep absolute top-10 left-4 z-20 h-5 w-5 -translate-x-1/2 rounded-full border-4 shadow-md lg:left-1/2"
+                      className="absolute top-1/2 left-4 z-20 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#DCCB8E] shadow-md lg:left-1/2"
                     />
                   ) : (
                     <div
                       aria-hidden="true"
-                      className="bg-accent border-brand-deep absolute top-10 left-4 z-20 h-5 w-5 -translate-x-1/2 rounded-full border-4 shadow-md lg:left-1/2"
+                      className="absolute top-1/2 left-4 z-20 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#DCCB8E] shadow-md lg:left-1/2"
                     />
                   )}
 
                   <div className="pl-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16 lg:pl-0">
-                    {/* Process Step Card */}
+                    {/* Step Card with 5px Gradient Border & 20px Radius */}
                     <div
                       className={
                         isRight
@@ -112,58 +120,32 @@ export function HowUltronWorks() {
                             duration: 0.5,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="bg-surface shadow-lift rounded-2xl border border-white/60 p-6 sm:p-8"
+                          className="relative max-w-md rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_10px_30px_rgba(0,0,0,0.18)]"
                         >
-                          <div className="flex items-center justify-between gap-4">
-                            <h3 className="font-display text-brand text-lg font-bold tracking-tight sm:text-xl">
+                          <div className="rounded-[15px] bg-white p-6 sm:p-7">
+                            <h3 className="font-display text-lg font-bold tracking-tight text-[#035551] sm:text-xl">
                               {step.title}
                             </h3>
-                            {/*
-                              The step ordinal, not a duration. The badge
-                              previously showed invented timelines ("Week 2–8");
-                              the client's copy commits to no delivery times, so
-                              the field was removed from the content rather than
-                              guessed at.
-                            */}
-                            <span
-                              aria-hidden="true"
-                              className="bg-brand/10 text-brand shrink-0 rounded-full px-2.5 py-1 font-mono text-xs font-semibold"
-                            >
-                              {step.step}
-                            </span>
+                            <p className="text-ink-muted mt-3 text-xs leading-relaxed sm:text-sm">
+                              {step.body}
+                            </p>
                           </div>
-                          <p className="text-ink-muted mt-3 text-sm leading-relaxed sm:text-base">
-                            {step.body}
-                          </p>
                         </motion.div>
                       ) : (
-                        <div className="bg-surface shadow-lift rounded-2xl border border-white/60 p-6 sm:p-8">
-                          <div className="flex items-center justify-between gap-4">
-                            <h3 className="font-display text-brand text-lg font-bold tracking-tight sm:text-xl">
+                        <div className="relative max-w-md rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_10px_30px_rgba(0,0,0,0.18)]">
+                          <div className="rounded-[15px] bg-white p-6 sm:p-7">
+                            <h3 className="font-display text-lg font-bold tracking-tight text-[#035551] sm:text-xl">
                               {step.title}
                             </h3>
-                            {/*
-                              The step ordinal, not a duration. The badge
-                              previously showed invented timelines ("Week 2–8");
-                              the client's copy commits to no delivery times, so
-                              the field was removed from the content rather than
-                              guessed at.
-                            */}
-                            <span
-                              aria-hidden="true"
-                              className="bg-brand/10 text-brand shrink-0 rounded-full px-2.5 py-1 font-mono text-xs font-semibold"
-                            >
-                              {step.step}
-                            </span>
+                            <p className="text-ink-muted mt-3 text-xs leading-relaxed sm:text-sm">
+                              {step.body}
+                            </p>
                           </div>
-                          <p className="text-ink-muted mt-3 text-sm leading-relaxed sm:text-base">
-                            {step.body}
-                          </p>
                         </div>
                       )}
                     </div>
 
-                    {/* 3D Circular Illustration Badge */}
+                    {/* Circular 3D Illustration Badge */}
                     <div
                       className={
                         isRight
@@ -180,7 +162,7 @@ export function HowUltronWorks() {
                             duration: 0.5,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="shadow-lift mx-auto flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-white/40 bg-white sm:h-44 sm:w-44 lg:mx-0"
+                          className="mx-auto flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_25px_rgba(0,0,0,0.20)] sm:h-52 sm:w-52 lg:mx-0"
                         >
                           <Image
                             src={step.image}
@@ -188,20 +170,20 @@ export function HowUltronWorks() {
                             aria-hidden="true"
                             width={261}
                             height={184}
-                            sizes="180px"
-                            className="h-auto w-24 object-contain sm:w-32"
+                            sizes="200px"
+                            className="h-auto w-32 object-contain sm:w-40"
                           />
                         </motion.div>
                       ) : (
-                        <div className="shadow-lift mx-auto flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-4 border-white/40 bg-white sm:h-44 sm:w-44 lg:mx-0">
+                        <div className="mx-auto flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_25px_rgba(0,0,0,0.20)] sm:h-52 sm:w-52 lg:mx-0">
                           <Image
                             src={step.image}
                             alt=""
                             aria-hidden="true"
                             width={261}
                             height={184}
-                            sizes="180px"
-                            className="h-auto w-24 object-contain sm:w-32"
+                            sizes="200px"
+                            className="h-auto w-32 object-contain sm:w-40"
                           />
                         </div>
                       )}
