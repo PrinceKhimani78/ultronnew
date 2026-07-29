@@ -55,26 +55,54 @@ deleted, two added.
 
 ## Typography — the largest single change
 
+Superseded by the client's brand sheet, which names one typeface. Both passes
+are recorded because the second reverses part of the first.
+
 - **Newsreader (serif) → Poppins (geometric sans).** The design sets every
-  heading in a heavy geometric sans with tight tracking. Weights limited to
-  500/600/700 — Poppins is not variable, so each weight is a separate file.
+  heading in a heavy geometric sans with tight tracking.
+- **Poppins → Funnel Display, Inter → Funnel Sans.** The brand sheet specifies
+  Funnel Display as the primary typeface at Regular / Medium / Semibold / Bold,
+  and names no second family. Poppins and Inter were both matched by eye and
+  neither was ever in the brand system, so the whole type stack is now Funnel.
+  Body copy runs on Funnel Sans — the companion text cut — rather than on the
+  display face at 16px, which is the one thing a display cut is not drawn for.
+  Both faces carry a variable axis; the four weights are requested as static
+  subsets because only those four stops are used.
 - Heading tracking set to `-0.02em` (`-0.03em` on the hero), matching the
   design's tight optical setting.
 - Eyebrows: `0.2em` uppercase tracking, preceded by a short rule, as drawn.
 
 ## Colour
 
-- `--color-brand` `#035551` → `#0e5045` — the design's green is a pine green,
-  less cyan than the previous value.
+Same story: the comp was matched by eye, then the brand sheet arrived and
+supplied the actual values. The sheet wins.
+
+- `--color-brand` `#0e5045` → **`#035551` (Authentic Teal)**, per the brand
+  sheet. An intermediate pass had moved it the other way, to a pine green read
+  off the comp; that is now reverted. `brand-deep`, `brand-ink`, `brand-mid`,
+  `--color-line` and both shadow tokens are re-derived from the new hue, so no
+  tint in the palette is left keyed to the old one.
+- `--color-surface` **`#fdfbee` (Orange White)** — already matched the sheet
+  exactly, unchanged.
 - `--color-ink` `#1c2b29` → `#121a18`. The design sets headings near-black; a
   green cast reads as a printing error beside true-green emphasis words.
-- **`--color-brand-bright` `#0f7a64` added** for heading emphasis. Gold is now
-  restricted to the three places the design actually uses it: the active nav
-  underline, the timeline markers, and inverted-band emphasis.
+- **`--color-brand-bright` added** for heading emphasis, then corrected twice:
+  `#0f7a64` → `#058881` (re-derived from Authentic Teal) → **`#057b75`**. The
+  re-derived value measured **4.17:1** on surface. This token is not
+  heading-only — it also carries 12px uppercase badges and benefit ticks, so it
+  is held to the 4.5:1 normal-text threshold rather than the 3:1 large-text one.
+  Now **4.93:1** on surface and **5.13:1** on raised white cards.
 - **`--color-accent-deep` `#a37f3c` → `#8a6a2b`.** The old value measures
   **3.57:1** on surface — it passes only for large text, while the token's own
   comment advertised it as safe "where text must be read". Now **4.84:1**, so
   the token matches its documentation. This was a pre-existing defect.
+- Gold remains restricted to the three places the design actually uses it: the
+  active nav underline, the timeline markers, and inverted-band emphasis.
+  `--color-accent` is decorative only at 1.98:1 and never carries meaning alone.
+- **`opengraph-image.tsx` re-synced.** It renders in Satori, which cannot read
+  CSS custom properties, so it holds its own literal copies of the tokens. It
+  was still painting the old `#0e5045` ground — the one place a palette change
+  does not propagate on its own, and invisible until a link is shared.
 
 ## Structure
 

@@ -25,7 +25,12 @@
   --color-brand: #035551;
   --color-brand-deep: #023c39;
   --color-brand-ink: #012422;
-  --color-brand-bright: #058881;
+  /* The emphasis green: accent words in headings, benefit ticks, small
+     uppercase badges. Because it lands on text as small as 12px it is held to
+     the 4.5:1 normal-text threshold, not the 3:1 large-text one — #058881
+     measures 4.17:1 on `surface` and failed that. This clears it on both the
+     cream page (4.93:1) and raised white cards (5.13:1). */
+  --color-brand-bright: #057b75;
   /* Top stop of the timeline band's gradient. */
   --color-brand-mid: #046e68;
 

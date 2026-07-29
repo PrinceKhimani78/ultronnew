@@ -20,7 +20,7 @@ export const alt = `${SITE.name} — ${SITE.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-const BRAND = '#0e5045';
+const BRAND = '#035551';
 const SURFACE = '#fdfbee';
 /**
  * Gold, not `brand-bright`: the emphasis green is chosen to sit on the cream
