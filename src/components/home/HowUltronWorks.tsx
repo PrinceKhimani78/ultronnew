@@ -120,24 +120,24 @@ export function HowUltronWorks() {
                             duration: 0.5,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="relative max-w-md rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_10px_30px_rgba(0,0,0,0.18)]"
+                          className="relative flex min-h-[287px] w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]"
                         >
-                          <div className="rounded-[15px] bg-white p-6 sm:p-7">
-                            <h3 className="font-display text-lg font-bold tracking-tight text-[#035551] sm:text-xl">
+                          <div className="flex flex-1 flex-col justify-center rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
+                            <h3 className="font-display text-xl font-bold tracking-tight text-[#035551] sm:text-2xl">
                               {step.title}
                             </h3>
-                            <p className="text-ink-muted mt-3 text-xs leading-relaxed sm:text-sm">
+                            <p className="text-ink-muted mt-3.5 text-xs leading-relaxed sm:text-sm">
                               {step.body}
                             </p>
                           </div>
                         </motion.div>
                       ) : (
-                        <div className="relative max-w-md rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_10px_30px_rgba(0,0,0,0.18)]">
-                          <div className="rounded-[15px] bg-white p-6 sm:p-7">
-                            <h3 className="font-display text-lg font-bold tracking-tight text-[#035551] sm:text-xl">
+                        <div className="relative flex min-h-[287px] w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]">
+                          <div className="flex flex-1 flex-col justify-center rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
+                            <h3 className="font-display text-xl font-bold tracking-tight text-[#035551] sm:text-2xl">
                               {step.title}
                             </h3>
-                            <p className="text-ink-muted mt-3 text-xs leading-relaxed sm:text-sm">
+                            <p className="text-ink-muted mt-3.5 text-xs leading-relaxed sm:text-sm">
                               {step.body}
                             </p>
                           </div>
