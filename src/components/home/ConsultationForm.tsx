@@ -3,31 +3,20 @@ import { CTA_CONTACT } from '@/content/home';
 import { cn } from '@/lib/utils';
 
 /**
- * The consultation form, as drawn in the design.
- *
- * ⚠️ NOT WIRED. There is no submit handler and no action, because `/api/contact`
- * is Phase 6 and the brief for this pass is design reconciliation only. The
- * markup, labelling and validation attributes are complete, so wiring it later
- * is adding an action and a handler — not rebuilding the form.
- *
- * TODO(phase-6): point this at `/api/contact`, parse with `contactSchema` from
- * `lib/schemas/contact.ts` (already written, honeypot included), and render
- * server-returned field errors through `aria-describedby`.
- *
- * Deliberately a Server Component: an unwired form needs no JavaScript, and
- * native `required` / `type` validation works without any. The fields carry real
- * `<label>` elements rather than placeholders-as-labels — a placeholder
- * disappears on focus, which is precisely when a user needs the label most.
+ * The consultation form, styled to match the Figma Frame 9 specs:
+ * - Angular/Conic gradient background (#035551 and #058881)
+ * - 20px rounded corners
+ * - 4px 4px 8px 5px rgba(3,85,81,0.25) drop shadow
  */
 
 const FIELD_CLASS = cn(
-  'w-full rounded-lg border border-surface/20 bg-surface/10 px-4 py-3',
+  'w-full rounded-xl border border-surface/25 bg-surface/10 px-4 py-3.5',
   'text-surface placeholder:text-surface/40 text-sm',
-  'ease-house transition-colors focus:border-surface/50',
+  'ease-house transition-all focus:border-surface/60 focus:bg-surface/15 focus:outline-none',
 );
 
 const LABEL_CLASS =
-  'block text-[0.65rem] font-medium tracking-[0.16em] text-surface/70 uppercase';
+  'block text-[0.65rem] font-medium tracking-[0.16em] text-surface/80 uppercase';
 
 /** `required` is mirrored visually; the asterisk alone is not an accessible cue. */
 function FieldLabel({
@@ -54,11 +43,17 @@ function FieldLabel({
 
 export function ConsultationForm() {
   return (
-    <div className="from-brand-mid to-brand-deep rounded-3xl bg-gradient-to-br p-6 sm:p-8">
-      <h3 className="text-surface font-display text-sm font-semibold tracking-[0.14em] uppercase">
+    <div
+      className={cn(
+        'text-surface relative overflow-hidden rounded-[20px] p-6 sm:p-8',
+        'bg-[conic-gradient(from_180deg_at_50%_50%,#035551_0deg,#058881_160deg,#035551_320deg,#035551_360deg)]',
+        'shadow-[4px_4px_8px_5px_rgba(3,85,81,0.25)]',
+      )}
+    >
+      <h3 className="text-surface font-display text-base font-bold tracking-[0.14em] uppercase">
         {CTA_CONTACT.form.title}
       </h3>
-      <hr className="border-surface/20 mt-4" />
+      <hr className="border-surface/25 mt-4" />
 
       <form className="mt-6 space-y-5" suppressHydrationWarning>
         <div className="grid gap-5 sm:grid-cols-2">
@@ -123,7 +118,6 @@ export function ConsultationForm() {
           <FieldLabel htmlFor="contact-service" required>
             Service interested in
           </FieldLabel>
-          {/* A select, not free text: the options are a known, closed set. */}
           <select
             id="contact-service"
             name="service"
@@ -156,11 +150,7 @@ export function ConsultationForm() {
           />
         </div>
 
-        {/*
-          Honeypot. Hidden from sight and from assistive technology, and taken
-          out of the tab order, so only an automated agent fills it.
-          `contactSchema` already rejects a non-empty value.
-        */}
+        {/* Honeypot field for bot protection */}
         <div aria-hidden="true" className="hidden">
           <label htmlFor="contact-website">Website</label>
           <input
@@ -175,15 +165,15 @@ export function ConsultationForm() {
         <button
           type="submit"
           className={cn(
-            'bg-surface text-brand w-full rounded-lg px-6 py-4',
-            'text-xs font-semibold tracking-[0.14em] uppercase',
-            'ease-house hover:bg-surface/90 transition-colors',
+            'bg-surface mt-2 w-full rounded-xl px-6 py-4 text-[#035551]',
+            'text-sm font-bold tracking-[0.14em] uppercase shadow-md',
+            'ease-house hover:bg-surface/90 transition-all hover:shadow-lg',
           )}
         >
           {CTA_CONTACT.form.submitLabel}
         </button>
 
-        <p className="text-surface/60 text-center text-xs">
+        <p className="text-surface/60 pt-1 text-center text-xs">
           {CTA_CONTACT.form.reassurance}
         </p>
       </form>
