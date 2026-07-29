@@ -9,9 +9,10 @@ import { HOME_HERO } from '@/content/home';
 
 /**
  * Hero section matching the Figma design layout:
- * - Left column: Heading, body paragraph, and WhatsApp CTA button.
+ * - Top: Heading ("Where Complex Becomes Possible.")
+ * - Middle: Horizontal proof metrics bar (100+ Complex Bank Accounts Opened, 30+ Structured Business Setups, All Nationalities Welcome) with circular teal badges & vertical dividers.
+ * - Bottom: Body copy ("End-to-end business advisory...") and WhatsApp CTA button.
  * - Right column: 3D monogram brand image.
- * - Bottom row: Horizontal proof metrics bar (100+ Complex Bank Accounts Opened, 30+ Structured Business Setups, All Nationalities Welcome) with circular teal badges and vertical dividers.
  */
 
 const STAT_ICONS = {
@@ -34,7 +35,51 @@ export function Hero() {
               <HeadingText segments={HOME_HERO.heading} />
             </h1>
 
-            <p className="text-ink mt-6 max-w-xl text-base leading-relaxed font-medium sm:text-lg">
+            {/* Horizontal Proof / Metrics Bar positioned directly ABOVE the body paragraph */}
+            <div className="bg-surface-raised/40 shadow-soft my-8 rounded-2xl border border-[#035551]/15 p-4 sm:p-5">
+              <dl className="grid items-center gap-6 sm:grid-cols-3 sm:gap-2">
+                {HOME_HERO.stats.map((stat, index) => {
+                  const Icon = STAT_ICONS[stat.icon as keyof typeof STAT_ICONS];
+                  return (
+                    <div
+                      key={stat.label}
+                      className="relative flex items-center gap-3.5 sm:pr-3"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="text-surface inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#035551] shadow-[0px_3px_6px_rgba(3,85,81,0.25)]"
+                      >
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <dt className="sr-only">{stat.label}</dt>
+                        <dd>
+                          <span className="font-display text-ink block text-xl leading-none font-bold tracking-tight sm:text-2xl">
+                            {stat.value}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="mt-1 block max-w-[130px] text-xs leading-tight font-medium text-[#035551]"
+                          >
+                            {stat.label}
+                          </span>
+                        </dd>
+                      </div>
+
+                      {/* Vertical divider line between stats */}
+                      {index < HOME_HERO.stats.length - 1 && (
+                        <div
+                          aria-hidden="true"
+                          className="absolute top-1/2 right-0 hidden h-9 w-[1.5px] -translate-y-1/2 bg-[#035551]/25 sm:block"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </dl>
+            </div>
+
+            <p className="text-ink max-w-xl text-base leading-relaxed font-medium sm:text-lg">
               {HOME_HERO.body}
             </p>
 
@@ -57,50 +102,6 @@ export function Hero() {
               className="h-auto w-full [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_82%)]"
             />
           </div>
-        </div>
-
-        {/* Horizontal Proof / Metrics Bar matching Figma screenshot */}
-        <div className="mt-14 border-t border-[#035551]/15 pt-10">
-          <dl className="grid items-center gap-8 sm:grid-cols-3 sm:gap-4">
-            {HOME_HERO.stats.map((stat, index) => {
-              const Icon = STAT_ICONS[stat.icon as keyof typeof STAT_ICONS];
-              return (
-                <div
-                  key={stat.label}
-                  className="relative flex items-center gap-4 sm:pr-4"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="text-surface inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#035551] shadow-[0px_4px_8px_rgba(3,85,81,0.25)]"
-                  >
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <dt className="sr-only">{stat.label}</dt>
-                    <dd>
-                      <span className="font-display text-ink block text-2xl leading-none font-bold tracking-tight sm:text-3xl">
-                        {stat.value}
-                      </span>
-                      <span
-                        aria-hidden="true"
-                        className="mt-1.5 block max-w-[170px] text-xs leading-tight font-medium text-[#035551] sm:text-sm"
-                      >
-                        {stat.label}
-                      </span>
-                    </dd>
-                  </div>
-
-                  {/* Vertical divider line between stats */}
-                  {index < HOME_HERO.stats.length - 1 && (
-                    <div
-                      aria-hidden="true"
-                      className="absolute top-1/2 right-0 hidden h-10 w-[2px] -translate-y-1/2 bg-[#035551]/30 sm:block"
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </dl>
         </div>
       </Container>
     </Section>
