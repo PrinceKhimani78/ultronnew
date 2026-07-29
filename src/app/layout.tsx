@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Funnel_Display, Funnel_Sans } from 'next/font/google';
+import { Funnel_Display } from 'next/font/google';
 
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -8,18 +8,7 @@ import { env } from '@/lib/env';
 import './globals.css';
 
 /**
- * One superfamily, two cuts — matching the two tokens `globals.css` consumes.
- *
- * The brand sheet names Funnel Display as the primary typeface and nothing else,
- * so Inter (which was never in the brand system) is gone: body copy now runs on
- * Funnel Sans, the companion text cut drawn for exactly this pairing. That keeps
- * the whole type system Funnel while leaving long-form copy on a face engineered
- * for reading rather than on a display cut at 16px.
- *
- * The four weights are the four the brand sheet specifies — Regular, Medium,
- * Semibold, Bold. Both faces ship a variable axis, so naming the weights is a
- * request for static subsets: fewer bytes than the full 300–800 range when only
- * four stops are ever used.
+ * Funnel Display drives the entire project typography system.
  */
 const display = Funnel_Display({
   variable: '--font-display-family',
@@ -28,7 +17,7 @@ const display = Funnel_Display({
   weight: ['400', '500', '600', '700'],
 });
 
-const sans = Funnel_Sans({
+const sans = Funnel_Display({
   variable: '--font-sans-family',
   subsets: ['latin'],
   display: 'swap',

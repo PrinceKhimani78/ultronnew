@@ -62,7 +62,9 @@
      and a silently unstyled page, if the order ever flipped. */
   --font-display:
     var(--font-display-family), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-display-family), var(--font-sans-family), ui-sans-serif,
+    system-ui, sans-serif;
 
   /* ── Motion ────────────────────────────────────────────────────────────
      One house curve. A fast start and a long settle is what reads as

@@ -38,10 +38,9 @@ export const HOME_HERO = {
    * go stale.
    */
   stats: [
-    { icon: 'bank', value: '130+', label: 'Bank Accounts Opened' },
-    { icon: 'briefcase', value: '35+', label: 'Business Setups Structured' },
+    { icon: 'bank', value: '100+', label: 'Complex Bank Accounts Opened' },
+    { icon: 'briefcase', value: '30+', label: 'Structured Business Setups' },
     { icon: 'globe', value: 'All', label: 'Nationalities Welcome' },
-    { icon: 'check', value: 'End-to-End', label: 'Solutions Delivered' },
   ],
 } as const;
 
