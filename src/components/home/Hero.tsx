@@ -26,22 +26,19 @@ export function Hero() {
     <Section
       id="top"
       spacing="spacious"
-      className="relative w-full max-w-full overflow-x-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-36 lg:pb-20"
+      className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-36 lg:pb-20"
     >
-      <Container
-        width="wide"
-        className="w-full max-w-full px-4 sm:px-6 lg:px-8"
-      >
-        <div className="grid w-full max-w-full items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
+      <Container width="wide">
+        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
           {/* Main Content Column (Left on Desktop, Full Width on Mobile/Tablet) */}
-          <div className="flex w-full max-w-full flex-col items-center text-center lg:col-span-7 lg:items-start lg:text-left">
+          <div className="flex flex-col items-center text-center lg:col-span-7 lg:items-start lg:text-left">
             {/* 1. Heading */}
-            <h1 className="font-display w-full max-w-full text-[clamp(1.65rem,6.5vw,3.75rem)] leading-[1.12] font-bold tracking-tight text-[#121a18] sm:leading-[1.08]">
+            <h1 className="font-display text-[clamp(1.65rem,6.5vw,3.75rem)] leading-[1.12] font-bold tracking-tight text-[#121a18] sm:leading-[1.08]">
               <HeadingText segments={HOME_HERO.heading} />
             </h1>
 
             {/* 2. Trust Strip / Metrics Bar */}
-            <div className="bg-surface-raised/40 shadow-soft my-6 w-full max-w-full rounded-2xl border border-[#035551]/15 p-3.5 sm:my-8 sm:p-5 lg:max-w-none">
+            <div className="bg-surface-raised/40 shadow-soft my-6 w-full rounded-2xl border border-[#035551]/15 p-3.5 sm:my-8 sm:p-5 lg:max-w-none">
               <dl className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-2">
                 {HOME_HERO.stats.map((stat, index) => {
                   const Icon = STAT_ICONS[stat.icon as keyof typeof STAT_ICONS];
@@ -85,17 +82,17 @@ export function Hero() {
             </div>
 
             {/* 3. Description Paragraph */}
-            <p className="text-ink w-full max-w-xl text-xs leading-relaxed font-medium sm:text-base lg:text-lg">
+            <p className="text-ink max-w-xl text-xs leading-relaxed font-medium sm:text-base lg:text-lg">
               {HOME_HERO.body}
             </p>
 
             {/* 4. Primary CTA Button */}
-            <div className="mt-6 flex w-full max-w-full justify-center sm:mt-8 lg:justify-start">
+            <div className="mt-6 flex w-full justify-center sm:mt-8 lg:justify-start">
               <Button
                 asChild
                 size="lg"
                 arrow
-                className="xs:text-xs flex min-h-[52px] w-full max-w-full items-center justify-center px-4 text-center text-[11px] leading-snug font-semibold tracking-normal sm:w-auto sm:px-7 sm:text-sm sm:tracking-[0.08em]"
+                className="xs:text-xs flex min-h-[52px] w-full items-center justify-center px-4 text-center text-[11px] leading-snug font-semibold tracking-normal sm:w-auto sm:px-7 sm:text-sm sm:tracking-[0.08em]"
               >
                 <a href={HOME_HERO.cta.href}>{HOME_HERO.cta.label}</a>
               </Button>
@@ -103,7 +100,7 @@ export function Hero() {
           </div>
 
           {/* 5. Hero Illustration (Right on Desktop, Below CTA on Mobile/Tablet) */}
-          <div className="mt-8 flex w-full max-w-full justify-center lg:col-span-5 lg:mt-0 lg:justify-end">
+          <div className="mt-8 flex w-full justify-center lg:col-span-5 lg:mt-0 lg:justify-end">
             <div className="xs:max-w-[260px] relative w-full max-w-[220px] sm:max-w-[340px] lg:max-w-none">
               <Image
                 src="/brand/hero-monogram.webp"
