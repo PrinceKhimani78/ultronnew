@@ -95,7 +95,7 @@ export function Hero() {
                 asChild
                 size="lg"
                 arrow
-                className="xs:text-sm flex min-h-[52px] w-full max-w-full items-center justify-center px-4 text-center text-xs leading-snug font-semibold sm:w-auto sm:px-7 sm:text-base"
+                className="xs:text-xs flex min-h-[52px] w-full max-w-full items-center justify-center px-4 text-center text-[11px] leading-snug font-semibold tracking-normal sm:w-auto sm:px-7 sm:text-sm sm:tracking-[0.08em]"
               >
                 <a href={HOME_HERO.cta.href}>{HOME_HERO.cta.label}</a>
               </Button>

@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 const button = cva(
   [
     'inline-flex items-center justify-center gap-2.5 rounded-full',
-    'font-semibold tracking-[0.1em] uppercase whitespace-nowrap select-none',
+    'font-semibold tracking-[0.1em] uppercase whitespace-normal sm:whitespace-nowrap select-none',
     'transition-all duration-200 ease-house active:translate-y-px',
     'disabled:pointer-events-none disabled:opacity-50',
   ],
