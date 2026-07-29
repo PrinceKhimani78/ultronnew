@@ -27,8 +27,11 @@ export const HOME_HERO = {
   stats: [
     { icon: 'bank', value: '130+', label: 'Bank Accounts Opened' },
     { icon: 'briefcase', value: '35+', label: 'Businesses Structured' },
-    { icon: 'globe', value: 'All', label: 'Nationalities, All Risk Profiles' },
-    { icon: 'globe', value: 'Dubai,', label: 'UAE' },
+    {
+      icon: 'globe',
+      value: 'All',
+      label: 'Nationalities, All Risk Profiles, Dubai, UAE',
+    },
   ],
 } as const;
 
