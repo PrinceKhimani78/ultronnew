@@ -102,13 +102,13 @@ export function HowUltronWorks() {
                     />
                   )}
 
-                  <div className="pl-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-16 lg:pl-0">
+                  <div className="pl-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:pl-0">
                     {/* Step Card with 5px Gradient Border & 20px Radius */}
                     <div
                       className={
                         isRight
-                          ? 'lg:col-start-2 lg:pl-6'
-                          : 'lg:col-start-1 lg:pr-6'
+                          ? 'lg:col-start-2 lg:flex lg:justify-start lg:pl-4'
+                          : 'lg:col-start-1 lg:flex lg:justify-end lg:pr-4'
                       }
                     >
                       {!isReducedMotion ? (
@@ -149,8 +149,8 @@ export function HowUltronWorks() {
                     <div
                       className={
                         isRight
-                          ? 'mt-6 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex lg:justify-end lg:pr-6'
-                          : 'mt-6 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:flex lg:justify-start lg:pl-6'
+                          ? 'mt-6 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex lg:justify-end lg:pr-4'
+                          : 'mt-6 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:flex lg:justify-start lg:pl-4'
                       }
                     >
                       {!isReducedMotion ? (
