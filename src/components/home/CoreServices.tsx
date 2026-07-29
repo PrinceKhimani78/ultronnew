@@ -5,29 +5,26 @@ import { Section } from '@/components/layout/Section';
 import { ServiceTabs } from '@/components/home/ServiceTabs';
 import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
-import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
+import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SERVICES_INTRO } from '@/content/home';
 
 /**
- * The service catalogue.
- *
- * A Server Component wrapper around one client leaf: the heading, the button and
- * the band itself are static HTML, and only `ServiceTabs` — which needs
- * selection state — crosses into the browser.
- *
- * `ServiceTabs` reads `content/services.ts`, the same array the Services routes
- * will read in Phase 5, so the two surfaces cannot drift into describing the
- * firm differently.
+ * The Core Services section redesigned to match the reference layout:
+ * - Centered Eyebrow & Heading ("Our Core Services" with "Services" in brand green #035551)
+ * - 2-column Desktop layout (Vertical Tab List on left, Premium Content Card on right)
+ * - Accordion view for mobile devices
+ * - Centered "VIEW MORE" button at the bottom
  */
+
 export function CoreServices() {
   return (
     <Section
       id="services"
       spacing="spacious"
       tone="raised"
-      className="relative overflow-hidden"
+      className="relative overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28"
     >
-      {/* Bottom-left 3D Monogram watermark matching Figma frame 3 */}
+      {/* Bottom-left 3D Monogram watermark matching Ultron brand identity */}
       <Image
         src="/brand/services-monogram.png"
         alt=""
@@ -40,17 +37,17 @@ export function CoreServices() {
       <Container width="wide" className="relative z-10">
         <Reveal className="text-center">
           <Eyebrow align="center">{SERVICES_INTRO.eyebrow}</Eyebrow>
-          <h2 className="font-display mt-4 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em]">
-            <HeadingText segments={SERVICES_INTRO.heading} />
+          <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.25rem)] leading-[1.12] font-bold tracking-[-0.02em] text-[#121a18]">
+            Our Core <span className="text-[#035551]">Services</span>
           </h2>
         </Reveal>
 
-        <div className="mt-12">
+        <div className="mt-12 lg:mt-14">
           <ServiceTabs />
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <Button asChild arrow>
+        <div className="mt-12 flex justify-center">
+          <Button asChild size="lg" arrow>
             <a href={SERVICES_INTRO.cta.href}>{SERVICES_INTRO.cta.label}</a>
           </Button>
         </div>
