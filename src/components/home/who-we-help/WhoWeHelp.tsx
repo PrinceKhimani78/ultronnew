@@ -37,7 +37,7 @@ export function WhoWeHelpSection() {
           </div>
 
           <div className="lg:col-span-6">
-            <p className="text-ink-muted max-w-xl text-base leading-relaxed">
+            <p className="text-ink-muted max-w-xl text-[18px] leading-relaxed">
               {WHO_WE_HELP_HEADER.body}
             </p>
             <div className="mt-6">
