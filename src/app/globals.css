@@ -13,26 +13,21 @@
      The palette is deliberately small. Two brand colours, one accent, one
      ink, one surface. A sixth colour would be a decision nobody made. */
 
-  /* Page. Warm off-white — pure #fff reads clinical against the teal. */
+  /* Page. Warm off-white #fdfbee (Orange White) */
   --color-surface: #fdfbee;
   --color-surface-raised: #ffffff;
 
-  /* Body copy and headings. Near-black — the design sets headings almost pure
-     black against the cream, and a green cast reads as a printing error beside
-     the true-green emphasis words. */
+  /* Body copy and headings. Near-black */
   --color-ink: #121a18;
   --color-ink-muted: #4b5563;
 
-  /* Brand. `brand` is the header bar, footer, buttons and inverted bands.
-     `brand-bright` is reserved for emphasis *text* — the design colours the
-     payoff words in a heading a lighter, warmer green than the surfaces, and
-     using the surface green there makes them read as accidentally dark. */
-  --color-brand: #0e5045;
-  --color-brand-deep: #0a3c34;
-  --color-brand-ink: #062a24;
-  --color-brand-bright: #0f7a64;
+  /* Brand: Authentic Teal #035551 */
+  --color-brand: #035551;
+  --color-brand-deep: #023c39;
+  --color-brand-ink: #012422;
+  --color-brand-bright: #058881;
   /* Top stop of the timeline band's gradient. */
-  --color-brand-mid: #12695c;
+  --color-brand-mid: #046e68;
 
   /* Accent. Gold is punctuation, and in this design it is used in exactly three
      places: the active nav underline, the timeline markers, and the active

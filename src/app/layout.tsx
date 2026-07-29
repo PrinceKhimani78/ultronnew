@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Poppins } from 'next/font/google';
+import { Funnel_Display, Inter } from 'next/font/google';
 
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
@@ -10,20 +10,14 @@ import './globals.css';
 /**
  * Two families, matching the two tokens `globals.css` consumes.
  *
- * Poppins carries the brand. The design sets every heading in a heavy geometric
- * sans with tight tracking — the earlier editorial serif was a direct
- * contradiction of it, not a stylistic near-miss. Inter carries everything a
- * visitor reads at length.
- *
- * Poppins is not a variable font, so each weight is a separate file: only the
- * three the design actually uses are requested, because every extra weight is
- * bytes on the critical path.
+ * Funnel Display carries the primary brand typography matching the design system.
+ * Inter carries body copy and long-form text.
  */
-const display = Poppins({
+const display = Funnel_Display({
   variable: '--font-display-family',
   subsets: ['latin'],
   display: 'swap',
-  weight: ['500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const sans = Inter({
