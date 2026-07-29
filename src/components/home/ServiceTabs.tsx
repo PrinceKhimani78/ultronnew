@@ -84,21 +84,13 @@ export function ServiceTabs() {
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
               className={cn(
-                'group ease-house relative flex w-full items-center justify-between rounded-xl px-5 py-4 text-left text-sm font-medium transition-all duration-300',
+                'ease-house relative flex w-full items-center justify-center rounded-xl px-5 py-4 text-center text-sm font-medium transition-all duration-300',
                 isActive
-                  ? 'border-l-4 border-white bg-[#035551] font-semibold text-white shadow-md'
+                  ? 'bg-[#035551] font-semibold text-white shadow-md'
                   : 'border-b border-[#035551]/10 bg-[#FDFBEE] text-[#035551] last:border-b-0 hover:bg-[#035551]/10',
               )}
             >
-              <span className="truncate">{service.title}</span>
-              <span
-                className={cn(
-                  'h-2 w-2 rounded-full transition-opacity duration-200',
-                  isActive
-                    ? 'bg-white opacity-100'
-                    : 'bg-[#035551] opacity-0 group-hover:opacity-40',
-                )}
-              />
+              <span>{service.title}</span>
             </button>
           );
         })}
