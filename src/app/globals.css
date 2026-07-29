@@ -1,0 +1,270 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Design tokens
+
+   Named by intent, not by appearance — `accent` rather than `gold`, so a brand
+   refresh is one value change here and nothing else in the codebase.
+   Everything in `@theme` becomes a real CSS variable *and* a Tailwind utility.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Colour ────────────────────────────────────────────────────────────
+     The palette is deliberately small. Two brand colours, one accent, one
+     ink, one surface. A sixth colour would be a decision nobody made. */
+
+  /* Page. Warm off-white — pure #fff reads clinical against the teal. */
+  --color-surface: #fdfbee;
+  --color-surface-raised: #ffffff;
+
+  /* Body copy and headings. Near-black — the design sets headings almost pure
+     black against the cream, and a green cast reads as a printing error beside
+     the true-green emphasis words. */
+  --color-ink: #121a18;
+  --color-ink-muted: #4b5563;
+
+  /* Brand. `brand` is the header bar, footer, buttons and inverted bands.
+     `brand-bright` is reserved for emphasis *text* — the design colours the
+     payoff words in a heading a lighter, warmer green than the surfaces, and
+     using the surface green there makes them read as accidentally dark. */
+  --color-brand: #0e5045;
+  --color-brand-deep: #0a3c34;
+  --color-brand-ink: #062a24;
+  --color-brand-bright: #0f7a64;
+  /* Top stop of the timeline band's gradient. */
+  --color-brand-mid: #12695c;
+
+  /* Accent. Gold is punctuation, and in this design it is used in exactly three
+     places: the active nav underline, the timeline markers, and the active
+     footer link. Heading emphasis is `brand-bright`, NOT gold.
+
+     `accent` is DECORATIVE ONLY — it measures ~2:1 on `surface` and fails WCAG
+     AA outright. It may mark a word or draw a rule; it may never be the sole
+     carrier of meaning and never body copy.
+
+     `accent-deep` is the readable gold: 4.84:1 on `surface`, so it clears AA for
+     text at any size. It was previously #a37f3c, which measures 3.57:1 — that
+     passes only for large text, while the comment here advertised it as safe
+     "where text must be read". Darkened so the token matches its own guidance. */
+  --color-accent: #c9b37e;
+  --color-accent-deep: #8a6a2b;
+
+  --color-line: rgb(3 85 81 / 0.12);
+
+  /* ── Type ──────────────────────────────────────────────────────────────
+     Two families. Display carries the brand; sans carries everything a
+     visitor actually has to read at length.
+
+     The `*-family` variables are injected by `next/font` in the root layout.
+     They are deliberately named differently from the tokens that consume them:
+     both land on <html> with equal specificity, so a same-named alias would be
+     a self-reference whose resolution depends on stylesheet order — a cycle,
+     and a silently unstyled page, if the order ever flipped. */
+  --font-display:
+    var(--font-display-family), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Motion ────────────────────────────────────────────────────────────
+     One house curve. A fast start and a long settle is what reads as
+     expensive; `ease-in-out` reads as a slideshow. */
+  --ease-house: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Animation ─────────────────────────────────────────────────────────
+     Disclosure only. `--radix-accordion-content-height` is set by Radix at
+     runtime, so the panel animates to its real height rather than to a
+     hard-coded guess that would clip longer answers.
+
+     The reduced-motion block at the foot of this file neutralises both. */
+  --animate-accordion-down: accordion-down 300ms var(--ease-house);
+  --animate-accordion-up: accordion-up 300ms var(--ease-house);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* ── Elevation ─────────────────────────────────────────────────────────
+     Tinted with the brand rather than black, so shadows sit in the palette
+     instead of greying it. */
+  --shadow-soft:
+    0 1px 2px rgb(3 85 81 / 0.04), 0 8px 24px -12px rgb(3 85 81 / 0.16);
+  --shadow-lift:
+    0 2px 4px rgb(3 85 81 / 0.06), 0 20px 48px -20px rgb(3 85 81 / 0.28);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Stops the sticky header covering the target of an in-page anchor. */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* One visible focus treatment for the whole site. Never removed — only
+     ever replaced, and this is the replacement. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-surface);
+  }
+
+  /* Headings default to the display face so no section has to remember. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    /* Prevents a single orphaned word on the last line. */
+    text-wrap: pretty;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Utilities
+   Only patterns that Tailwind cannot express and that appear more than once.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Architectural grid. An 80px lattice at 3.5% — present, never legible. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgb(3 85 81 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(3 85 81 / 0.035) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .bg-dots {
+    background-image: radial-gradient(
+      circle,
+      rgb(3 85 81 / 0.22) 1.2px,
+      transparent 1.2px
+    );
+    background-size: 15px 15px;
+  }
+
+  .bg-glow-brand {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgb(3 85 81 / 0.07) 0%,
+      rgb(253 251 238 / 0) 70%
+    );
+  }
+
+  .bg-glow-accent {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgb(201 179 126 / 0.16) 0%,
+      rgb(253 251 238 / 0) 70%
+    );
+  }
+
+  /* Hairline that fades out at both ends, so it never collides with an edge. */
+  .rule-fade {
+    background: linear-gradient(
+      to right,
+      rgb(3 85 81 / 0) 0%,
+      rgb(3 85 81 / 0.16) 20%,
+      rgb(3 85 81 / 0.16) 80%,
+      rgb(3 85 81 / 0) 100%
+    );
+  }
+
+  /* Scroll reveal, driven by `components/motion/Reveal`.
+
+     Only `opacity` and `transform` — both composite on the GPU, so a page with
+     forty of these still scrolls at 60fps. The observer sets
+     `data-reveal="visible"`; the delay is passed per element as a custom
+     property so a stagger needs no extra classes. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 700ms var(--ease-house) var(--reveal-delay, 0s),
+      transform 700ms var(--ease-house) var(--reveal-delay, 0s);
+  }
+
+  [data-reveal='visible'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Concentric outlines. Centred by `inset: 0; margin: auto` rather than a
+     translate, because these get animated with `transform: scale()` and a
+     centring transform would be overwritten by the first keyframe. */
+  .ring-line {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    border: 1px solid rgb(3 85 81 / 0.13);
+    pointer-events: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Reduced motion
+
+   A correctness requirement, not a courtesy. Anything that moves must reduce
+   to a fade or to nothing. `scroll-behavior` is included because a smooth
+   scroll is exactly the vestibular trigger this preference exists to avoid.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Reveal collapses to "already there" rather than to a fade. The blanket rule
+     below would shorten the transition to nothing anyway, but stating it here
+     means the element is never briefly transparent while the observer catches
+     up on a slow device. */
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
