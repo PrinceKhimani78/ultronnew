@@ -22,7 +22,7 @@ export function ServicesGrid() {
     // squeezed between two elements that already bring their own padding: the
     // hero card above and `CtaContact`'s spacious top below. Using the default
     // would stack ~17rem of dead space before the call to action.
-    <Section className="pt-16 pb-8 sm:pt-20 sm:pb-10">
+    <Section className="text-ink bg-white pt-16 pb-16 sm:pt-20 sm:pb-20">
       <Container width="wide">
         <Reveal>
           <Eyebrow>{SERVICES_PAGE.intro.eyebrow}</Eyebrow>

@@ -4,7 +4,6 @@ import { ArrowUpRight, Check, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useId, useState } from 'react';
 
-import { Card } from '@/components/ui/Card';
 import { SERVICES_PAGE } from '@/content/services-page';
 import type { Service } from '@/content/services';
 import { cn } from '@/lib/utils';
@@ -18,7 +17,14 @@ export function ServiceCard({ service }: ServiceCardProps) {
   const panelId = useId();
 
   return (
-    <Card variant="raised" interactive className="flex h-full flex-col">
+    <div
+      className={cn(
+        'flex h-full flex-col rounded-[20px] border border-[#035551]/10 p-6 sm:p-8',
+        'bg-[conic-gradient(from_180deg_at_50%_50%,#FDFBEE_0deg,#FFFFFF_160deg,#FDFBEE_320deg,#FDFBEE_360deg)]',
+        'shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
+        'ease-house transition-all duration-300 hover:-translate-y-1 hover:shadow-[inset_4px_-4px_8px_0px_rgba(3,85,81,0.3)]',
+      )}
+    >
       <h3 className="font-display text-base font-semibold tracking-tight">
         {service.headline}
       </h3>
@@ -87,6 +93,6 @@ export function ServiceCard({ service }: ServiceCardProps) {
           <ChevronRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       </div>
-    </Card>
+    </div>
   );
 }
