@@ -20,7 +20,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-brand text-surface">
+    <footer data-header-tone="dark" className="bg-brand text-surface">
       <Container width="wide">
         <div className="grid gap-12 py-16 lg:grid-cols-12 lg:py-20">
           <div className="lg:col-span-5">

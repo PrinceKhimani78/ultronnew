@@ -32,6 +32,7 @@ export function Section({
 }: SectionProps) {
   return (
     <section
+      data-header-tone={tone === 'brand' ? 'dark' : undefined}
       className={cn('relative', SPACING[spacing], TONES[tone], className)}
       {...props}
     />

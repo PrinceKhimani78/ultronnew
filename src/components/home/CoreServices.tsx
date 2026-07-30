@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { ServiceTabs } from '@/components/home/ServiceTabs';
@@ -24,16 +22,6 @@ export function CoreServices() {
       tone="raised"
       className="relative overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28"
     >
-      {/* Bottom-left 3D Monogram watermark matching Ultron brand identity */}
-      <Image
-        src="/brand/services-monogram.png"
-        alt=""
-        aria-hidden="true"
-        width={240}
-        height={260}
-        className="pointer-events-none absolute -bottom-6 -left-6 z-0 h-auto w-40 opacity-35 sm:w-56 lg:opacity-45"
-      />
-
       <Container width="wide" className="relative z-10">
         <Reveal className="text-center">
           <Eyebrow align="center">{SERVICES_INTRO.eyebrow}</Eyebrow>
