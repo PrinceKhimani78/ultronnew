@@ -208,8 +208,8 @@ export const WHY_CHOOSE = {
 export const CTA_CONTACT = {
   eyebrow: 'Get started',
   heading: [
-    { text: 'Start your UAE Business Journey ' },
-    { text: 'Today', accent: true },
+    { text: 'Start your UAE Business  ' },
+    { text: 'Journey Today', accent: true },
   ] as readonly HeadingSegment[],
   body: "If a case has stalled, or hasn't been tried yet, talk to us before writing it off. Banking, financing, structuring or compliance—that's exactly where we start.",
   cta: { label: 'Get a Same-Day Feasibility Read', href: '#contact' },
