@@ -1,110 +1,54 @@
-import { Container } from '@/components/layout/Container';
-import { Section } from '@/components/layout/Section';
-import { Button } from '@/components/ui/Button';
-import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
+'use client';
+
 import { WHO_WE_HELP_CARDS, WHO_WE_HELP_HEADER } from '@/content/who-we-help';
-import { WhoWeHelpCard } from './WhoWeHelpCard';
+import { DesktopStorytellingDeck } from './DesktopStorytellingDeck';
+import { MobileFlipDeck } from './MobileFlipDeck';
 
 /**
- * "Who We Help" section matching the Figma comp:
- * - Background: Clean off-white #FDFBEE (no gradients, patterns, or graphics)
- * - Top Row: Left Eyebrow + "Who We Help" (green "Help") & Right body copy + "ABOUT US" CTA button
- * - Desktop Asymmetric Grid:
- *   - Left Column (60% width):
- *     Row 1: Wide Card (International Entrepreneurs)
- *     Row 2: 2 Equal Cards (Foreign Investors, SMEs & Growing Businesses)
- *     Row 3: Wide Card (Startups & Founders)
- *   - Right Column (40% width):
- *     Card 1: High-Net-Worth Individuals
- *     Card 2: Global Companies Expanding to the UAE
+ * Redesigned "Who We Help" section:
+ * - Apple x Stripe x Trionn x Luxury Financial Advisory storytelling deck
+ * - Pinned sticky desktop deck with smooth 3D depth transitions
+ * - Mobile vertical 3D card flip interaction
+ * - Architectural grid background, ambient radial glows & subtle geometry
  */
 
 export function WhoWeHelpSection() {
-  const cardMap = Object.fromEntries(
-    WHO_WE_HELP_CARDS.map((card) => [card.id, card]),
-  );
-
   return (
-    <Section className="bg-[#FDFBEE] pt-16 pb-24 sm:pt-20 sm:pb-32">
-      <Container width="wide">
-        {/* Top Header Section */}
-        <div className="mb-14 grid gap-8 lg:mb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
-          <div className="lg:col-span-6">
-            <Eyebrow>{WHO_WE_HELP_HEADER.eyebrow}</Eyebrow>
-            <h2 className="font-display mt-4 text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.1] font-bold tracking-tight text-[#121a18]">
-              <HeadingText segments={WHO_WE_HELP_HEADER.heading} />
-            </h2>
-          </div>
+    <section className="relative w-full overflow-hidden bg-[#FDFBEE] text-[#121a18]">
+      {/* Background Architectural Grid & Geometry Overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#03555108_1px,transparent_1px),linear-gradient(to_bottom,#03555108_1px,transparent_1px)] bg-[size:36px_36px]" />
 
-          <div className="lg:col-span-6">
-            <p className="text-ink-muted max-w-xl text-[18px] leading-relaxed">
-              {WHO_WE_HELP_HEADER.body}
-            </p>
-            <div className="mt-6">
-              <Button asChild variant="outline" arrow>
-                <a href={WHO_WE_HELP_HEADER.cta.href}>
-                  {WHO_WE_HELP_HEADER.cta.label}
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
+      {/* Subtle Radial Glow Center Top & Bottom */}
+      <div className="pointer-events-none absolute top-0 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(3,85,81,0.06)_0,transparent_70%)] blur-3xl" />
+      <div className="pointer-events-none absolute right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_at_center,rgba(10,167,155,0.05)_0,transparent_70%)] blur-3xl" />
 
-        {/* Asymmetric Content Grid matching Figma comp */}
-        <div className="grid items-stretch gap-6 lg:grid-cols-12">
-          {/* Left Column (7 cols / ~60% width) */}
-          <div className="flex flex-col gap-6 lg:col-span-7">
-            {/* Row 1: Card 1 (Wide) */}
-            <WhoWeHelpCard
-              item={
-                cardMap['uae-smes-operating-businesses'] || WHO_WE_HELP_CARDS[0]
-              }
-              index={0}
-              className="flex-1"
-            />
+      {/* Circular Architectural Accents */}
+      <div className="pointer-events-none absolute top-1/4 -left-24 h-96 w-96 rounded-full border border-[#035551]/10 opacity-40" />
+      <div className="pointer-events-none absolute -right-24 bottom-1/4 h-[500px] w-[500px] rounded-full border border-[#035551]/10 opacity-40" />
 
-            {/* Row 2: Card 3 & Card 4 (2 Equal Columns) */}
-            <div className="grid gap-6 sm:grid-cols-2">
-              <WhoWeHelpCard
-                item={cardMap['foreign-investors'] || WHO_WE_HELP_CARDS[2]}
-                index={2}
-                className="h-full"
-              />
-              <WhoWeHelpCard
-                item={
-                  cardMap['smes-growing-businesses'] || WHO_WE_HELP_CARDS[3]
-                }
-                index={3}
-                className="h-full"
-              />
-            </div>
+      {/* Desktop Experience (Tablet & Desktop md+) */}
+      <div className="hidden md:block">
+        <DesktopStorytellingDeck
+          items={WHO_WE_HELP_CARDS}
+          eyebrow={WHO_WE_HELP_HEADER.eyebrow}
+          heading={WHO_WE_HELP_HEADER.heading}
+          body={WHO_WE_HELP_HEADER.body}
+          ctaLabel={WHO_WE_HELP_HEADER.cta.label}
+          ctaHref={WHO_WE_HELP_HEADER.cta.href}
+        />
+      </div>
 
-            {/* Row 3: Card 5 (Wide) */}
-            <WhoWeHelpCard
-              item={cardMap['startups-founders'] || WHO_WE_HELP_CARDS[4]}
-              index={4}
-              className="flex-1"
-            />
-          </div>
-
-          {/* Right Column (5 cols / ~40% width) */}
-          <div className="flex flex-col gap-6 lg:col-span-5">
-            {/* Card 2 (Tall Card) */}
-            <WhoWeHelpCard
-              item={cardMap['high-net-worth'] || WHO_WE_HELP_CARDS[1]}
-              index={1}
-              className="flex-1"
-            />
-
-            {/* Card 6 */}
-            <WhoWeHelpCard
-              item={cardMap['global-companies'] || WHO_WE_HELP_CARDS[5]}
-              index={5}
-              className="flex-1"
-            />
-          </div>
-        </div>
-      </Container>
-    </Section>
+      {/* Mobile Experience (Under md breakpoint) */}
+      <div className="block md:hidden">
+        <MobileFlipDeck
+          items={WHO_WE_HELP_CARDS}
+          eyebrow={WHO_WE_HELP_HEADER.eyebrow}
+          heading={WHO_WE_HELP_HEADER.heading}
+          body={WHO_WE_HELP_HEADER.body}
+          ctaLabel={WHO_WE_HELP_HEADER.cta.label}
+          ctaHref={WHO_WE_HELP_HEADER.cta.href}
+        />
+      </div>
+    </section>
   );
 }
