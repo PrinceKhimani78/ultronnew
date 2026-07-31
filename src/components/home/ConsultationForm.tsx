@@ -57,7 +57,7 @@ export function ConsultationForm() {
 
       <form className="mt-6 space-y-5" suppressHydrationWarning>
         <div className="grid gap-5 sm:grid-cols-2">
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <FieldLabel htmlFor="contact-name" required>
               Full name
             </FieldLabel>
@@ -67,11 +67,12 @@ export function ConsultationForm() {
               type="text"
               autoComplete="name"
               required
+              suppressHydrationWarning
               className={FIELD_CLASS}
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <FieldLabel htmlFor="contact-email" required>
               Email address
             </FieldLabel>
@@ -81,11 +82,12 @@ export function ConsultationForm() {
               type="email"
               autoComplete="email"
               required
+              suppressHydrationWarning
               className={FIELD_CLASS}
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <FieldLabel htmlFor="contact-phone" required>
               Phone number
             </FieldLabel>
@@ -95,11 +97,12 @@ export function ConsultationForm() {
               type="tel"
               autoComplete="tel"
               required
+              suppressHydrationWarning
               className={FIELD_CLASS}
             />
           </div>
 
-          <div className="space-y-2" suppressHydrationWarning>
+          <div className="space-y-2">
             <FieldLabel htmlFor="contact-business" required>
               Business type
             </FieldLabel>
@@ -109,12 +112,13 @@ export function ConsultationForm() {
               type="text"
               autoComplete="organization"
               required
+              suppressHydrationWarning
               className={FIELD_CLASS}
             />
           </div>
         </div>
 
-        <div className="space-y-2" suppressHydrationWarning>
+        <div className="space-y-2">
           <FieldLabel htmlFor="contact-service" required>
             Service interested in
           </FieldLabel>
@@ -123,6 +127,7 @@ export function ConsultationForm() {
             name="service"
             required
             defaultValue=""
+            suppressHydrationWarning
             className={cn(FIELD_CLASS, 'appearance-none')}
           >
             <option value="" disabled>
@@ -140,12 +145,13 @@ export function ConsultationForm() {
           </select>
         </div>
 
-        <div className="space-y-2" suppressHydrationWarning>
+        <div className="space-y-2">
           <FieldLabel htmlFor="contact-message">Message</FieldLabel>
           <textarea
             id="contact-message"
             name="message"
             rows={4}
+            suppressHydrationWarning
             className={cn(FIELD_CLASS, 'resize-y')}
           />
         </div>
