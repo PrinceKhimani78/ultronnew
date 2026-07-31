@@ -136,52 +136,41 @@ function MobileFlipCard({
   const start = index * stepSize;
   const end = (index + 1) * stepSize;
 
-  // 3D Flip transformation outputs
-  const rotateX = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.5, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [0, 0, 0, 0]
-      : index === 0
-        ? [0, 0, 0, -45]
-        : index === total - 1
-          ? [45, 0, 0, 0]
-          : [45, 0, 0, -45],
-  );
+  let inputRange: number[];
+  let opacityRange: number[];
+  let scaleRange: number[];
+  let yRange: number[];
+  let rotateXRange: number[];
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.5, start, end - stepSize * 0.2, end],
-    index === 0
-      ? [1, 1, 1, 0]
-      : index === total - 1
-        ? [0, 1, 1, 1]
-        : [0, 1, 1, 0],
-  );
+  if (index === 0) {
+    inputRange = [0, Math.max(0, end - stepSize * 0.2), end];
+    opacityRange = [1, 1, 0];
+    scaleRange = shouldReduceMotion ? [1, 1, 1] : [1, 1, 0.92];
+    yRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -30];
+    rotateXRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -45];
+  } else if (index === total - 1) {
+    inputRange = [Math.max(0, start - stepSize * 0.5), start, 1];
+    opacityRange = [0, 1, 1];
+    scaleRange = shouldReduceMotion ? [1, 1, 1] : [0.92, 1, 1];
+    yRange = shouldReduceMotion ? [0, 0, 0] : [40, 0, 0];
+    rotateXRange = shouldReduceMotion ? [0, 0, 0] : [45, 0, 0];
+  } else {
+    inputRange = [
+      Math.max(0, start - stepSize * 0.5),
+      start,
+      Math.max(start, end - stepSize * 0.2),
+      Math.min(1, end),
+    ];
+    opacityRange = [0, 1, 1, 0];
+    scaleRange = shouldReduceMotion ? [1, 1, 1, 1] : [0.92, 1, 1, 0.92];
+    yRange = shouldReduceMotion ? [0, 0, 0, 0] : [40, 0, 0, -30];
+    rotateXRange = shouldReduceMotion ? [0, 0, 0, 0] : [45, 0, 0, -45];
+  }
 
-  const scale = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.5, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [1, 1, 1, 1]
-      : index === 0
-        ? [1, 1, 1, 0.92]
-        : index === total - 1
-          ? [0.92, 1, 1, 1]
-          : [0.92, 1, 1, 0.92],
-  );
-
-  const y = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.5, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [0, 0, 0, 0]
-      : index === 0
-        ? [0, 0, 0, -30]
-        : index === total - 1
-          ? [40, 0, 0, 0]
-          : [40, 0, 0, -30],
-  );
+  const rotateX = useTransform(scrollYProgress, inputRange, rotateXRange);
+  const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
+  const scale = useTransform(scrollYProgress, inputRange, scaleRange);
+  const y = useTransform(scrollYProgress, inputRange, yRange);
 
   const pointerEvents = useTransform(scrollYProgress, (val: number) => {
     if (index === 0 && val <= end) return 'auto';

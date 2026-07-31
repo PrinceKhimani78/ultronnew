@@ -180,55 +180,41 @@ function DeckCard({
   const start = index * stepSize;
   const end = (index + 1) * stepSize;
 
-  // Transform windows for enter, active, and exit
-  // Enter: [start - stepSize*0.5, start]
-  // Active: [start, end]
-  // Exit: [end, end + stepSize*0.5]
-  const opacity = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.6, start, end - stepSize * 0.2, end],
-    index === 0
-      ? [1, 1, 1, 0]
-      : index === total - 1
-        ? [0, 1, 1, 1]
-        : [0, 1, 1, 0],
-  );
+  let inputRange: number[];
+  let opacityRange: number[];
+  let scaleRange: number[];
+  let yRange: number[];
+  let rotateRange: number[];
 
-  const scale = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.6, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [1, 1, 1, 1]
-      : index === 0
-        ? [1, 1, 1, 0.94]
-        : index === total - 1
-          ? [0.96, 1, 1, 1]
-          : [0.96, 1, 1, 0.94],
-  );
+  if (index === 0) {
+    inputRange = [0, Math.max(0, end - stepSize * 0.2), end];
+    opacityRange = [1, 1, 0];
+    scaleRange = shouldReduceMotion ? [1, 1, 1] : [1, 1, 0.94];
+    yRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -20];
+    rotateRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -2.5];
+  } else if (index === total - 1) {
+    inputRange = [Math.max(0, start - stepSize * 0.5), start, 1];
+    opacityRange = [0, 1, 1];
+    scaleRange = shouldReduceMotion ? [1, 1, 1] : [0.96, 1, 1];
+    yRange = shouldReduceMotion ? [0, 0, 0] : [40, 0, 0];
+    rotateRange = shouldReduceMotion ? [0, 0, 0] : [2.5, 0, 0];
+  } else {
+    inputRange = [
+      Math.max(0, start - stepSize * 0.5),
+      start,
+      Math.max(start, end - stepSize * 0.2),
+      Math.min(1, end),
+    ];
+    opacityRange = [0, 1, 1, 0];
+    scaleRange = shouldReduceMotion ? [1, 1, 1, 1] : [0.96, 1, 1, 0.94];
+    yRange = shouldReduceMotion ? [0, 0, 0, 0] : [40, 0, 0, -20];
+    rotateRange = shouldReduceMotion ? [0, 0, 0, 0] : [2.5, 0, 0, -2.5];
+  }
 
-  const y = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.6, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [0, 0, 0, 0]
-      : index === 0
-        ? [0, 0, 0, -20]
-        : index === total - 1
-          ? [40, 0, 0, 0]
-          : [40, 0, 0, -20],
-  );
-
-  const rotate = useTransform(
-    scrollYProgress,
-    [start - stepSize * 0.6, start, end - stepSize * 0.2, end],
-    shouldReduceMotion
-      ? [0, 0, 0, 0]
-      : index === 0
-        ? [0, 0, 0, -2.5]
-        : index === total - 1
-          ? [2.5, 0, 0, 0]
-          : [2.5, 0, 0, -2.5],
-  );
+  const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
+  const scale = useTransform(scrollYProgress, inputRange, scaleRange);
+  const y = useTransform(scrollYProgress, inputRange, yRange);
+  const rotate = useTransform(scrollYProgress, inputRange, rotateRange);
 
   // Pointer events control so only the active card is clickable
   const pointerEvents = useTransform(scrollYProgress, (val: number) => {
