@@ -22,7 +22,7 @@ export const HOME_HERO = {
 
   body: "Every case we take starts the same way: something that should have worked, didn't. We step in where standard applications get rejected, structure it properly, and stay in the case until it's resolved.",
 
-  cta: { label: 'Get a Same-Day Feasibility Read', href: '#contact' },
+  cta: { label: 'Explore', href: '#contact' },
 
   stats: [
     { icon: 'bank', value: '130+', label: 'Bank Accounts Opened' },

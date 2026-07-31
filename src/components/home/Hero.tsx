@@ -1,18 +1,19 @@
-import { Briefcase, Globe, Landmark } from 'lucide-react';
+import { ArrowUpRight, Briefcase, Globe, Landmark } from 'lucide-react';
 import Image from 'next/image';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import { Button } from '@/components/ui/Button';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import { HOME_HERO } from '@/content/home';
+import { cn } from '@/lib/utils';
 
 /**
  * Fully Responsive Hero Section (320px to 1920px+):
+ * - Reconciled to Figma Frame 5 (1280px comp):
+ *   1. Bottom Hero Gradient Effect (#FDFBEE to soft #DCCB8E 132px height)
+ *   2. Primary CTA Button: 179px × 44px pill [ EXPLORE  ○↗ ] with diagonal Uiverse arrow swap animation
  * - Desktop (1200px+): 2-Column layout (Left: Heading, Trust Strip, Description, CTA; Right: 3D Monogram)
- * - Tablet & Mobile (<1200px): Stacked single column with center-aligned text and element order:
- *   Heading -> Trust Strip -> Description -> CTA -> 3D Illustration
- * - Guaranteed 0% horizontal overflow or text clipping on 320px, 360px, 375px, 390px, 480px, 640px, 768px, 1024px, 1280px+
+ * - Tablet & Mobile (<1200px): Stacked single column with center-aligned text
  */
 
 const STAT_ICONS = {
@@ -25,19 +26,9 @@ export function Hero() {
   return (
     <Section
       id="top"
-      /*
-       * No `spacing` variant: every edge is stated below, because the top is
-       * not rhythm but clearance.
-       *
-       * Top padding is not free space — the header is fixed, so this is what
-       * keeps the h1 out from under it. The pill's lowest edge is 76px on
-       * mobile (16 inset + 60 bar) and 98px at `lg` (32 + 66); each step here
-       * clears that and adds roughly 28px of air, which is the gap the comp
-       * draws between the bar and the heading.
-       */
       className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32 lg:pb-12"
     >
-      <Container width="wide">
+      <Container width="wide" className="relative z-10">
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
           {/* Main Content Column (Left on Desktop, Full Width on Mobile/Tablet) */}
           <div className="flex flex-col items-center text-center lg:col-span-7 lg:items-start lg:text-left">
@@ -95,16 +86,32 @@ export function Hero() {
               {HOME_HERO.body}
             </p>
 
-            {/* 4. Primary CTA Button */}
+            {/* 4. Rebuilt Primary CTA Button [ EXPLORE  ○↗ ] matching Figma Comp & Uiverse Diagonal Arrow Animation */}
             <div className="mt-6 flex w-full justify-center sm:mt-7 lg:justify-start">
-              <Button
-                asChild
-                size="lg"
-                arrow
-                className="xs:text-xs flex min-h-[52px] w-full items-center justify-center px-4 text-center text-[11px] leading-snug font-semibold tracking-normal sm:w-auto sm:px-7 sm:text-sm sm:tracking-[0.08em]"
+              <a
+                href={HOME_HERO.cta.href}
+                className={cn(
+                  'group relative inline-flex h-[44px] w-full max-w-[179px] items-center justify-between rounded-full border-2 border-[#035551] bg-[#035551] pr-2.5 pl-7 shadow-[0px_4px_9px_0px_rgba(0,0,0,0.25)] select-none',
+                  'font-display text-xs font-bold tracking-[0.08em] text-white uppercase sm:text-sm',
+                  'ease-house transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#154B47] hover:shadow-[0px_6px_14px_0px_rgba(0,0,0,0.30)] active:translate-y-0',
+                  'focus-visible:ring-2 focus-visible:ring-[#035551] focus-visible:ring-offset-2 focus-visible:outline-none',
+                )}
               >
-                <a href={HOME_HERO.cta.href}>{HOME_HERO.cta.label}</a>
-              </Button>
+                <span>{HOME_HERO.cta.label}</span>
+
+                <span
+                  aria-hidden="true"
+                  className="relative inline-flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#FDFBEE] text-[#035551] sm:h-[26px] sm:w-[26px]"
+                >
+                  {/* Primary Arrow (exits top-right on hover) */}
+                  <ArrowUpRight className="ease-house h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-full group-hover:-translate-y-full group-hover:opacity-0 motion-reduce:transform-none motion-reduce:group-hover:opacity-100" />
+                  {/* Copy Arrow (enters from bottom-left on hover) */}
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    className="ease-house absolute h-3.5 w-3.5 -translate-x-full translate-y-full opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:hidden"
+                  />
+                </span>
+              </a>
             </div>
           </div>
 
@@ -125,6 +132,16 @@ export function Hero() {
           </div>
         </div>
       </Container>
+
+      {/* 6. Hero Bottom Gradient Effect (Figma Frame 5: 132px height transition into next section) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-0 bottom-0 left-0 z-0 h-[64px] w-full sm:h-[96px] lg:h-[132px]"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(253, 251, 238, 0) 0%, rgba(253, 251, 238, 0.75) 35%, rgba(220, 203, 142, 0.22) 100%)',
+        }}
+      />
     </Section>
   );
 }
