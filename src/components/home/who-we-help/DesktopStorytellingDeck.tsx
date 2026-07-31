@@ -119,6 +119,35 @@ export function DesktopStorytellingDeck({
   );
 }
 
+/** Helper to ensure WAAPI keyframes start at 0, end at 1, and are strictly monotonic */
+function sanitizeKeyframes(inputs: number[], outputs: number[]) {
+  const cleanInputs: number[] = [];
+  const cleanOutputs: number[] = [];
+
+  if (inputs[0] > 0) {
+    cleanInputs.push(0);
+    cleanOutputs.push(outputs[0]);
+  }
+
+  for (let i = 0; i < inputs.length; i++) {
+    const currInput = Math.max(0, Math.min(1, inputs[i]));
+    const prevInput =
+      cleanInputs.length > 0 ? cleanInputs[cleanInputs.length - 1] : -1;
+
+    if (currInput > prevInput + 0.0001) {
+      cleanInputs.push(currInput);
+      cleanOutputs.push(outputs[i]);
+    }
+  }
+
+  if (cleanInputs[cleanInputs.length - 1] < 1) {
+    cleanInputs.push(1);
+    cleanOutputs.push(outputs[outputs.length - 1]);
+  }
+
+  return { inputs: cleanInputs, outputs: cleanOutputs };
+}
+
 /** Step Pill indicator reflecting active scroll progress */
 function StepPill({
   index,
@@ -135,15 +164,33 @@ function StepPill({
   const start = index * stepSize;
   const end = (index + 1) * stepSize;
 
+  const rawOpacityInputs = [
+    start,
+    start + stepSize * 0.3,
+    end - stepSize * 0.3,
+    end,
+  ];
+  const rawOpacityOutputs = [0.4, 1, 1, 0.4];
+  const opacityFrames = sanitizeKeyframes(rawOpacityInputs, rawOpacityOutputs);
+
+  const rawScaleInputs = [
+    start,
+    start + stepSize * 0.3,
+    end - stepSize * 0.3,
+    end,
+  ];
+  const rawScaleOutputs = [0.9, 1.1, 1.1, 0.9];
+  const scaleFrames = sanitizeKeyframes(rawScaleInputs, rawScaleOutputs);
+
   const opacity = useTransform(
     scrollYProgress,
-    [start, start + stepSize * 0.3, end - stepSize * 0.3, end],
-    [0.4, 1, 1, 0.4],
+    opacityFrames.inputs,
+    opacityFrames.outputs,
   );
   const scale = useTransform(
     scrollYProgress,
-    [start, start + stepSize * 0.3, end - stepSize * 0.3, end],
-    [0.9, 1.1, 1.1, 0.9],
+    scaleFrames.inputs,
+    scaleFrames.outputs,
   );
 
   return (
@@ -180,41 +227,58 @@ function DeckCard({
   const start = index * stepSize;
   const end = (index + 1) * stepSize;
 
-  let inputRange: number[];
-  let opacityRange: number[];
-  let scaleRange: number[];
-  let yRange: number[];
-  let rotateRange: number[];
+  let rawInputs: number[];
+  let opacityOutputs: number[];
+  let scaleOutputs: number[];
+  let yOutputs: number[];
+  let rotateOutputs: number[];
 
   if (index === 0) {
-    inputRange = [0, Math.max(0, end - stepSize * 0.2), end];
-    opacityRange = [1, 1, 0];
-    scaleRange = shouldReduceMotion ? [1, 1, 1] : [1, 1, 0.94];
-    yRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -20];
-    rotateRange = shouldReduceMotion ? [0, 0, 0] : [0, 0, -2.5];
+    rawInputs = [0, Math.max(0, end - stepSize * 0.2), end];
+    opacityOutputs = [1, 1, 0];
+    scaleOutputs = shouldReduceMotion ? [1, 1, 1] : [1, 1, 0.94];
+    yOutputs = shouldReduceMotion ? [0, 0, 0] : [0, 0, -20];
+    rotateOutputs = shouldReduceMotion ? [0, 0, 0] : [0, 0, -2.5];
   } else if (index === total - 1) {
-    inputRange = [Math.max(0, start - stepSize * 0.5), start, 1];
-    opacityRange = [0, 1, 1];
-    scaleRange = shouldReduceMotion ? [1, 1, 1] : [0.96, 1, 1];
-    yRange = shouldReduceMotion ? [0, 0, 0] : [40, 0, 0];
-    rotateRange = shouldReduceMotion ? [0, 0, 0] : [2.5, 0, 0];
+    rawInputs = [Math.max(0, start - stepSize * 0.5), start, 1];
+    opacityOutputs = [0, 1, 1];
+    scaleOutputs = shouldReduceMotion ? [1, 1, 1] : [0.96, 1, 1];
+    yOutputs = shouldReduceMotion ? [0, 0, 0] : [40, 0, 0];
+    rotateOutputs = shouldReduceMotion ? [0, 0, 0] : [2.5, 0, 0];
   } else {
-    inputRange = [
+    rawInputs = [
       Math.max(0, start - stepSize * 0.5),
       start,
       Math.max(start, end - stepSize * 0.2),
       Math.min(1, end),
     ];
-    opacityRange = [0, 1, 1, 0];
-    scaleRange = shouldReduceMotion ? [1, 1, 1, 1] : [0.96, 1, 1, 0.94];
-    yRange = shouldReduceMotion ? [0, 0, 0, 0] : [40, 0, 0, -20];
-    rotateRange = shouldReduceMotion ? [0, 0, 0, 0] : [2.5, 0, 0, -2.5];
+    opacityOutputs = [0, 1, 1, 0];
+    scaleOutputs = shouldReduceMotion ? [1, 1, 1, 1] : [0.96, 1, 1, 0.94];
+    yOutputs = shouldReduceMotion ? [0, 0, 0, 0] : [40, 0, 0, -20];
+    rotateOutputs = shouldReduceMotion ? [0, 0, 0, 0] : [2.5, 0, 0, -2.5];
   }
 
-  const opacity = useTransform(scrollYProgress, inputRange, opacityRange);
-  const scale = useTransform(scrollYProgress, inputRange, scaleRange);
-  const y = useTransform(scrollYProgress, inputRange, yRange);
-  const rotate = useTransform(scrollYProgress, inputRange, rotateRange);
+  const opacityFrames = sanitizeKeyframes(rawInputs, opacityOutputs);
+  const scaleFrames = sanitizeKeyframes(rawInputs, scaleOutputs);
+  const yFrames = sanitizeKeyframes(rawInputs, yOutputs);
+  const rotateFrames = sanitizeKeyframes(rawInputs, rotateOutputs);
+
+  const opacity = useTransform(
+    scrollYProgress,
+    opacityFrames.inputs,
+    opacityFrames.outputs,
+  );
+  const scale = useTransform(
+    scrollYProgress,
+    scaleFrames.inputs,
+    scaleFrames.outputs,
+  );
+  const y = useTransform(scrollYProgress, yFrames.inputs, yFrames.outputs);
+  const rotate = useTransform(
+    scrollYProgress,
+    rotateFrames.inputs,
+    rotateFrames.outputs,
+  );
 
   // Pointer events control so only the active card is clickable
   const pointerEvents = useTransform(scrollYProgress, (val: number) => {
