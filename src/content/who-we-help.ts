@@ -12,10 +12,10 @@ export type WhoWeHelpItem = {
 };
 
 export const WHO_WE_HELP_HEADER = {
-  eyebrow: 'SERVING GLOBAL CLIENTS',
+  eyebrow: 'WHO WE HELP',
   heading: [
-    { text: 'Who We ' },
-    { text: 'Help', accent: true },
+    { text: 'Helping Businesses Build with ' },
+    { text: 'Confidence', accent: true },
   ] as readonly HeadingSegment[],
   body: "We don't have a typical client. What we have is a typical situation: something that should have worked, didn't.",
   cta: { label: 'ABOUT US', href: '#about' },
