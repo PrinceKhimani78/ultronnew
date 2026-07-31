@@ -33,7 +33,7 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         ease: [0.22, 1, 0.36, 1],
       }}
       className={cn(
-        'group flex flex-col justify-between rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
+        'group flex flex-col rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
         'border border-[#035551]/12',
         'shadow-[0_10px_30px_-10px_rgba(3,85,81,0.06)]',
         'ease-house transition-all duration-300',
@@ -41,17 +41,17 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         className,
       )}
     >
-      <div>
-        <h3 className="font-display mb-3 text-lg font-bold tracking-tight text-[#035551] transition-colors group-hover:text-[#035551] sm:text-xl lg:text-2xl">
+      <div className="flex flex-1 flex-col">
+        <h3 className="font-display mb-2.5 text-lg font-bold tracking-tight text-[#035551] sm:text-xl lg:text-2xl">
           {item.title}
         </h3>
-        <p className="text-ink-muted mb-6 text-xs leading-relaxed sm:text-sm lg:text-base">
+        <p className="text-ink-muted text-xs leading-relaxed sm:text-sm lg:text-base">
           {item.description}
         </p>
       </div>
 
-      {/* Unique Animated Financial Visualization Component */}
-      <div className="mt-4 border-t border-[#035551]/10 pt-4">
+      {/* Unique Animated Financial Visualization Component - Connected 20px below description */}
+      <div className="mt-5 border-t border-[#035551]/10 pt-4">
         <CardFinancialGraphic id={item.id} />
       </div>
     </motion.div>
@@ -86,8 +86,8 @@ function SmeBarChartVisualization() {
   const bars = [30, 48, 65, 82, 100];
 
   return (
-    <div className="flex flex-col gap-3.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 backdrop-blur-xs transition-colors group-hover:border-[#C9B37E]/40">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 backdrop-blur-xs transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <TrendingUp className="h-4 w-4 text-[#035551]" />
           <span className="font-mono text-[11px] font-bold text-[#035551] uppercase">
@@ -96,22 +96,22 @@ function SmeBarChartVisualization() {
         </div>
         <div className="flex items-center gap-1.5 rounded-md border border-emerald-600/20 bg-emerald-50 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-700">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-600" />
-          <span>BANKING APPROVED ✓</span>
+          <span>APPROVED ✓</span>
         </div>
       </div>
 
-      <div className="flex items-end justify-between gap-2 pt-1">
+      <div className="flex items-end justify-between gap-2 pt-0.5">
         <div className="flex flex-col">
           <span className="font-mono text-base font-bold text-[#121a18] sm:text-lg">
             +$2.8M
           </span>
           <span className="font-mono text-[10px] font-medium text-emerald-700">
-            +28.4% Revenue Flow ▲
+            +28.4% Flow ▲
           </span>
         </div>
 
         {/* 5-Bar Chart with SVG Sparkline Curve */}
-        <div className="relative flex h-12 w-32 items-end gap-1.5">
+        <div className="relative flex h-11 w-32 items-end gap-1.5">
           {bars.map((height, i) => (
             <div
               key={i}
@@ -139,7 +139,7 @@ function SmeBarChartVisualization() {
           {/* SVG Sparkline Curve Overlay */}
           <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
             <motion.path
-              d="M 2 34 Q 24 24, 48 18 T 96 8 T 120 4"
+              d="M 2 32 Q 24 22, 48 16 T 96 8 T 120 4"
               fill="none"
               stroke="#C9B37E"
               strokeWidth="2"
@@ -165,16 +165,16 @@ function SmeBarChartVisualization() {
 
 /**
  * CARD 2: Family Offices & Multi-Entity Groups
- * Multi-Tier Organization Hierarchy Tree with ADGM/DIFC Jurisdiction Connections
+ * Compact Hierarchy Diagram sitting 24px below paragraph
  */
 function FamilyOfficeHierarchyVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 transition-colors group-hover:border-[#C9B37E]/40">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Layers className="h-4 w-4 text-[#035551]" />
           <span className="font-mono text-[11px] font-bold text-[#035551] uppercase">
-            MULTI-JURISDICTION HIERARCHY
+            JURISDICTION HIERARCHY
           </span>
         </div>
         <span className="font-mono text-[10px] font-bold text-[#C9B37E]">
@@ -182,11 +182,11 @@ function FamilyOfficeHierarchyVisualization() {
         </span>
       </div>
 
-      {/* Visual Hierarchy Diagram */}
-      <div className="relative flex flex-col items-center gap-2 pt-1">
+      {/* Visual Hierarchy Diagram - Compact Alignment */}
+      <div className="relative flex flex-col items-center gap-1.5 pt-0.5">
         {/* Tier 1: HoldCo */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ amount: 0.5 }}
           transition={{ duration: 0.4 }}
@@ -198,12 +198,12 @@ function FamilyOfficeHierarchyVisualization() {
 
         {/* Connecting SVG Dotted Lines */}
         <svg
-          className="h-4 w-32 stroke-[#035551]/30"
+          className="h-3.5 w-32 stroke-[#035551]/30"
           fill="none"
-          viewBox="0 0 120 16"
+          viewBox="0 0 120 14"
         >
           <path
-            d="M 60 0 V 8 H 20 V 16 M 60 8 H 100 V 16"
+            d="M 60 0 V 7 H 20 V 14 M 60 7 H 100 V 14"
             strokeDasharray="3 3"
             strokeWidth="1.5"
           />
@@ -212,7 +212,7 @@ function FamilyOfficeHierarchyVisualization() {
         {/* Tier 2: Dual Subsidiaries */}
         <div className="flex w-full items-center justify-between gap-2">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.5 }}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -223,7 +223,7 @@ function FamilyOfficeHierarchyVisualization() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.5 }}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -240,18 +240,18 @@ function FamilyOfficeHierarchyVisualization() {
 
 /**
  * CARD 3: Founders & Entrepreneurs
- * UAE Banking Fast-Track 4-Step Lifecycle Timeline
+ * Perfectly Aligned 4-Step Progress Tracker with Center Line Precision
  */
 function FoundersTimelineVisualization() {
   const steps = [
-    { label: 'Structure', active: true },
-    { label: 'Compliance', active: true },
-    { label: 'KYC', active: true },
-    { label: 'Active', active: true },
-  ];
+    { label: 'Structure', status: 'completed' },
+    { label: 'Compliance', status: 'completed' },
+    { label: 'KYC', status: 'completed' },
+    { label: 'Active', status: 'current' },
+  ] as const;
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 transition-colors group-hover:border-[#C9B37E]/40">
+    <div className="flex flex-col gap-3.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="h-4 w-4 text-[#035551]" />
@@ -264,42 +264,61 @@ function FoundersTimelineVisualization() {
         </span>
       </div>
 
-      {/* Timeline Steps */}
-      <div className="relative pt-2 pb-1">
-        {/* Connection Line */}
-        <div className="absolute top-[22px] right-3 left-3 h-0.5 bg-[#035551]/15">
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: '100%' }}
-            viewport={{ amount: 0.5 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-[#035551] via-[#0aa79b] to-[#C9B37E]"
-          />
-        </div>
+      {/* Progress Tracker Widget with Perfect Line & Circle Alignment */}
+      <div className="relative pt-1 pb-1">
+        {/* Step Nodes Grid with Equal Spacing */}
+        <div className="relative z-10 grid grid-cols-4 items-center">
+          {/* Continuous Center Connecting Line - Aligned exactly through circle midpoints */}
+          <div className="absolute top-[12px] right-6 left-6 h-[2px] -translate-y-1/2 bg-[#035551]/15">
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '100%' }}
+              viewport={{ amount: 0.5 }}
+              transition={{ duration: 1.1, ease: 'easeInOut' }}
+              className="h-full bg-gradient-to-r from-[#035551] via-[#0aa79b] to-[#C9B37E]"
+            />
+          </div>
 
-        {/* Milestone Nodes */}
-        <div className="relative z-10 flex items-center justify-between">
-          {steps.map((step, idx) => (
-            <div key={idx} className="flex flex-col items-center gap-1.5">
-              <motion.div
-                initial={{ scale: 0.6 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ amount: 0.5 }}
-                transition={{ duration: 0.3, delay: idx * 0.12 }}
-                className={cn(
-                  'flex h-5 w-5 items-center justify-center rounded-full text-[9px] font-bold shadow-2xs',
-                  idx === steps.length - 1
-                    ? 'border border-[#C9B37E] bg-[#C9B37E] text-white ring-2 ring-[#C9B37E]/30'
-                    : 'bg-[#035551] text-white',
-                )}
-              >
-                {idx + 1}
-              </motion.div>
-              <span className="font-mono text-[9px] font-semibold text-[#035551]">
-                {step.label}
-              </span>
-            </div>
-          ))}
+          {steps.map((step, idx) => {
+            const isCompleted = step.status === 'completed';
+            const isCurrent = step.status === 'current';
+
+            return (
+              <div key={idx} className="flex flex-col items-center">
+                {/* Numbered Step Circle - Identical 24x24px size, centered over line */}
+                <motion.div
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ amount: 0.5 }}
+                  transition={{ duration: 0.35, delay: idx * 0.15 }}
+                  className={cn(
+                    'relative z-10 flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold shadow-2xs transition-transform',
+                    isCurrent
+                      ? 'border-2 border-[#C9B37E] bg-[#C9B37E] text-white ring-2 ring-[#C9B37E]/30'
+                      : isCompleted
+                        ? 'bg-[#035551] text-white'
+                        : 'bg-slate-200 text-slate-500',
+                  )}
+                >
+                  {idx + 1}
+                </motion.div>
+
+                {/* Step Label - Centered directly beneath circle */}
+                <motion.span
+                  initial={{ opacity: 0, y: 4 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ amount: 0.5 }}
+                  transition={{ duration: 0.3, delay: idx * 0.15 + 0.1 }}
+                  className={cn(
+                    'mt-2 text-center font-mono text-[10px] leading-tight font-semibold whitespace-nowrap',
+                    isCurrent ? 'font-bold text-[#121a18]' : 'text-[#035551]',
+                  )}
+                >
+                  {step.label}
+                </motion.span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -312,7 +331,7 @@ function FoundersTimelineVisualization() {
  */
 function InvestorRadarVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 transition-colors group-hover:border-[#C9B37E]/40">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LineChart className="h-4 w-4 text-[#035551]" />
@@ -325,9 +344,9 @@ function InvestorRadarVisualization() {
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-4 pt-1">
+      <div className="flex items-center justify-between gap-4 pt-0.5">
         {/* SVG Circular Donut Chart */}
-        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+        <div className="relative flex h-13 w-13 shrink-0 items-center justify-center">
           <svg
             className="h-full w-full -rotate-90 transform"
             viewBox="0 0 36 36"
@@ -388,7 +407,7 @@ function InvestorRadarVisualization() {
  */
 function RealEstateValuationVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 transition-colors group-hover:border-[#C9B37E]/40">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-[#035551]" />
@@ -397,17 +416,17 @@ function RealEstateValuationVisualization() {
           </span>
         </div>
         <span className="font-mono text-[10px] font-bold text-emerald-700">
-          LENDER CLEARED
+          CLEARED ✓
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-2 pt-1">
+      <div className="flex items-center justify-between gap-2 pt-0.5">
         <div className="flex flex-col">
           <span className="font-mono text-base font-bold text-[#121a18]">
             AED 18.5M
           </span>
           <span className="font-mono text-[10px] font-medium text-emerald-700">
-            Valuation Approved ✓
+            Valuation Cleared ✓
           </span>
         </div>
 
@@ -452,7 +471,7 @@ function RealEstateValuationVisualization() {
  */
 function GlobalNetworkVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-4 transition-colors group-hover:border-[#C9B37E]/40">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Globe2 className="h-4 w-4 text-[#035551]" />
@@ -465,7 +484,7 @@ function GlobalNetworkVisualization() {
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-2 pt-1">
+      <div className="flex items-center justify-between gap-2 pt-0.5">
         <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#035551]">
           <span className="rounded border border-[#035551]/15 bg-white px-2 py-1 shadow-2xs">
             UK / US / SG
