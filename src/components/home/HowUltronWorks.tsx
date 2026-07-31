@@ -42,9 +42,9 @@ export function HowUltronWorks() {
   return (
     <Section
       id="process"
-      spacing="spacious"
+      spacing="default"
       tone="brand"
-      className="relative overflow-hidden bg-[#035551] py-20 sm:py-28"
+      className="relative overflow-hidden bg-[#035551]"
     >
       <Container width="wide">
         <div className="text-center">
@@ -58,7 +58,7 @@ export function HowUltronWorks() {
         </div>
 
         {/* Timeline Container with Scroll Progress Line */}
-        <div ref={sectionRef} className="relative mt-16 sm:mt-24">
+        <div ref={sectionRef} className="relative mt-10 sm:mt-14">
           {/* Static Background Spine Line */}
           <div
             aria-hidden="true"
@@ -79,7 +79,7 @@ export function HowUltronWorks() {
             />
           )}
 
-          <ol className="relative z-10 space-y-12 sm:space-y-16 lg:space-y-24">
+          <ol className="relative z-10 space-y-10 sm:space-y-12 lg:space-y-16">
             {PROCESS_STEPS.map((step, index) => {
               const isRight = index % 2 === 1;
 
@@ -120,9 +120,9 @@ export function HowUltronWorks() {
                             duration: 0.5,
                             ease: [0.22, 1, 0.36, 1],
                           }}
-                          className="relative flex min-h-[287px] w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]"
+                          className="relative flex w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]"
                         >
-                          <div className="flex flex-1 flex-col justify-center rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
+                          <div className="flex flex-col rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
                             <h3 className="font-display text-xl font-bold tracking-tight text-[#035551] sm:text-2xl">
                               {step.title}
                             </h3>
@@ -132,8 +132,8 @@ export function HowUltronWorks() {
                           </div>
                         </motion.div>
                       ) : (
-                        <div className="relative flex min-h-[287px] w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]">
-                          <div className="flex flex-1 flex-col justify-center rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
+                        <div className="relative flex w-full max-w-[306px] flex-col rounded-[20px] bg-gradient-to-b from-white via-white to-[#DCCB8E] p-[5px] shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)]">
+                          <div className="flex flex-col rounded-[15px] bg-white p-6 shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] sm:p-7">
                             <h3 className="font-display text-xl font-bold tracking-tight text-[#035551] sm:text-2xl">
                               {step.title}
                             </h3>

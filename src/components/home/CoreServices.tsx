@@ -18,9 +18,9 @@ export function CoreServices() {
   return (
     <Section
       id="services"
-      spacing="spacious"
+      spacing="default"
       tone="raised"
-      className="relative overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28"
+      className="relative overflow-hidden"
     >
       <Container width="wide" className="relative z-10">
         <Reveal className="text-center">
@@ -30,11 +30,11 @@ export function CoreServices() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 lg:mt-14">
+        <div className="mt-10 lg:mt-12">
           <ServiceTabs />
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-10 flex justify-center lg:mt-12">
           <Button asChild size="lg" arrow>
             <a href={SERVICES_INTRO.cta.href}>{SERVICES_INTRO.cta.label}</a>
           </Button>

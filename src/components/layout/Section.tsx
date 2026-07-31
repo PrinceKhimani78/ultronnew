@@ -11,10 +11,23 @@ type SectionProps = React.ComponentPropsWithoutRef<'section'> & {
   tone?: 'surface' | 'raised' | 'brand';
 };
 
+/**
+ * The vertical scale, in one place. Three steps, each stated at mobile, tablet
+ * and desktop, so a section never has to invent its own numbers.
+ *
+ * The values are the comp's, not a guess: its bands run 52–65px of lead-in and
+ * 88–130px of run-out, which is an inter-section gap of roughly 145px. Symmetric
+ * 72px padding lands on the same rhythm without the asymmetry, which existed in
+ * the comp only because of where each heading happened to sit.
+ *
+ *   tight     32 / 40 / 48
+ *   default   44 / 56 / 72
+ *   spacious  56 / 72 / 96
+ */
 const SPACING = {
-  tight: 'py-12 sm:py-16',
-  default: 'py-20 sm:py-28',
-  spacious: 'py-28 sm:py-36',
+  tight: 'py-8 sm:py-10 lg:py-12',
+  default: 'py-11 sm:py-14 lg:py-18',
+  spacious: 'py-14 sm:py-18 lg:py-24',
 } as const;
 
 const TONES = {

@@ -51,7 +51,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     <>
       <main id="content" className="flex-1">
         {/* Service Hero */}
-        <div className="bg-surface text-ink relative overflow-hidden pt-28 pb-12 sm:pt-36 sm:pb-16">
+        <div className="bg-surface text-ink relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32">
           <Container width="wide">
             {/* Breadcrumb */}
             <nav

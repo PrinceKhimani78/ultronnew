@@ -17,10 +17,10 @@ export function WhoWeHelpSection() {
   );
 
   return (
-    <Section className="bg-[#FDFBEE] pt-16 pb-24 sm:pt-20 sm:pb-32">
+    <Section className="bg-[#FDFBEE]">
       <Container width="wide">
         {/* Top Header Section */}
-        <div className="mb-14 grid gap-8 lg:mb-16 lg:grid-cols-12 lg:items-end lg:gap-12">
+        <div className="mb-10 grid gap-8 lg:mb-12 lg:grid-cols-12 lg:items-end lg:gap-12">
           <div className="lg:col-span-6">
             <Eyebrow>{WHO_WE_HELP_HEADER.eyebrow}</Eyebrow>
             <h2 className="font-display mt-4 text-[clamp(2.25rem,4.5vw,3.25rem)] leading-[1.1] font-bold tracking-tight text-[#121a18]">

@@ -25,8 +25,17 @@ export function Hero() {
   return (
     <Section
       id="top"
-      spacing="spacious"
-      className="relative overflow-hidden pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pt-36 lg:pb-20"
+      /*
+       * No `spacing` variant: every edge is stated below, because the top is
+       * not rhythm but clearance.
+       *
+       * Top padding is not free space — the header is fixed, so this is what
+       * keeps the h1 out from under it. The pill's lowest edge is 76px on
+       * mobile (16 inset + 60 bar) and 98px at `lg` (32 + 66); each step here
+       * clears that and adds roughly 28px of air, which is the gap the comp
+       * draws between the bar and the heading.
+       */
+      className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32 lg:pb-12"
     >
       <Container width="wide">
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
@@ -38,7 +47,7 @@ export function Hero() {
             </h1>
 
             {/* 2. Trust Strip / Metrics Bar */}
-            <div className="bg-surface-raised/40 shadow-soft my-6 w-full rounded-2xl border border-[#035551]/15 p-3.5 sm:my-8 sm:p-5 lg:max-w-none">
+            <div className="bg-surface-raised/40 shadow-soft my-5 w-full rounded-2xl border border-[#035551]/15 p-3.5 sm:my-6 sm:p-5 lg:max-w-none">
               <dl className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-2">
                 {HOME_HERO.stats.map((stat, index) => {
                   const Icon = STAT_ICONS[stat.icon as keyof typeof STAT_ICONS];
@@ -87,7 +96,7 @@ export function Hero() {
             </p>
 
             {/* 4. Primary CTA Button */}
-            <div className="mt-6 flex w-full justify-center sm:mt-8 lg:justify-start">
+            <div className="mt-6 flex w-full justify-center sm:mt-7 lg:justify-start">
               <Button
                 asChild
                 size="lg"

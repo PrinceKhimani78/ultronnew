@@ -10,7 +10,8 @@ import { SERVICES_PAGE } from '@/content/services-page';
  */
 export function ServicesHero() {
   return (
-    <div className="bg-surface text-ink relative overflow-hidden pt-28 pb-12 sm:pt-36 sm:pb-16">
+    // Top padding clears the fixed header, on the same steps as the home hero.
+    <div className="bg-surface text-ink relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32">
       <Container width="wide" className="relative">
         <div className="flex flex-col items-center justify-center text-center">
           {/* Centered Title & Description */}

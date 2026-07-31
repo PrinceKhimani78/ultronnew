@@ -100,16 +100,18 @@ export const FOOTER_NAV: readonly {
     heading: 'Quick Links',
     items: [
       { label: 'Home', href: '/' },
-      { label: 'All Services', href: '/services' },
+      { label: 'Services', href: '/services' },
       { label: 'About Us', href: '/#about' },
       { label: 'Contact Us', href: '/#contact' },
-      { label: 'Blogs', href: '/blog', pending: true },
+      // The header sends Blogs to the same in-page anchor. `/blog` does not
+      // exist yet, and two footers ago this was a `pending` non-link; pointing
+      // both navs at one destination is what stops them contradicting.
+      { label: 'Blogs', href: '/#blogs' },
     ],
   },
   {
     heading: 'Services',
     items: [
-      { label: 'All Services', href: '/services' },
       { label: 'Business Banking', href: '/services/business-banking' },
       { label: 'Business Setup', href: '/services/business-setup' },
       { label: 'Financial Advisory', href: '/services/financial-advisory' },

@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/layout/Logo';
 import { SERVICES } from '@/content/services';
 import { PRIMARY_CTA, PRIMARY_NAV } from '@/content/site';
+import { isCurrentRoute } from '@/lib/nav';
 import { cn } from '@/lib/utils';
 
 const FOCUSABLE =
@@ -103,7 +104,7 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="bg-brand text-surface fixed inset-0 z-10 flex h-full w-full flex-col overflow-y-auto p-6 shadow-2xl"
+            className="bg-brand-panel text-surface fixed inset-0 z-10 flex h-full w-full flex-col overflow-y-auto p-6 shadow-2xl"
           >
             {/* Header: Logo + Close Button */}
             <div className="border-surface/15 flex items-center justify-between border-b pb-4">
@@ -125,11 +126,7 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
               <ul className="flex flex-col space-y-2">
                 {PRIMARY_NAV.map((item) => {
                   const isServices = item.href === '/services';
-                  const isCurrent =
-                    item.href === '/'
-                      ? pathname === '/'
-                      : !item.href.includes('#') &&
-                        pathname.startsWith(item.href);
+                  const isCurrent = isCurrentRoute(item.href, pathname);
 
                   if (isServices) {
                     return (

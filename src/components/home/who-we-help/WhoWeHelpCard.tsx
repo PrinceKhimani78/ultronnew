@@ -33,7 +33,10 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         ease: [0.22, 1, 0.36, 1],
       }}
       className={cn(
-        'group flex h-auto flex-col justify-start rounded-[20px] bg-white p-5 sm:p-6 lg:p-7',
+        // No `h-full`: every card is content-height, which is what keeps the
+        // bento from stretching a short card to match a tall neighbour and
+        // leaving a band of empty white under its graphic.
+        'group flex flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7',
         'border border-[#035551]/12',
         'shadow-[0_10px_30px_-10px_rgba(3,85,81,0.06)]',
         'ease-house transition-all duration-300',
@@ -42,7 +45,7 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
       )}
     >
       {/* Title & Description Container */}
-      <div className="flex h-auto flex-col">
+      <div className="flex flex-col">
         <h3 className="font-display mb-2 text-lg font-bold tracking-tight text-[#035551] sm:text-xl lg:text-2xl">
           {item.title}
         </h3>

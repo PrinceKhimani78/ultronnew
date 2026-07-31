@@ -18,11 +18,10 @@ import { SERVICES_PAGE } from '@/content/services-page';
  */
 export function ServicesGrid() {
   return (
-    // Custom rhythm rather than a `spacing` variant, because this band is
-    // squeezed between two elements that already bring their own padding: the
-    // hero card above and `CtaContact`'s spacious top below. Using the default
-    // would stack ~17rem of dead space before the call to action.
-    <Section className="text-ink bg-white pt-16 pb-16 sm:pt-20 sm:pb-20">
+    // The `default` variant now sits below what this band used to hand-roll, so
+    // the custom rhythm that once avoided ~17rem of dead space before the call
+    // to action is no longer needed — the token is the tighter of the two.
+    <Section className="text-ink bg-white">
       <Container width="wide">
         <Reveal>
           <Eyebrow>{SERVICES_PAGE.intro.eyebrow}</Eyebrow>

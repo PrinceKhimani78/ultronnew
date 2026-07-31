@@ -25,6 +25,13 @@
   --color-brand: #035551;
   --color-brand-deep: #023c39;
   --color-brand-ink: #012422;
+  /* The chrome teal. One step lighter than `brand`, and the only value the
+     design uses for the two surfaces that frame the page: the header pill and
+     the footer ground. It is not a sixth palette colour looking for a use — it
+     exists because the comp draws the chrome and the page sections in two
+     measurably different greens, and collapsing them onto `brand` loses the
+     separation the design relies on. */
+  --color-brand-panel: #154b47;
   /* The emphasis green: accent words in headings, benefit ticks, small
      uppercase badges. Because it lands on text as small as 12px it is held to
      the 4.5:1 normal-text threshold, not the 3:1 large-text one — #058881
@@ -109,8 +116,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Stops the sticky header covering the target of an in-page anchor. */
-    scroll-padding-top: 6rem;
+    /* Stops the sticky header covering the target of an in-page anchor. Must
+       stay above the pill's lowest edge — 32px of top inset plus a 66px bar. */
+    scroll-padding-top: 7rem;
     -webkit-text-size-adjust: 100%;
     font-family: var(--font-brand);
   }

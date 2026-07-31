@@ -56,8 +56,8 @@ export function ConsultationForm() {
       <hr className="border-surface/25 mt-4" />
 
       <form className="mt-6 space-y-5" suppressHydrationWarning>
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div className="space-y-2">
+        <div className="grid gap-5 sm:grid-cols-2" suppressHydrationWarning>
+          <div className="space-y-2" suppressHydrationWarning>
             <FieldLabel htmlFor="contact-name" required>
               Full name
             </FieldLabel>
@@ -72,7 +72,7 @@ export function ConsultationForm() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2" suppressHydrationWarning>
             <FieldLabel htmlFor="contact-email" required>
               Email address
             </FieldLabel>
@@ -87,7 +87,7 @@ export function ConsultationForm() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2" suppressHydrationWarning>
             <FieldLabel htmlFor="contact-phone" required>
               Phone number
             </FieldLabel>
@@ -102,7 +102,7 @@ export function ConsultationForm() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2" suppressHydrationWarning>
             <FieldLabel htmlFor="contact-business" required>
               Business type
             </FieldLabel>
@@ -118,7 +118,7 @@ export function ConsultationForm() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-service" required>
             Service interested in
           </FieldLabel>
@@ -145,7 +145,7 @@ export function ConsultationForm() {
           </select>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-message">Message</FieldLabel>
           <textarea
             id="contact-message"
