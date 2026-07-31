@@ -24,9 +24,9 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
       }}
       className={cn(
         'group flex flex-col justify-between rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
-        'border border-[#035551]/10',
-        'shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
-        'ease-house transition-all duration-300 hover:-translate-y-1 hover:shadow-[inset_4px_-4px_8px_0px_rgba(3,85,81,0.30)]',
+        'border border-[#035551]/12',
+        'shadow-[0_10px_30px_-10px_rgba(3,85,81,0.06)]',
+        'ease-house transition-all duration-300 hover:-translate-y-1 hover:border-[#035551]/25 hover:shadow-[0_20px_45px_-12px_rgba(3,85,81,0.14)]',
         className,
       )}
     >
