@@ -33,7 +33,7 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         ease: [0.22, 1, 0.36, 1],
       }}
       className={cn(
-        'group flex flex-col rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
+        'group flex flex-col justify-start rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
         'border border-[#035551]/12',
         'shadow-[0_10px_30px_-10px_rgba(3,85,81,0.06)]',
         'ease-house transition-all duration-300',
@@ -41,7 +41,8 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         className,
       )}
     >
-      <div className="flex flex-1 flex-col">
+      {/* Title & Description Container - Strictly h-auto without flex-1 stretching */}
+      <div className="flex h-auto flex-col">
         <h3 className="font-display mb-2.5 text-lg font-bold tracking-tight text-[#035551] sm:text-xl lg:text-2xl">
           {item.title}
         </h3>
@@ -50,8 +51,8 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         </p>
       </div>
 
-      {/* Unique Animated Financial Visualization Component - Connected 20px below description */}
-      <div className="mt-5 border-t border-[#035551]/10 pt-4">
+      {/* Divider (24px below paragraph) + Visualization (starts immediately after divider) */}
+      <div className="mt-6 border-t border-[#035551]/10 pt-4">
         <CardFinancialGraphic id={item.id} />
       </div>
     </motion.div>
@@ -165,7 +166,7 @@ function SmeBarChartVisualization() {
 
 /**
  * CARD 2: Family Offices & Multi-Entity Groups
- * Compact Hierarchy Diagram sitting 24px below paragraph
+ * Compact Hierarchy Diagram sitting 24px below paragraph divider
  */
 function FamilyOfficeHierarchyVisualization() {
   return (
@@ -182,7 +183,7 @@ function FamilyOfficeHierarchyVisualization() {
         </span>
       </div>
 
-      {/* Visual Hierarchy Diagram - Compact Alignment */}
+      {/* Visual Hierarchy Diagram - Natural Placement */}
       <div className="relative flex flex-col items-center gap-1.5 pt-0.5">
         {/* Tier 1: HoldCo */}
         <motion.div
@@ -264,7 +265,7 @@ function FoundersTimelineVisualization() {
         </span>
       </div>
 
-      {/* Progress Tracker Widget with Perfect Line & Circle Alignment */}
+      {/* Progress Tracker Widget */}
       <div className="relative pt-1 pb-1">
         {/* Step Nodes Grid with Equal Spacing */}
         <div className="relative z-10 grid grid-cols-4 items-center">
@@ -285,7 +286,7 @@ function FoundersTimelineVisualization() {
 
             return (
               <div key={idx} className="flex flex-col items-center">
-                {/* Numbered Step Circle - Identical 24x24px size, centered over line */}
+                {/* Numbered Step Circle */}
                 <motion.div
                   initial={{ scale: 0.5, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
@@ -303,7 +304,7 @@ function FoundersTimelineVisualization() {
                   {idx + 1}
                 </motion.div>
 
-                {/* Step Label - Centered directly beneath circle */}
+                {/* Step Label */}
                 <motion.span
                   initial={{ opacity: 0, y: 4 }}
                   whileInView={{ opacity: 1, y: 0 }}
