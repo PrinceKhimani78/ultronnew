@@ -33,7 +33,7 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         ease: [0.22, 1, 0.36, 1],
       }}
       className={cn(
-        'group flex flex-col justify-start rounded-[20px] bg-white p-6 sm:p-7 lg:p-8',
+        'group flex h-auto flex-col justify-start rounded-[20px] bg-white p-5 sm:p-6 lg:p-7',
         'border border-[#035551]/12',
         'shadow-[0_10px_30px_-10px_rgba(3,85,81,0.06)]',
         'ease-house transition-all duration-300',
@@ -41,18 +41,18 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
         className,
       )}
     >
-      {/* Title & Description Container - Strictly h-auto without flex-1 stretching */}
+      {/* Title & Description Container */}
       <div className="flex h-auto flex-col">
-        <h3 className="font-display mb-2.5 text-lg font-bold tracking-tight text-[#035551] sm:text-xl lg:text-2xl">
+        <h3 className="font-display mb-2 text-lg font-bold tracking-tight text-[#035551] sm:text-xl lg:text-2xl">
           {item.title}
         </h3>
-        <p className="text-ink-muted text-xs leading-relaxed sm:text-sm lg:text-base">
+        <p className="text-ink-muted text-xs leading-relaxed sm:text-sm lg:text-[0.95rem]">
           {item.description}
         </p>
       </div>
 
-      {/* Divider (24px below paragraph) + Visualization (starts immediately after divider) */}
-      <div className="mt-6 border-t border-[#035551]/10 pt-4">
+      {/* Divider + Visualization Container (Compact 20px Top Spacing) */}
+      <div className="mt-5 border-t border-[#035551]/10 pt-3.5">
         <CardFinancialGraphic id={item.id} />
       </div>
     </motion.div>
@@ -87,7 +87,7 @@ function SmeBarChartVisualization() {
   const bars = [30, 48, 65, 82, 100];
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 backdrop-blur-xs transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 backdrop-blur-xs transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <TrendingUp className="h-4 w-4 text-[#035551]" />
@@ -112,11 +112,11 @@ function SmeBarChartVisualization() {
         </div>
 
         {/* 5-Bar Chart with SVG Sparkline Curve */}
-        <div className="relative flex h-11 w-32 items-end gap-1.5">
+        <div className="relative flex h-10 w-28 items-end gap-1.5">
           {bars.map((height, i) => (
             <div
               key={i}
-              className="relative flex h-full w-4 flex-col justify-end"
+              className="relative flex h-full w-3.5 flex-col justify-end"
             >
               <motion.div
                 initial={{ height: 0 }}
@@ -140,7 +140,7 @@ function SmeBarChartVisualization() {
           {/* SVG Sparkline Curve Overlay */}
           <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
             <motion.path
-              d="M 2 32 Q 24 22, 48 16 T 96 8 T 120 4"
+              d="M 2 28 Q 20 20, 40 14 T 80 6 T 104 2"
               fill="none"
               stroke="#C9B37E"
               strokeWidth="2"
@@ -150,13 +150,13 @@ function SmeBarChartVisualization() {
               transition={{ duration: 1, ease: 'easeOut' }}
             />
             <circle
-              cx="120"
-              cy="4"
+              cx="104"
+              cy="2"
               r="3"
               fill="#C9B37E"
               className="animate-ping"
             />
-            <circle cx="120" cy="4" r="3" fill="#C9B37E" />
+            <circle cx="104" cy="2" r="3" fill="#C9B37E" />
           </svg>
         </div>
       </div>
@@ -166,11 +166,11 @@ function SmeBarChartVisualization() {
 
 /**
  * CARD 2: Family Offices & Multi-Entity Groups
- * Compact Hierarchy Diagram sitting 24px below paragraph divider
+ * Compact Hierarchy Diagram sitting naturally 20px below description
  */
 function FamilyOfficeHierarchyVisualization() {
   return (
-    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Layers className="h-4 w-4 text-[#035551]" />
@@ -183,7 +183,7 @@ function FamilyOfficeHierarchyVisualization() {
         </span>
       </div>
 
-      {/* Visual Hierarchy Diagram - Natural Placement */}
+      {/* Visual Hierarchy Diagram */}
       <div className="relative flex flex-col items-center gap-1.5 pt-0.5">
         {/* Tier 1: HoldCo */}
         <motion.div
@@ -199,12 +199,12 @@ function FamilyOfficeHierarchyVisualization() {
 
         {/* Connecting SVG Dotted Lines */}
         <svg
-          className="h-3.5 w-32 stroke-[#035551]/30"
+          className="h-3 w-32 stroke-[#035551]/30"
           fill="none"
-          viewBox="0 0 120 14"
+          viewBox="0 0 120 12"
         >
           <path
-            d="M 60 0 V 7 H 20 V 14 M 60 7 H 100 V 14"
+            d="M 60 0 V 6 H 20 V 12 M 60 6 H 100 V 12"
             strokeDasharray="3 3"
             strokeWidth="1.5"
           />
@@ -213,7 +213,7 @@ function FamilyOfficeHierarchyVisualization() {
         {/* Tier 2: Dual Subsidiaries */}
         <div className="flex w-full items-center justify-between gap-2">
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.5 }}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -224,7 +224,7 @@ function FamilyOfficeHierarchyVisualization() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.5 }}
             transition={{ duration: 0.4, delay: 0.2 }}
@@ -252,7 +252,7 @@ function FoundersTimelineVisualization() {
   ] as const;
 
   return (
-    <div className="flex flex-col gap-3.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="h-4 w-4 text-[#035551]" />
@@ -311,7 +311,7 @@ function FoundersTimelineVisualization() {
                   viewport={{ amount: 0.5 }}
                   transition={{ duration: 0.3, delay: idx * 0.15 + 0.1 }}
                   className={cn(
-                    'mt-2 text-center font-mono text-[10px] leading-tight font-semibold whitespace-nowrap',
+                    'mt-1.5 text-center font-mono text-[9.5px] leading-tight font-semibold whitespace-nowrap',
                     isCurrent ? 'font-bold text-[#121a18]' : 'text-[#035551]',
                   )}
                 >
@@ -332,7 +332,7 @@ function FoundersTimelineVisualization() {
  */
 function InvestorRadarVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LineChart className="h-4 w-4 text-[#035551]" />
@@ -345,9 +345,9 @@ function InvestorRadarVisualization() {
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-4 pt-0.5">
+      <div className="flex items-center justify-between gap-3 pt-0.5">
         {/* SVG Circular Donut Chart */}
-        <div className="relative flex h-13 w-13 shrink-0 items-center justify-center">
+        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center">
           <svg
             className="h-full w-full -rotate-90 transform"
             viewBox="0 0 36 36"
@@ -379,21 +379,21 @@ function InvestorRadarVisualization() {
         </div>
 
         {/* Asset Distribution Key */}
-        <div className="grid flex-1 grid-cols-2 gap-1.5">
-          <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-[#035551]">
-            <span className="h-2 w-2 rounded-full bg-[#035551]" />
+        <div className="grid flex-1 grid-cols-2 gap-1 sm:gap-1.5">
+          <div className="flex items-center gap-1 font-mono text-[9.5px] font-medium text-[#035551]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#035551]" />
             <span>Equity (40%)</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-[#035551]">
-            <span className="h-2 w-2 rounded-full bg-[#0aa79b]" />
+          <div className="flex items-center gap-1 font-mono text-[9.5px] font-medium text-[#035551]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0aa79b]" />
             <span>Real Estate (35%)</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-[#035551]">
-            <span className="h-2 w-2 rounded-full bg-[#C9B37E]" />
+          <div className="flex items-center gap-1 font-mono text-[9.5px] font-medium text-[#035551]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#C9B37E]" />
             <span>Offshore (15%)</span>
           </div>
-          <div className="flex items-center gap-1.5 font-mono text-[10px] font-medium text-[#035551]">
-            <span className="h-2 w-2 rounded-full bg-emerald-600" />
+          <div className="flex items-center gap-1 font-mono text-[9.5px] font-medium text-[#035551]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
             <span>Liquidity (10%)</span>
           </div>
         </div>
@@ -408,7 +408,7 @@ function InvestorRadarVisualization() {
  */
 function RealEstateValuationVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-[#035551]" />
@@ -432,7 +432,7 @@ function RealEstateValuationVisualization() {
         </div>
 
         {/* Curved Area SVG Chart */}
-        <div className="relative h-11 w-36">
+        <div className="relative h-10 w-32">
           <svg className="h-full w-full" viewBox="0 0 140 40" fill="none">
             <defs>
               <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
@@ -472,7 +472,7 @@ function RealEstateValuationVisualization() {
  */
 function GlobalNetworkVisualization() {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3.5 transition-colors group-hover:border-[#C9B37E]/40 sm:p-4">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-[#035551]/12 bg-[#FDFBEE] p-3 transition-colors group-hover:border-[#C9B37E]/40 sm:p-3.5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Globe2 className="h-4 w-4 text-[#035551]" />
@@ -493,8 +493,8 @@ function GlobalNetworkVisualization() {
         </div>
 
         {/* Animated Connecting Flow */}
-        <div className="relative flex flex-1 items-center justify-center px-2">
-          <svg className="h-4 w-full" viewBox="0 0 100 16">
+        <div className="relative flex flex-1 items-center justify-center px-1.5">
+          <svg className="h-3.5 w-full" viewBox="0 0 100 16">
             <motion.path
               d="M 0 8 Q 50 0, 100 8"
               fill="none"

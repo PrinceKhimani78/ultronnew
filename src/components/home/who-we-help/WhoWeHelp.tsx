@@ -6,9 +6,9 @@ import { WHO_WE_HELP_CARDS, WHO_WE_HELP_HEADER } from '@/content/who-we-help';
 import { WhoWeHelpCard } from './WhoWeHelpCard';
 
 /**
- * "Who We Help" section matching the Figma comp:
+ * "Who We Help" section matching the Apple Bento Grid design language:
  * - Background: Clean off-white #FDFBEE
- * - Cards: Clean 2-column asymmetric layout with inline financial bar charts & graphics inside cards
+ * - Cards: Compact 2-column asymmetric layout where every card hugs its content naturally
  */
 
 export function WhoWeHelpSection() {
@@ -42,8 +42,8 @@ export function WhoWeHelpSection() {
           </div>
         </div>
 
-        {/* Asymmetric Content Grid matching Figma comp */}
-        <div className="grid items-stretch gap-6 lg:grid-cols-12">
+        {/* Asymmetric Content Grid - Compact Apple Bento Layout */}
+        <div className="grid items-start gap-6 lg:grid-cols-12">
           {/* Left Column (7 cols / ~60% width) */}
           <div className="flex flex-col gap-6 lg:col-span-7">
             {/* Row 1: Card 1 (Wide) */}
@@ -52,7 +52,6 @@ export function WhoWeHelpSection() {
                 cardMap['uae-smes-operating-businesses'] || WHO_WE_HELP_CARDS[0]
               }
               index={0}
-              className="flex-1"
             />
 
             {/* Row 2: Card 3 & Card 4 (2 Equal Columns) */}
@@ -60,14 +59,12 @@ export function WhoWeHelpSection() {
               <WhoWeHelpCard
                 item={cardMap['foreign-investors'] || WHO_WE_HELP_CARDS[2]}
                 index={2}
-                className="h-full"
               />
               <WhoWeHelpCard
                 item={
                   cardMap['smes-growing-businesses'] || WHO_WE_HELP_CARDS[3]
                 }
                 index={3}
-                className="h-full"
               />
             </div>
 
@@ -75,24 +72,21 @@ export function WhoWeHelpSection() {
             <WhoWeHelpCard
               item={cardMap['startups-founders'] || WHO_WE_HELP_CARDS[4]}
               index={4}
-              className="flex-1"
             />
           </div>
 
           {/* Right Column (5 cols / ~40% width) */}
           <div className="flex flex-col gap-6 lg:col-span-5">
-            {/* Card 2 (Tall Card) */}
+            {/* Card 2 (Family Offices) */}
             <WhoWeHelpCard
               item={cardMap['high-net-worth'] || WHO_WE_HELP_CARDS[1]}
               index={1}
-              className="flex-1"
             />
 
-            {/* Card 6 */}
+            {/* Card 6 (Global Companies) */}
             <WhoWeHelpCard
               item={cardMap['global-companies'] || WHO_WE_HELP_CARDS[5]}
               index={5}
-              className="flex-1"
             />
           </div>
         </div>
