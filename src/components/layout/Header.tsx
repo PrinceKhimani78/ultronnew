@@ -51,23 +51,29 @@ const CREAM = '#FDFBEE';
  * CTA after it on the comp's x=944, where honouring the 44px gutter instead
  * drags it 37px left.
  *
- * No nav label is ever gold. The current page is marked by full-strength white
- * over the 88% the others sit at, plus the hairline gold rule beneath it — the
- * gold stays as punctuation under the word rather than becoming the word.
+ * Labels are pure white at rest — no tint, no reduced opacity — and resolve to
+ * brand gold on hover and on the current route. The current page also keeps the
+ * hairline gold rule beneath it, so the state is carried by two signals rather
+ * than by colour alone.
  *
  * Both states carry a `border-b`, one transparent, so the underline costs the
  * same 1px of box in either state and the baseline never shifts when the route
- * changes. Colour is set with classes rather than an inline `style`, because an
- * inline colour outranks `hover:text-white` and the hover would not fire.
+ * changes. Weight stays `font-medium` in both, for the same reason: a heavier
+ * current label would re-measure the nav and move every item after it.
+ *
+ * Colour is set with classes rather than an inline `style`, because an inline
+ * colour outranks `hover:text-*` and the hover would never fire.
+ *
+ * The curve is CSS's literal `ease`, spelled out. Tailwind's `transition-colors`
+ * defaults to `cubic-bezier(0.4, 0, 0.2, 1)`, which is not the same easing.
  */
 const NAV_LINK =
   'block pb-1 text-[18px] leading-none font-medium whitespace-nowrap uppercase ' +
-  'border-b transition-colors duration-[250ms] ' +
+  'border-b transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] ' +
   'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCCB8E]';
 
-const NAV_LINK_CURRENT = 'border-[#DCCB8E] text-white';
-const NAV_LINK_DEFAULT =
-  'border-transparent text-white/[0.88] hover:text-white';
+const NAV_LINK_CURRENT = 'border-[#DCCB8E] text-[#DCCB8E]';
+const NAV_LINK_DEFAULT = 'border-transparent text-white hover:text-[#DCCB8E]';
 
 export function Header() {
   const pathname = usePathname();

@@ -131,21 +131,20 @@ export function PreviewHeader() {
                 {NAV.map((item) => (
                   <li key={item.label}>
                     {/*
-                      No nav label is gold. The current page reads as
-                      full-strength white against the 88% its siblings sit at,
-                      with the hairline gold rule beneath it — matching the
-                      shared header exactly.
+                      Pure white at rest, brand gold on hover and on the current
+                      route, which also keeps the hairline gold rule beneath it —
+                      matching the shared header exactly.
                     */}
                     <a
                       href={item.href}
                       aria-current={item.current ? 'page' : undefined}
                       className={cn(
                         'block border-b pb-1 text-[18px] leading-none font-medium whitespace-nowrap uppercase',
-                        'transition-colors duration-[250ms]',
+                        'transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]',
                         'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCCB8E]',
                         item.current
-                          ? 'border-[#DCCB8E] text-white'
-                          : 'border-transparent text-white/[0.88] hover:text-white',
+                          ? 'border-[#DCCB8E] text-[#DCCB8E]'
+                          : 'border-transparent text-white hover:text-[#DCCB8E]',
                       )}
                     >
                       {item.label}

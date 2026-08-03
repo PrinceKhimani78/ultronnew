@@ -7,6 +7,7 @@ import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import type { NavItem } from '@/content/site';
 import { isCurrentRoute } from '@/lib/nav';
+import { cn } from '@/lib/utils';
 
 /**
  * One footer link column, at the comp's 18px/30px.
@@ -24,9 +25,12 @@ import { isCurrentRoute } from '@/lib/nav';
  * decorative here and must never be the only signal.
  */
 
+/**
+ * Links are pure white at rest — not the 85% the contact column's body copy sits
+ * at. These are navigation, and nav is held to full strength; the reduced
+ * opacity is for prose only.
+ */
 const BODY = 'text-[18px] leading-[30px] font-normal';
-const BODY_COLOR = 'rgba(255,255,255,0.85)';
-const GOLD = '#DCCB8E';
 
 export function FooterNavColumn({
   heading,
@@ -74,11 +78,22 @@ export function FooterNavColumn({
                   {item.label}
                 </span>
               ) : (
+                /*
+                  Colour is a CLASS, never an inline `style`. It used to be a
+                  style, and that silently disabled the hover for the life of the
+                  component: an inline `color` outranks a `hover:text-*`
+                  utility, which is not `!important`, so the gold never applied.
+                */
                 <Link
                   href={item.href}
                   aria-current={isCurrent ? 'page' : undefined}
-                  className={`${BODY} inline-block transition-colors duration-200 hover:text-[#DCCB8E]`}
-                  style={{ color: isCurrent ? GOLD : BODY_COLOR }}
+                  className={cn(
+                    BODY,
+                    'inline-block transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]',
+                    isCurrent
+                      ? 'text-[#DCCB8E]'
+                      : 'text-white hover:text-[#DCCB8E]',
+                  )}
                 >
                   {item.label}
                 </Link>
