@@ -3,66 +3,90 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import type { NavItem } from '@/content/site';
 import { isCurrentRoute } from '@/lib/nav';
-import { cn } from '@/lib/utils';
 
 /**
- * One footer link column.
+ * One footer link column, at the comp's 18px/30px.
  *
  * Split out of `Footer` so the footer shell stays a server component: marking
- * the whole footer `'use client'` to read one pathname would ship the logo,
- * the NAP block and the copyright row to the browser for no reason.
+ * the whole footer `'use client'` to read one pathname would ship the logo, the
+ * NAP block and the copyright row to the browser for no reason.
  *
- * The design marks the current page gold in these columns, matching the header.
- * `aria-current` carries the same fact for anyone who cannot see the colour —
- * gold on teal is decorative here and must never be the only signal.
+ * The gap is 2px, not a comfortable list gap — the comp sets a 32px pitch on a
+ * 30px line box, so the rhythm is carried by the line height and the gap only
+ * makes up the difference.
+ *
+ * The design marks the current page gold, matching the header. `aria-current`
+ * carries the same fact for anyone who cannot see the colour: gold on teal is
+ * decorative here and must never be the only signal.
  */
+
+const BODY = 'text-[18px] leading-[30px] font-normal';
+const BODY_COLOR = 'rgba(255,255,255,0.85)';
+const GOLD = '#DCCB8E';
+
 export function FooterNavColumn({
   heading,
   items,
+  delay = 0,
 }: {
   heading: string;
   items: readonly (NavItem & { pending?: boolean })[];
+  /** Offsets this column against its siblings so the three do not land together. */
+  delay?: number;
 }) {
   const pathname = usePathname();
   const headingId = `footer-${heading.replace(/\s+/g, '-').toLowerCase()}`;
 
   return (
     <nav aria-labelledby={headingId}>
-      <h2
-        id={headingId}
-        className="text-surface text-base font-semibold lg:text-[1.0625rem]"
+      <Reveal variant="text" delay={delay}>
+        <h2
+          id={headingId}
+          className="mb-7 text-[18px] leading-tight font-semibold text-white"
+        >
+          {heading}
+        </h2>
+      </Reveal>
+      {/*
+        Links arrive one after another. `Stagger` renders this `<ul>` itself, so
+        the 2px pitch that carries the comp's 32px rhythm is untouched.
+      */}
+      <Stagger
+        as="ul"
+        delayChildren={delay + 0.06}
+        className="flex flex-col gap-[2px]"
       >
-        {heading}
-      </h2>
-      <ul className="mt-5 space-y-3.5 lg:mt-6 lg:space-y-4">
         {items.map((item) => {
           const isCurrent = isCurrentRoute(item.href, pathname);
 
           return (
-            <li key={item.label}>
+            <StaggerItem as="li" variant="text" key={item.label}>
               {item.pending ? (
                 // A footer link into a 404 is worse than a non-link.
-                <span className="text-surface/45 text-[0.9375rem] lg:text-base">
+                <span
+                  className={BODY}
+                  style={{ color: 'rgba(255,255,255,0.45)' }}
+                >
                   {item.label}
                 </span>
               ) : (
                 <Link
                   href={item.href}
                   aria-current={isCurrent ? 'page' : undefined}
-                  className={cn(
-                    'ease-house hover:text-accent inline-block text-[0.9375rem] transition-all duration-200 hover:translate-x-0.5 lg:text-base',
-                    isCurrent ? 'text-accent' : 'text-surface/85',
-                  )}
+                  className={`${BODY} inline-block transition-colors duration-200 hover:text-[#DCCB8E]`}
+                  style={{ color: isCurrent ? GOLD : BODY_COLOR }}
                 >
                   {item.label}
                 </Link>
               )}
-            </li>
+            </StaggerItem>
           );
         })}
-      </ul>
+      </Stagger>
     </nav>
   );
 }

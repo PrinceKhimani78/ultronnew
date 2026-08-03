@@ -1,5 +1,9 @@
 import Image from 'next/image';
 
+import { Parallax } from '@/components/motion/Parallax';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+
 import {
   DESIGN_CREAM,
   DESIGN_SAND,
@@ -39,18 +43,20 @@ export function DesignHero() {
         carry. It was 198px while the site's *fixed* header sat above instead.
       */}
       <DesignContainer className="pt-10 pb-0 sm:pt-14 lg:pt-[102px]">
-        <div className="flex flex-col gap-10 lg:flex-row lg:gap-[15px]">
-          <div className="w-full lg:w-[654px] lg:shrink-0">
-            <h1
-              id="design-hero-heading"
-              className="m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em]"
-            >
-              {HERO.headingLines.map((line, index) => (
-                <span key={index} className="block">
-                  <DesignHeadingText segments={line} />
-                </span>
-              ))}
-            </h1>
+        <div className="mx-auto flex max-w-[1150px] flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 xl:gap-6">
+          <div className="w-full lg:w-[670px] lg:shrink-0 xl:w-[700px]">
+            <Reveal variant="text">
+              <h1
+                id="design-hero-heading"
+                className="m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em]"
+              >
+                {HERO.headingLines.map((line, index) => (
+                  <span key={index} className="block">
+                    <DesignHeadingText segments={line} />
+                  </span>
+                ))}
+              </h1>
+            </Reveal>
 
             {/*
               Statistics. A description list rather than a row of divs: each
@@ -59,14 +65,17 @@ export function DesignHero() {
               nothing to split into a separate <dt>. The whole string is the
               term; the icon is decoration.
             */}
-            <ul
-              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
+            <Stagger
+              as="ul"
+              delayChildren={0.12}
+              className="mt-[34px] flex w-full flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
               style={{ backgroundColor: '#FEFDF2', minHeight: 156 }}
             >
               {HERO.stats.map((stat, index) => {
                 const Icon = STAT_ICONS[stat.icon];
                 return (
-                  <li
+                  <StaggerItem
+                    as="li"
                     key={stat.label}
                     className="flex flex-1 items-center sm:py-[28px]"
                   >
@@ -92,37 +101,38 @@ export function DesignHero() {
                         {stat.label}
                       </span>
                     </div>
-                  </li>
+                  </StaggerItem>
                 );
               })}
-            </ul>
+            </Stagger>
 
-            <p className="mt-[58px] max-w-[654px] text-[20px] leading-[130%] font-medium text-black lg:leading-[100%]">
-              {HERO.body}
-            </p>
+            <Reveal variant="text" delay={0.08} className="mt-[58px]">
+              <p className="w-full text-[20px] leading-[130%] font-medium text-black lg:leading-[100%]">
+                {HERO.body}
+              </p>
+            </Reveal>
           </div>
 
           {/*
-            The comp's 3D monogram, 441×473 at x=792.
-
-            ⚠️ SUBSTITUTED ASSET. The source export is `assets/cdb8109c99ca62e3.png`,
-            which the Design MCP cannot return — see icons.tsx for the 256 KiB
-            cap. `hero-monogram.webp` already in `public/brand` is the same
-            artwork at exactly the 441×473 the comp specifies, so it stands in
-            rather than a placeholder.
+            The comp's 3D monogram, 441×473 placed directly adjacent to content.
           */}
-          <div className="flex justify-center lg:mt-[-54px] lg:block lg:w-[441px] lg:shrink-0">
-            <Image
-              src="/assets/home-design-preview/hero-monogram.webp"
-              alt=""
-              aria-hidden="true"
-              width={441}
-              height={473}
-              priority
-              sizes="(min-width: 1024px) 441px, 80vw"
-              className="h-auto w-[min(441px,80vw)] lg:w-[441px]"
-            />
-          </div>
+          <Parallax
+            distance={24}
+            className="flex justify-center lg:mt-[-40px] lg:block lg:w-[441px] lg:shrink-0"
+          >
+            <Reveal variant="image">
+              <Image
+                src="/assets/home-design-preview/hero-monogram.webp"
+                alt=""
+                aria-hidden="true"
+                width={441}
+                height={473}
+                priority
+                sizes="(min-width: 1024px) 441px, 80vw"
+                className="h-auto w-[min(441px,80vw)] object-contain lg:w-[441px]"
+              />
+            </Reveal>
+          </Parallax>
         </div>
       </DesignContainer>
 
@@ -139,7 +149,9 @@ export function DesignHero() {
         }}
       >
         <DesignContainer>
-          <DesignButton href="#design-services">{HERO.cta}</DesignButton>
+          <Reveal variant="button" delay={0.16} className="inline-block">
+            <DesignButton href="#design-services">{HERO.cta}</DesignButton>
+          </Reveal>
         </DesignContainer>
       </div>
     </section>

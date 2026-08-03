@@ -1,23 +1,25 @@
 import type { ReactNode } from 'react';
 
-import { cn } from '@/lib/utils';
-
-import { ArrowUpRightIcon } from './icons';
+import { Container } from '@/components/layout/Container';
+import {
+  ActionButton,
+  type ActionButtonProps,
+} from '@/components/ui/ActionButton';
+import { BandEyebrow } from '@/components/ui/BandEyebrow';
 
 /**
- * Shared primitives for `/home-design-preview`.
+ * Primitives for `/home-design-preview`.
  *
- * Every colour is written as a literal hex rather than a theme token. That is
- * deliberate: this page is a fidelity reference for one specific comp, and it
- * must keep showing that comp even if the site's tokens are retuned. It also
- * means the page cannot influence — or be influenced by — the live site's
- * palette, which is the style isolation the brief asks for.
+ * These were originally standalone copies, isolated from the site's tokens so
+ * the reference page could not be disturbed by a palette change. That isolation
+ * is now the wrong trade: this page is the design source of truth for the live
+ * home page, and two implementations of the same button are two things that
+ * drift apart. Each one below is a thin alias over the shared primitive that
+ * `/` also renders, so "identical" is enforced by the module graph rather than
+ * by a promise in a comment.
  *
- * The comp is a fixed 1280px canvas with content inset 85px on both sides, so
- * the measure is 1110px — the exact width of its Who We Help grid. Everything
- * here is expressed as that measure plus responsive gutters, so the 1280px
- * rendering is dimensionally identical to the source while narrower viewports
- * reflow instead of scaling.
+ * The colour constants stay exported — several preview sections use them for
+ * grounds and rules, and they are the comp's literal values.
  */
 
 export const DESIGN_INK = '#000000';
@@ -29,6 +31,7 @@ export const DESIGN_MUTED = '#5A5A5A';
 
 type Segment = { readonly text: string; readonly tone: 'ink' | 'brand' };
 
+/** The comp's measure, which is now the site's measure. */
 export function DesignContainer({
   className,
   children,
@@ -37,23 +40,12 @@ export function DesignContainer({
   children: ReactNode;
 }) {
   return (
-    <div
-      className={cn(
-        'mx-auto w-full max-w-[1110px] px-5 sm:px-8 lg:px-10 xl:px-0',
-        className,
-      )}
-    >
+    <Container width="wide" className={className}>
       {children}
-    </div>
+    </Container>
   );
 }
 
-/**
- * The comp draws its section labels as a literal run of hyphens followed by two
- * spaces — "----  SERVING GLOBAL CLIENTS". Reproduced as a drawn rule plus the
- * label, so the dashes cannot be read out as punctuation by a screen reader
- * and the rule scales with the type instead of depending on a glyph.
- */
 export function DesignEyebrow({
   children,
   className,
@@ -61,25 +53,17 @@ export function DesignEyebrow({
   children: ReactNode;
   className?: string;
 }) {
-  return (
-    <p
-      className={cn(
-        'flex items-center gap-2 text-[16px] leading-none font-normal',
-        className,
-      )}
-      style={{ color: DESIGN_GOLD }}
-    >
-      <span
-        aria-hidden="true"
-        className="inline-block h-px w-8 shrink-0"
-        style={{ backgroundColor: DESIGN_GOLD }}
-      />
-      {children}
-    </p>
-  );
+  return <BandEyebrow className={className}>{children}</BandEyebrow>;
 }
 
-/** Two-tone heading. The comp colours individual words, not whole headings. */
+/**
+ * Two-tone heading. The comp colours individual words, not whole headings.
+ *
+ * Kept local rather than shared: the live site stores heading emphasis as a
+ * boolean `accent` flag on each segment, this page stores it as a `tone` string.
+ * They are the same idea in two shapes, and the preview's shape is the one its
+ * transcribed `content.ts` is written in.
+ */
 export function DesignHeadingText({
   segments,
   brandColor = DESIGN_BRAND,
@@ -103,59 +87,6 @@ export function DesignHeadingText({
   );
 }
 
-type DesignButtonProps = {
-  children: ReactNode;
-  href: string;
-  /** `solid` is the teal fill; `outline` is the cream fill with a teal ring. */
-  variant?: 'solid' | 'outline';
-  /** The comp uses a full pill everywhere except the contact CTA, which is 10px. */
-  radius?: 'pill' | 'rounded';
-  className?: string;
-};
-
-/**
- * The comp's button: a 44px-high lozenge with the label at 18px/700 and a
- * ringed arrow disc to its right.
- *
- * The ring on both the button and the disc is an *inset* box-shadow, not a
- * border — a border would grow the box and break the 44px height and the
- * 179/196px widths the comp specifies.
- */
-export function DesignButton({
-  children,
-  href,
-  variant = 'solid',
-  radius = 'pill',
-  className,
-}: DesignButtonProps) {
-  const isSolid = variant === 'solid';
-
-  return (
-    <a
-      href={href}
-      className={cn(
-        'group inline-flex h-11 items-center gap-4 pr-5 pl-[27px] text-[18px] leading-none font-bold whitespace-nowrap transition-opacity duration-200 hover:opacity-90',
-        radius === 'pill' ? 'rounded-full' : 'rounded-[10px]',
-        className,
-      )}
-      style={{
-        backgroundColor: isSolid ? DESIGN_BRAND : DESIGN_CREAM,
-        color: isSolid ? '#ffffff' : DESIGN_BRAND,
-        boxShadow: isSolid
-          ? `inset 0 0 0 2px ${DESIGN_BRAND}, 0 4px 9px 0 rgba(0,0,0,0.25)`
-          : `inset 0 0 0 2px ${DESIGN_BRAND}, 0 4px 9px 0 rgba(0,0,0,0.2)`,
-      }}
-    >
-      {children}
-      <span
-        aria-hidden="true"
-        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
-        style={{
-          boxShadow: `inset 0 0 0 3px ${isSolid ? '#ffffff' : DESIGN_BRAND}`,
-        }}
-      >
-        <ArrowUpRightIcon className="h-[11px] w-[11px]" />
-      </span>
-    </a>
-  );
+export function DesignButton(props: ActionButtonProps) {
+  return <ActionButton {...props} />;
 }

@@ -117,8 +117,9 @@
   html {
     scroll-behavior: smooth;
     /* Stops the sticky header covering the target of an in-page anchor. Must
-       stay above the pill's lowest edge — 32px of top inset plus a 66px bar. */
-    scroll-padding-top: 7rem;
+       stay below the pill's lowest edge — 49px of top inset plus a 66px bar is
+       115px, so 8rem leaves 13px of clearance. */
+    scroll-padding-top: 8rem;
     -webkit-text-size-adjust: 100%;
     font-family: var(--font-brand);
   }
@@ -224,24 +225,16 @@
     );
   }
 
-  /* Scroll reveal, driven by `components/motion/Reveal`.
+  /* `[data-reveal]` carries NO animation.
 
-     Only `opacity` and `transform` — both composite on the GPU, so a page with
-     forty of these still scrolls at 60fps. The observer sets
-     `data-reveal="visible"`; the delay is passed per element as a custom
-     property so a stagger needs no extra classes. */
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity 700ms var(--ease-house) var(--reveal-delay, 0s),
-      transform 700ms var(--ease-house) var(--reveal-delay, 0s);
-  }
+     Scroll reveals are owned entirely by `components/motion/*`, which drives
+     them on the compositor through Framer Motion. A `transition` here would run
+     against Framer's own rAF loop on the same properties and produce a visible
+     double-ease, so the rule that used to live here is deliberately gone.
 
-  [data-reveal='visible'] {
-    opacity: 1;
-    transform: none;
-  }
+     The attribute survives for one job: it is the selector the `<noscript>`
+     block in the root layout uses to force every element visible when Framer's
+     inline `opacity: 0` would otherwise be permanent. */
 
   /* Concentric outlines. Centred by `inset: 0; margin: auto` rather than a
      translate, because these get animated with `transform: scale()` and a
@@ -270,14 +263,17 @@
     scroll-behavior: auto;
   }
 
-  /* Reveal collapses to "already there" rather than to a fade. The blanket rule
-     below would shorten the transition to nothing anyway, but stating it here
-     means the element is never briefly transparent while the observer catches
-     up on a slow device. */
+  /* A belt-and-braces backstop for reveals.
+     `useMotionScale` already returns 0 under this preference, which collapses
+     every transform to its resting value and leaves a plain fade — that is the
+     honest reading of the request, since the visitor asked for less movement,
+     not for no signal that something arrived. This rule covers the window before
+     hydration, when Framer's SSR-inlined `initial` is on the element and no
+     JavaScript has run to reconsider it. */
   [data-reveal] {
-    opacity: 1;
-    transform: none;
-    transition: none;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 
   *,

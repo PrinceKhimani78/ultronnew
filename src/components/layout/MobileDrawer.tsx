@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Phone, X } from 'lucide-react';
+import { ChevronDown, Phone, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -21,12 +21,21 @@ interface MobileDrawerProps {
   drawerId: string;
 }
 
+/**
+ * Luxury Full-Screen Mobile Navigation Menu (100vw × 100vh):
+ * - Brand green ground (#154B47)
+ * - Fixed position inset-0, no backdrop, no card edges or radius
+ * - Centered vertical navigation with generous spacing
+ * - Active link: white with a gold underline; never gold text
+ * - Inactive: white at 85%, resolving to full white on hover
+ * - Cream pill "BOOK A CALL" button transitioning to Gold on hover
+ */
 export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
   const pathname = usePathname();
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const drawerRef = useRef<HTMLDivElement>(null);
 
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   if (prevIsOpen !== isOpen) {
     setPrevIsOpen(isOpen);
     if (!isOpen) {
@@ -34,8 +43,12 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
     }
   }
 
+  // Lock body scroll and trap focus when open
   useEffect(() => {
     if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
     const drawerEl = drawerRef.current;
     if (drawerEl) {
@@ -71,76 +84,80 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
     };
   }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div
-          className="fixed inset-0 z-50 lg:hidden"
+        <motion.div
+          key="full-screen-menu"
+          ref={drawerRef}
           id={drawerId}
           role="dialog"
           aria-modal="true"
-          aria-label="Mobile Navigation Menu"
+          aria-label="Full Screen Navigation Menu"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className={cn(
+            /*
+             * `inset-0` on a fixed element already IS the viewport, so there is
+             * no explicit width here. A 100vw width would be wider than the
+             * visible area on any viewport with a classic scrollbar, and would
+             * push a horizontal scrollbar under the menu.
+             *
+             * Height is `100dvh`, not `h-screen`/100vh. On mobile Safari and
+             * Chrome, 100vh is the viewport with the URL bar RETRACTED, so a
+             * 100vh panel runs taller than what you can see and the "Book a
+             * call" button at its foot sits below the fold until you scroll —
+             * which the scroll lock prevents. `dvh` tracks the bar.
+             */
+            'fixed inset-0 z-50 flex h-[100dvh] flex-col rounded-none border-none bg-[#154B47] px-6 text-white shadow-none sm:px-10 lg:hidden',
+            'pt-[env(safe-area-inset-top,1.25rem)] pb-[env(safe-area-inset-bottom,1.5rem)]',
+          )}
         >
-          {/* Backdrop */}
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/50"
-            aria-hidden="true"
-          />
+          {/* Top Bar: Logo on left, Close (X) on right */}
+          <div className="flex h-[64px] shrink-0 items-center justify-between">
+            <Link href="/" onClick={onClose} aria-label="Home">
+              <Logo tone="cream" className="h-[36px] sm:h-[40px]" />
+            </Link>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 text-white transition-colors duration-250 hover:text-white/80 focus:outline-none"
+              aria-label="Close menu"
+            >
+              <X className="h-7 w-7" />
+            </button>
+          </div>
 
-          {/* Full Screen Drawer Panel */}
-          <motion.div
-            key="panel"
-            ref={drawerRef}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="bg-brand-panel text-surface fixed inset-0 z-10 flex h-full w-full flex-col overflow-y-auto p-6 shadow-2xl"
-          >
-            {/* Header: Logo + Close Button */}
-            <div className="border-surface/15 flex items-center justify-between border-b pb-4">
-              <Link href="/" onClick={onClose} aria-label="Home">
-                <Logo />
-              </Link>
-              <button
-                type="button"
-                onClick={onClose}
-                className="text-surface hover:text-accent p-2 transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-
-            {/* Nav links */}
-            <nav className="flex-1 overflow-y-auto py-6">
-              <ul className="flex flex-col space-y-2">
+          {/* Centered Navigation Links */}
+          <div className="my-auto flex flex-1 flex-col items-center justify-center py-6 text-center">
+            <nav aria-label="Mobile Primary Navigation" className="w-full">
+              <ul className="flex flex-col items-center">
                 {PRIMARY_NAV.map((item) => {
                   const isServices = item.href === '/services';
                   const isCurrent = isCurrentRoute(item.href, pathname);
 
                   if (isServices) {
                     return (
-                      <li key={item.href} className="flex flex-col">
-                        <div className="hover:bg-surface/10 flex w-full items-center justify-between rounded-lg px-3 py-2 transition-colors">
+                      <li
+                        key={item.href}
+                        className="flex w-full flex-col items-center"
+                      >
+                        <div className="flex h-[64px] items-center justify-center gap-2">
                           <Link
                             href="/services"
                             onClick={onClose}
                             aria-current={isCurrent ? 'page' : undefined}
                             className={cn(
-                              'flex-1 text-sm font-medium tracking-wider uppercase transition-colors',
+                              'text-[22px] font-semibold tracking-[0.08em] uppercase transition-all duration-250 sm:text-[26px]',
                               isCurrent
-                                ? 'text-accent font-semibold'
-                                : 'text-surface/90 hover:text-surface',
+                                ? 'font-bold text-white underline decoration-[#DCCB8E] underline-offset-8'
+                                : 'text-white/85 hover:text-white',
                             )}
                           >
                             {item.label}
@@ -150,79 +167,102 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
                             onClick={() => setIsServicesOpen((prev) => !prev)}
                             aria-expanded={isServicesOpen}
                             aria-label="Toggle Services submenu"
-                            className="text-surface/90 hover:text-accent focus-visible:ring-accent rounded p-1 transition-colors focus-visible:ring-1 focus-visible:outline-none"
+                            className="p-2 text-white transition-colors duration-250 hover:text-white focus:outline-none"
                           >
                             <ChevronDown
                               className={cn(
-                                'h-4 w-4 transition-transform duration-200',
-                                isServicesOpen && 'text-accent rotate-180',
+                                'h-5 w-5 transition-transform duration-250',
+                                isServicesOpen && 'rotate-180 text-white',
                               )}
                             />
                           </button>
                         </div>
 
-                        {isServicesOpen && (
-                          <ul className="border-surface/20 my-2 ml-4 space-y-2 border-l pl-3">
-                            <li>
-                              <Link
-                                href="/services"
-                                onClick={onClose}
-                                className="text-accent flex items-center gap-1.5 py-1 text-xs font-semibold uppercase"
-                              >
-                                <span>All Services</span>
-                                <ArrowRight className="h-3 w-3" />
-                              </Link>
-                            </li>
-                            {SERVICES.map((s) => (
-                              <li key={s.slug}>
-                                <Link
-                                  href={`/services/${s.slug}`}
-                                  onClick={onClose}
-                                  className="text-surface/80 hover:text-surface block py-1 text-xs"
-                                >
-                                  {s.title}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
+                        {/* Accordion Submenu */}
+                        <AnimatePresence>
+                          {isServicesOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25, ease: 'easeOut' }}
+                              className="w-full overflow-hidden"
+                            >
+                              <ul className="flex flex-col items-center gap-3 py-3">
+                                <li>
+                                  <Link
+                                    href="/services"
+                                    onClick={onClose}
+                                    className="text-[15px] font-semibold tracking-wider text-white uppercase transition-opacity duration-250 hover:opacity-80"
+                                  >
+                                    All Services
+                                  </Link>
+                                </li>
+                                {SERVICES.map((s) => {
+                                  const isSubCurrent =
+                                    pathname === `/services/${s.slug}`;
+                                  return (
+                                    <li key={s.slug}>
+                                      <Link
+                                        href={`/services/${s.slug}`}
+                                        onClick={onClose}
+                                        className={cn(
+                                          'text-[15px] font-medium transition-colors duration-250',
+                                          isSubCurrent
+                                            ? 'font-semibold text-white'
+                                            : 'text-white/85 hover:text-white',
+                                        )}
+                                      >
+                                        {s.title}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </li>
                     );
                   }
 
                   return (
-                    <li key={item.href}>
-                      <a
+                    <li key={item.href} className="flex w-full justify-center">
+                      <Link
                         href={item.href}
                         onClick={onClose}
+                        aria-current={isCurrent ? 'page' : undefined}
                         className={cn(
-                          'block rounded-lg px-3 py-2 text-sm font-medium tracking-wider uppercase transition-colors',
+                          'flex h-[64px] items-center justify-center text-[22px] font-semibold tracking-[0.08em] uppercase transition-all duration-250 sm:text-[26px]',
                           isCurrent
-                            ? 'text-accent font-semibold'
-                            : 'text-surface/90 hover:text-surface',
+                            ? 'font-bold text-white underline decoration-[#DCCB8E] underline-offset-8'
+                            : 'text-white/85 hover:text-white',
                         )}
                       >
                         {item.label}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}
               </ul>
             </nav>
+          </div>
 
-            {/* CTA Button */}
-            <div className="border-surface/15 mt-auto border-t pt-4">
-              <a
-                href={PRIMARY_CTA.href}
-                onClick={onClose}
-                className="bg-surface text-brand hover:bg-surface/90 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-xs font-semibold tracking-wider uppercase transition-colors"
-              >
-                <Phone className="h-4 w-4" />
-                <span>{PRIMARY_CTA.label}</span>
-              </a>
-            </div>
-          </motion.div>
-        </div>
+          {/* Book A Call CTA Button near bottom */}
+          <div className="mt-auto flex w-full shrink-0 justify-center pt-4 pb-6">
+            <a
+              href={PRIMARY_CTA.href}
+              onClick={onClose}
+              className={cn(
+                'flex h-[50px] w-full max-w-[280px] items-center justify-center gap-2.5 rounded-full bg-[#FDFBEE] px-6 text-[14px] font-bold tracking-[0.08em] text-[#035551] uppercase',
+                'transition-colors duration-300 hover:bg-[#DCCB8E] hover:text-[#035551]',
+              )}
+            >
+              <Phone className="h-4 w-4" />
+              <span>{PRIMARY_CTA.label}</span>
+            </a>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

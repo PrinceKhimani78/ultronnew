@@ -15,49 +15,49 @@ export const WHO_WE_HELP_HEADER = {
     { text: 'Who We ' },
     { text: 'Help', accent: true },
   ] as readonly HeadingSegment[],
-  body: "We don't have a typical client. What we have is a typical situation: something that should have worked, didn't.",
+  body: 'Whether you’re entering the UAE market or expanding globally, we deliver tailored financial and business advisory solutions every step of the way.',
   cta: { label: 'ABOUT US', href: '#about' },
 };
 
 export const WHO_WE_HELP_CARDS: readonly WhoWeHelpItem[] = [
   {
-    id: 'uae-smes-operating-businesses',
-    title: 'UAE-Based SMEs & Operating Businesses',
+    id: 'international-entrepreneurs',
+    title: 'International Entrepreneurs',
     description:
-      'Revenue is coming in, operations are running, then a bank flags the account or a loan gets declined with no clear explanation. We find the trigger and resolve it.',
+      'Whether you’re relocating or expanding into the UAE, we help establish the right business structure, navigate regulations, and secure the financial foundation needed for long-term success.',
     size: 'wide',
     order: 1,
   },
   {
-    id: 'high-net-worth',
-    title: 'Family Offices & Multi-Entity Groups',
+    id: 'foreign-investors',
+    title: 'Foreign Investors',
     description:
-      'Holding companies, trusts and entities spread across jurisdictions, built for control and succession, not simplicity. We design and reposition these so they hold up under scrutiny.',
-    size: 'tall',
+      'From market entry and company formation to banking and investment advisory, we help overseas investors confidently build and grow their presence in the UAE.',
+    size: 'standard',
     order: 2,
   },
   {
-    id: 'foreign-investors',
-    title: 'Founders & Entrepreneurs',
+    id: 'smes-growing-businesses',
+    title: 'SMEs & Growing Businesses',
     description:
-      "The idea, the capital and the plan are all there. What's missing is a structure a UAE bank will actually approve. We fix that before it becomes a bigger problem.",
+      'As your business scales, so do its financial and operational challenges. We provide strategic guidance, banking solutions, and financial support to help you grow with confidence.',
     size: 'standard',
     order: 3,
   },
   {
-    id: 'smes-growing-businesses',
-    title: 'Resident & Non-Resident Investors',
+    id: 'startups-founders',
+    title: 'Startups & Founders',
     description:
-      "Multi-jurisdiction income and assets, spread across a profile no single bank's checklist was built for. We present it in a way that satisfies compliance without losing the nuance.",
-    size: 'standard',
+      'Building a business requires more than registration. We support founders with business setup, banking, financial planning, and practical advice from day one.',
+    size: 'wide',
     order: 4,
   },
   {
-    id: 'startups-founders',
-    title: 'Real Estate Professionals',
+    id: 'high-net-worth',
+    title: 'High-Net-Worth Individuals',
     description:
-      "Mortgage cases that stall after valuation. Strong financials, but income the lenders can't categorise. We handle the repositioning and see it through.",
-    size: 'wide',
+      'For clients with complex financial requirements, we offer tailored advisory services, tax-efficient structuring, wealth-related financing, and bespoke banking solutions.',
+    size: 'tall',
     order: 5,
   },
   {
@@ -65,7 +65,7 @@ export const WHO_WE_HELP_CARDS: readonly WhoWeHelpItem[] = [
     title: 'Global Companies Expanding to the UAE',
     description:
       'International businesses rely on us to simplify UAE market entry through company formation, corporate banking, financial advisory, and ongoing strategic support.',
-    size: 'standard',
+    size: 'tall',
     order: 6,
   },
 ] as const;

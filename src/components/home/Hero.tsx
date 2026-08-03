@@ -1,123 +1,151 @@
-import { ArrowUpRight, Briefcase, Globe, Landmark } from 'lucide-react';
 import Image from 'next/image';
 
 import { Container } from '@/components/layout/Container';
-import { Section } from '@/components/layout/Section';
+import { Parallax } from '@/components/motion/Parallax';
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { HeadingText } from '@/components/ui/SectionHeading';
+import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
 import { HOME_HERO } from '@/content/home';
-import { cn } from '@/lib/utils';
 
 /**
- * Fully Responsive Hero Section (320px to 1920px+):
- * - Reconciled to Figma Frame 5 (1280px comp):
- *   1. Bottom Hero Gradient Effect (#FDFBEE to soft #DCCB8E 132px height)
- *   2. Primary CTA Button: 179px × 44px pill [ EXPLORE  ○↗ ] with diagonal Uiverse arrow swap animation
- * - Desktop (1200px+): 2-Column layout (Left: Heading, Trust Strip, Description, CTA; Right: 3D Monogram)
- * - Tablet & Mobile (<1200px): Stacked single column with center-aligned text
+ * Hero, rebuilt from the comp's 1280×832 "Hero" frame — the same frame
+ * `/home-design-preview` draws, with the client-approved copy in its place.
+ *
+ * The comp places the nav pill inside this frame at y=49 and sets the h1 at
+ * y=217. The site header is `fixed` and lives in the root layout, so it occupies
+ * no flow height here and the whole 217px has to come from this section's top
+ * padding: 49 (header inset) + 66 (bar) + 102 (the comp's gap below the pill).
+ * The narrower breakpoints carry the same sum against their own header inset.
+ *
+ * The frame is absolutely positioned throughout. This is flow layout at the same
+ * dimensions: at 1280 the result is dimensionally the comp, and below that it
+ * reflows rather than scaling, because the export defines no layout other than
+ * 1280 (its support.js contains no media queries, no scaling, no breakpoints).
  */
 
-const STAT_ICONS = {
-  bank: Landmark,
-  briefcase: Briefcase,
-  globe: Globe,
-} as const;
+/** The comp's cream, and the slightly warmer cream of the statistics bar. */
+const CREAM = '#FDFBEE';
+const STRIP = '#FEFDF2';
+const SAND = '#DCCB8E';
+const BRAND = '#035551';
 
 export function Hero() {
   return (
-    <Section
+    <section
       id="top"
-      className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32 lg:pb-12"
+      className="relative overflow-hidden"
+      style={{ backgroundColor: CREAM }}
+      aria-labelledby="home-hero-heading"
     >
-      <Container width="wide" className="relative z-10">
-        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10 xl:gap-14">
-          {/* Main Content Column (Left on Desktop, Full Width on Mobile/Tablet) */}
-          <div className="flex flex-col items-center text-center lg:col-span-7 lg:items-start lg:text-left">
-            {/* 1. Heading */}
-            <h1 className="font-display text-[clamp(1.65rem,6.5vw,3.75rem)] leading-[1.12] font-bold tracking-tight text-[#121a18] sm:leading-[1.08]">
-              <HeadingText segments={HOME_HERO.heading} />
-            </h1>
+      <Container
+        width="wide"
+        className="pt-[130px] pb-0 sm:pt-[146px] lg:pt-[217px]"
+      >
+        <div className="flex flex-col gap-8 sm:gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-16 xl:gap-[160px] 2xl:gap-[240px]">
+          <div className="w-full lg:max-w-[654px] lg:shrink">
+            {/*
+              The heading reveals as one block. It previously typed itself in a
+              character at a time; that is gone, along with the per-character
+              timer and the mutating accessible name it produced.
+            */}
+            <Reveal variant="text">
+              <h1
+                id="home-hero-heading"
+                className="font-display m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em] text-black"
+              >
+                {/*
+                  `accentClassName` sets the emphasised words in the comp's full
+                  brand teal rather than the lighter `brand-bright`; at 64px it
+                  needs no extra separation from the cream, and it measures
+                  8.4:1 against it.
+                */}
+                <HeadingText
+                  segments={HOME_HERO.heading}
+                  accentClassName="text-[#035551]"
+                />
+              </h1>
+            </Reveal>
 
-            {/* 2. Trust Strip / Metrics Bar */}
-            <div className="bg-surface-raised/40 shadow-soft my-5 w-full rounded-2xl border border-[#035551]/15 p-3.5 sm:my-6 sm:p-5 lg:max-w-none">
-              <dl className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-2">
-                {HOME_HERO.stats.map((stat, index) => {
-                  const Icon = STAT_ICONS[stat.icon as keyof typeof STAT_ICONS];
-                  return (
-                    <div
-                      key={stat.label}
-                      className="relative flex items-center justify-start gap-3 pl-2 sm:justify-start sm:pr-2 sm:pl-0"
-                    >
+            {/*
+              Statistics. A list rather than a row of divs: the comp welds each
+              figure to its wording into one string ("130+ Bank Accounts
+              Opened"), so there is nothing to split into a separate term and
+              definition. The whole string is the item; the icon is decoration.
+
+              `Stagger` renders the `<ul>` itself — it does not wrap it — so the
+              strip's own flex layout, background and min-height are untouched.
+
+              ⚠️ PLACEHOLDER FIGURES. `HOME_HERO.stats` carries numbers that have
+              not been client-verified. They must be confirmed before launch.
+            */}
+            <Stagger
+              as="ul"
+              delayChildren={0.12}
+              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
+              // The strip's own ground and its 156px floor. Both are layout, not
+              // motion — they stay on the element that `Stagger` renders.
+              style={{ backgroundColor: STRIP, minHeight: 156 }}
+            >
+              {HOME_HERO.stats.map((stat, index) => {
+                const Icon = STAT_ICONS[stat.icon as StatIconName];
+                return (
+                  <StaggerItem
+                    as="li"
+                    key={stat.label}
+                    className="flex flex-1 items-center sm:py-[28px]"
+                  >
+                    {index > 0 ? (
                       <span
                         aria-hidden="true"
-                        className="text-surface inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#035551] shadow-[0px_3px_6px_rgba(3,85,81,0.25)] sm:h-11 sm:w-11"
+                        className="mr-6 hidden h-[100px] w-px shrink-0 self-center sm:block"
+                        style={{ backgroundColor: SAND }}
+                      />
+                    ) : null}
+                    <div className="flex flex-col gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+                        style={{ backgroundColor: BRAND, color: CREAM }}
                       >
-                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <Icon className="h-[22px] w-[22px]" />
                       </span>
-                      <div className="min-w-0 flex-1 text-left">
-                        <dt className="sr-only">{stat.label}</dt>
-                        <dd>
-                          <span className="font-display text-ink block text-base leading-none font-bold tracking-tight sm:text-xl lg:text-2xl">
-                            {stat.value}
-                          </span>
-                          <span
-                            aria-hidden="true"
-                            className="mt-1 block text-[11px] leading-tight font-medium text-[#035551] sm:text-xs"
-                          >
-                            {stat.label}
-                          </span>
-                        </dd>
-                      </div>
-
-                      {/* Vertical divider line on tablet/desktop */}
-                      {index < HOME_HERO.stats.length - 1 && (
-                        <div
-                          aria-hidden="true"
-                          className="absolute top-1/2 right-0 hidden h-8 w-[1.5px] -translate-y-1/2 bg-[#035551]/20 sm:block"
-                        />
-                      )}
+                      <span className="text-[16px] leading-[135%] font-bold text-black">
+                        {stat.value} {stat.label}
+                      </span>
                     </div>
-                  );
-                })}
-              </dl>
-            </div>
+                  </StaggerItem>
+                );
+              })}
+            </Stagger>
 
-            {/* 3. Description Paragraph */}
-            <p className="text-ink max-w-xl text-xs leading-relaxed font-medium sm:text-base lg:text-lg">
-              {HOME_HERO.body}
-            </p>
-
-            {/* 4. Rebuilt Primary CTA Button [ EXPLORE  ○↗ ] matching Figma Comp & Uiverse Diagonal Arrow Animation */}
-            <div className="mt-6 flex w-full justify-center sm:mt-7 lg:justify-start">
-              <a
-                href={HOME_HERO.cta.href}
-                className={cn(
-                  'group relative inline-flex h-[44px] w-full max-w-[179px] items-center justify-between rounded-full border-2 border-[#035551] bg-[#035551] pr-2.5 pl-7 shadow-[0px_4px_9px_0px_rgba(0,0,0,0.25)] select-none',
-                  'font-display text-xs font-bold tracking-[0.08em] text-white uppercase sm:text-sm',
-                  'ease-house transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#154B47] hover:shadow-[0px_6px_14px_0px_rgba(0,0,0,0.30)] active:translate-y-0',
-                  'focus-visible:ring-2 focus-visible:ring-[#035551] focus-visible:ring-offset-2 focus-visible:outline-none',
-                )}
-              >
-                <span>{HOME_HERO.cta.label}</span>
-
-                <span
-                  aria-hidden="true"
-                  className="relative inline-flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#FDFBEE] text-[#035551] sm:h-[26px] sm:w-[26px]"
-                >
-                  {/* Primary Arrow (exits top-right on hover) */}
-                  <ArrowUpRight className="ease-house h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-full group-hover:-translate-y-full group-hover:opacity-0 motion-reduce:transform-none motion-reduce:group-hover:opacity-100" />
-                  {/* Copy Arrow (enters from bottom-left on hover) */}
-                  <ArrowUpRight
-                    aria-hidden="true"
-                    className="ease-house absolute h-3.5 w-3.5 -translate-x-full translate-y-full opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:hidden"
-                  />
-                </span>
-              </a>
-            </div>
+            {/* `mt-[58px]` moves to the wrapper — the reveal IS the element in
+                flow now, so the margin has to live where the box does. */}
+            <Reveal variant="text" delay={0.08} className="mt-[58px]">
+              <p className="max-w-[654px] text-[20px] leading-[130%] font-medium text-black lg:leading-[100%]">
+                {HOME_HERO.body}
+              </p>
+            </Reveal>
           </div>
 
-          {/* 5. Hero Illustration (Right on Desktop, Below CTA on Mobile/Tablet) */}
-          <div className="mt-8 flex w-full justify-center lg:col-span-5 lg:mt-0 lg:justify-end">
-            <div className="xs:max-w-[260px] relative w-full max-w-[220px] sm:max-w-[340px] lg:max-w-none">
+          {/*
+            The comp's 3D monogram, 441×473 at x=792.
+
+            Two layers, and they have to be separate elements: `Parallax` writes
+            a scroll-linked `y` on every frame, while `Reveal` runs a one-shot
+            `y` on entry. Both on one node and the last writer wins — the reveal
+            would be dragged back by the parallax mid-flight. Outer drifts,
+            inner arrives.
+
+            The parallax div carries the layout classes so no box is added to the
+            flex row; the reveal is inside it and wraps only the image.
+          */}
+          <Parallax
+            distance={24}
+            className="flex justify-center lg:mt-[-54px] lg:block lg:w-[441px] lg:shrink-0"
+          >
+            <Reveal variant="image">
               <Image
                 src="/brand/hero-monogram.webp"
                 alt=""
@@ -125,23 +153,38 @@ export function Hero() {
                 width={441}
                 height={473}
                 priority
-                sizes="(min-width: 1024px) 40vw, (min-width: 640px) 340px, 220px"
-                className="h-auto w-full [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_82%)] object-contain"
+                sizes="(min-width: 1024px) 441px, 80vw"
+                className="h-auto w-[min(441px,80vw)] lg:w-[441px]"
               />
-            </div>
-          </div>
+            </Reveal>
+          </Parallax>
         </div>
       </Container>
 
-      {/* 6. Hero Bottom Gradient Effect (Figma Frame 5: 132px height transition into next section) */}
+      {/*
+        The comp's closing band: a 132px strip carrying a gradient whose second
+        stop sits at 740.91%, so only its first ~13% is ever visible — the wash
+        barely leaves cream. Reproduced with the same stop rather than the colour
+        it resolves to, so it stays correct if the height changes. The primary
+        call to action sits inside it, on the page measure.
+      */}
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 bottom-0 left-0 z-0 h-[64px] w-full sm:h-[96px] lg:h-[132px]"
+        className="relative mt-10 h-[132px] w-full lg:mt-[67px]"
         style={{
-          background:
-            'linear-gradient(180deg, rgba(253, 251, 238, 0) 0%, rgba(253, 251, 238, 0.75) 35%, rgba(220, 203, 142, 0.22) 100%)',
+          backgroundImage: `linear-gradient(180deg, ${CREAM} 0%, ${SAND} 740.91%)`,
         }}
-      />
-    </Section>
+      >
+        <Container width="wide">
+          {/* `inline-block` so the reveal box hugs the button rather than
+              spanning the measure — a full-width wrapper would make the 12px
+              rise read as the whole band moving. */}
+          <Reveal variant="button" delay={0.16} className="inline-block">
+            <ActionButton href={HOME_HERO.cta.href}>
+              {HOME_HERO.cta.label.toUpperCase()}
+            </ActionButton>
+          </Reveal>
+        </Container>
+      </div>
+    </section>
   );
 }

@@ -1,99 +1,81 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import type { ReactNode } from 'react';
+
+import {
+  TRANSFORM_PERSPECTIVE,
+  VIEWPORT,
+  revealVariants,
+  type RevealDirection,
+  type RevealKind,
+} from './config';
+import { useMotionScale } from './useMotionScale';
 
 /**
- * Fade-and-rise as an element scrolls into view.
+ * One block, revealed once as it enters the viewport.
  *
- * Deliberately not Framer Motion. This does one thing — transition opacity and a
- * small translate once, on intersection — and Framer cost 58KB gzipped to do it,
- * which was 24% of the page's entire JavaScript. PROJECT.md's seventh
- * code-quality rule ("if it saves fewer than fifty lines, write the fifty
- * lines") decides this. Framer stays in the dependency list for work that
- * genuinely needs it: presence and exit transitions on the contact form, and any
- * future modal.
+ * This replaces an IntersectionObserver + CSS implementation that existed to
+ * avoid loading Framer Motion. That trade no longer pays: the site header uses
+ * Framer on every route, so the library is already in the shared bundle and the
+ * CSS version was a second animation system maintained to save a download that
+ * had already happened. One system now, defined in `motion/config.ts`.
  *
- * **One observer for the whole page.** Every instance shares the module-level
- * observer below rather than constructing its own — around twenty separate
- * observers were previously being created and each one is an independent
- * callback the browser must service during scroll. The reveal action is
- * identical for every element, so there is nothing per-instance to store.
+ * **`data-reveal` is not decorative.** Framer writes its `initial` state as an
+ * inline style during SSR, so with JavaScript disabled every element on the page
+ * would stay at `opacity: 0` forever. The attribute is the hook for the
+ * `<noscript>` rule in the root layout, whose `!important` beats a
+ * non-important inline declaration and forces everything visible.
  *
- * The animation itself lives in `globals.css` against `[data-reveal]`, so this
- * component ships no style objects and the reduced-motion escape hatch is a
- * media query rather than a runtime branch. A `<noscript>` block in the root
- * layout forces every element visible when scripting is off.
+ * **Wrap, do not insert.** `as` and `className` exist so this component can BE
+ * the element it animates — a grid cell, a list item, a column — rather than
+ * adding a div inside one. An extra div in a grid is a layout change, and the
+ * brief forbids layout changes.
  */
 
 type RevealProps = {
-  children: React.ReactNode;
-  /** Stagger siblings by passing an index-derived delay, in seconds. */
+  children: ReactNode;
+  /** Seconds. Stagger siblings by passing an index-derived delay. */
   delay?: number;
+  /** Which set of distances and durations to use. See `KIND` in `config.ts`. */
+  variant?: RevealKind;
+  /** `up` is the default; `left`/`right` are the 20px bento column slides. */
+  direction?: RevealDirection;
   className?: string;
-  as?: 'div' | 'li' | 'article';
+  as?: 'div' | 'li' | 'article' | 'span';
+  /** Override the fraction that must be visible. Defaults to 0.2. */
+  amount?: number;
+  id?: string;
 };
-
-/** Reveal slightly before the element reaches the fold, so it is never abrupt. */
-const ROOT_MARGIN = '0px 0px -80px 0px';
-
-let sharedObserver: IntersectionObserver | null = null;
-
-function getSharedObserver() {
-  if (sharedObserver) return sharedObserver;
-
-  sharedObserver = new IntersectionObserver(
-    (entries, observer) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        (entry.target as HTMLElement).dataset.reveal = 'visible';
-        // Once only. Re-animating on every pass is what makes motion read as
-        // decoration rather than confidence — and it keeps the observer's
-        // working set shrinking as the visitor scrolls.
-        observer.unobserve(entry.target);
-      }
-    },
-    { rootMargin: ROOT_MARGIN },
-  );
-
-  return sharedObserver;
-}
 
 export function Reveal({
   children,
   delay = 0,
+  variant = 'section',
+  direction = 'up',
   className,
-  as: Tag = 'div',
+  as = 'div',
+  amount,
+  id,
 }: RevealProps) {
-  const nodeRef = useRef<HTMLElement | null>(null);
-
-  const setRef = useCallback((node: HTMLElement | null) => {
-    nodeRef.current = node;
-  }, []);
-
-  useEffect(() => {
-    const element = nodeRef.current;
-    if (!element) return;
-
-    // Reveal immediately rather than leaving content hidden if the API is absent.
-    if (typeof IntersectionObserver === 'undefined') {
-      element.dataset.reveal = 'visible';
-      return;
-    }
-
-    const observer = getSharedObserver();
-    observer.observe(element);
-    // Unobserve only this element — the observer is shared and outlives it.
-    return () => observer.unobserve(element);
-  }, []);
+  const scale = useMotionScale();
+  const Component = motion[as];
 
   return (
-    <Tag
-      ref={setRef}
+    <Component
+      id={id}
       data-reveal=""
-      style={{ '--reveal-delay': `${delay}s` } as React.CSSProperties}
       className={className}
+      variants={revealVariants({ kind: variant, direction, scale, delay })}
+      initial="hidden"
+      whileInView="visible"
+      viewport={amount === undefined ? VIEWPORT : { ...VIEWPORT, amount }}
+      // Without a perspective a rotateX on a flat plane is invisible. Set here
+      // rather than in the variant so it is never animated — it is the camera,
+      // not the subject.
+      style={{ transformPerspective: TRANSFORM_PERSPECTIVE }}
     >
       {children}
-    </Tag>
+    </Component>
   );
 }

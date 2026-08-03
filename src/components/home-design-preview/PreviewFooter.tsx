@@ -1,5 +1,13 @@
 import Image from 'next/image';
 
+import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import {
+  LocationGlyph,
+  MailGlyph,
+  PhoneGlyph,
+} from '@/components/ui/ContactIcons';
+
 /**
  * Footer for `/home-design-preview` only, rebuilt from the comp's "Footer"
  * frame (1280×572).
@@ -8,7 +16,13 @@ import Image from 'next/image';
  * rather than a variant prop: the comp's ground is #154B47 rather than the
  * site's `--color-brand`, its type runs 18px throughout, its "Quick Links" and
  * "Services" columns differ in order and content from the live site's, and it
- * carries no regulatory disclaimer — the paragraph in that slot is lorem ipsum.
+ * carries no regulatory disclaimer.
+ *
+ * The 572px height is not set — it is the sum of the parts, and the parts are
+ * what the spec fixes: 84px of lead-in, 40px of run-out and 448px of content
+ * between them. The one free variable is the gap under the lockup; at 40px the
+ * column measures 449px and the frame closes at 573px. Setting an explicit
+ * height instead would clip the moment a line of the address wrapped.
  *
  * The comp has NO social icons and NO newsletter block. Neither is invented
  * here; the frame is transcribed as drawn.
@@ -19,8 +33,11 @@ import Image from 'next/image';
  */
 
 const PILL = '#154B47';
-const CREAM = '#FDFBEE';
-const GOLD = '#C9B37E';
+/** The comp's active-link gold. */
+const GOLD = '#DCCB8E';
+/** 18px body throughout, at the comp's 30px line box. */
+const BODY = 'text-[18px] leading-[30px] font-normal';
+const BODY_COLOR = 'rgba(255,255,255,0.85)';
 
 const QUICK_LINKS = [
   { label: 'Home', current: false },
@@ -32,106 +49,68 @@ const QUICK_LINKS = [
 
 const SERVICE_LINKS = [
   { label: 'Business Banking', current: false },
+  { label: 'Business Setup', current: false },
   { label: 'Financial Advisory', current: true },
   { label: 'Tax Structuring Advisory', current: false },
   { label: 'Business Finance', current: false },
   { label: 'Real Estate Mortgages', current: false },
-  { label: 'Business Setup', current: false },
 ] as const;
 
 /** ⚠️ Lorem ipsum and placeholder NAP, exactly as the comp draws them. */
 const CONTACT = {
-  blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  address: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   email: 'lorem@ultronfinancials.com',
   telephone: '98765 43210',
-  link: 'Contact Us',
 } as const;
 
 const COPYRIGHT_LEFT = 'ALL RIGHTS RESERVED BY ULTRON FINANCIALS';
 const COPYRIGHT_RIGHT = 'COPYRIGHTS © MUTANT TECHNOLOGIES';
 
-function MailGlyph() {
+function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-[22px] w-[22px] shrink-0"
-    >
-      <rect x="2" y="4.5" width="20" height="15" rx="2.5" />
-      <path d="m2.5 6 9.5 7 9.5-7" />
-    </svg>
-  );
-}
-
-function PhoneGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.8}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-[22px] w-[21px] shrink-0"
-    >
-      <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5L16 12l4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z" />
-    </svg>
-  );
-}
-
-/** The comp's third contact row: a 27×18 landscape glyph, i.e. a message. */
-function MessageGlyph() {
-  return (
-    <svg
-      viewBox="0 0 27 18"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-[18px] w-[27px] shrink-0"
-    >
-      <path d="M2 3.5A2.5 2.5 0 0 1 4.5 1h18A2.5 2.5 0 0 1 25 3.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 3v-3H4.5A2.5 2.5 0 0 1 2 11.5Z" />
-    </svg>
+    <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
+      {children}
+    </h2>
   );
 }
 
 function LinkColumn({
   heading,
   items,
+  delay = 0,
 }: {
   heading: string;
   items: readonly { label: string; current: boolean }[];
+  /** Offsets this column against its siblings so the three do not land together. */
+  delay?: number;
 }) {
   return (
     <div>
-      <h2
-        className="mb-6 text-[18px] leading-tight font-semibold"
-        style={{ color: CREAM }}
+      <Reveal variant="text" delay={delay}>
+        <ColumnHeading>{heading}</ColumnHeading>
+      </Reveal>
+      {/*
+        2px between items, not a comfortable list gap: the comp sets a 32px
+        pitch on a 30px line box, so the rhythm is carried by the line height.
+      */}
+      <Stagger
+        as="ul"
+        delayChildren={delay + 0.06}
+        className="flex flex-col gap-[2px]"
       >
-        {heading}
-      </h2>
-      <ul className="flex flex-col gap-4">
         {items.map((item) => (
-          <li key={item.label}>
+          <StaggerItem as="li" variant="text" key={item.label}>
             <a
               href="#design-contact"
               aria-current={item.current ? 'page' : undefined}
-              className="text-[18px] leading-tight font-normal transition-opacity duration-200 hover:opacity-80"
-              style={{ color: item.current ? GOLD : CREAM }}
+              className={`${BODY} transition-colors duration-200 hover:text-[#DCCB8E]`}
+              style={{ color: item.current ? GOLD : BODY_COLOR }}
             >
               {item.label}
             </a>
-          </li>
+          </StaggerItem>
         ))}
-      </ul>
+      </Stagger>
     </div>
   );
 }
@@ -139,106 +118,111 @@ function LinkColumn({
 export function PreviewFooter() {
   return (
     <footer
-      className="overflow-hidden pt-16 pb-8 lg:pt-[96px] lg:pb-[42px]"
+      className="overflow-hidden pt-14 pb-8 lg:pt-[84px] lg:pb-10"
       style={{ backgroundColor: PILL }}
     >
-      <div className="mx-auto w-full max-w-[1066px] px-5 sm:px-8 lg:px-8 xl:px-0">
+      {/*
+        The frame is 1280 wide and insets its content 105px, which is what
+        produces the comp's 1070px footer measure — the exact width of the rule
+        below. Stated as max-width plus inset rather than as a 1070px box, so the
+        two numbers stay traceable to the frame.
+      */}
+      <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10 xl:px-[105px]">
         {/*
           ⚠️ SUBSTITUTED ASSET — `assets/35d9345d34d0b43d.png`, drawn 358×105,
           exceeds the Design MCP's 256 KiB cap. The repo's cream lockup stands
           in at the comp's box.
+
+          Width pinned rather than height: the stand-in is ratio 3.62 against the
+          comp's 3.41, so height follows at 99px. Matching the drawn width keeps
+          the block's footprint right; matching the height would have left it
+          22px wide of the comp.
         */}
-        <Image
-          src="/brand/logo-lockup-cream.webp"
-          alt="Ultron Financials"
-          width={358}
-          height={105}
-          /*
-            Width pinned for the same reason as the header lockup: the stand-in
-            asset is ratio 3.62 against the comp's 3.41, so height follows at
-            99px rather than 105. Matching the drawn width keeps the block's
-            footprint right; matching the height would have made it 22px wide
-            of the comp.
-          */
-          className="h-auto w-[240px] lg:w-[358px]"
-        />
+        <Reveal variant="text" direction="none">
+          <Image
+            src="/brand/logo-lockup-cream.webp"
+            alt="Ultron Financials"
+            width={358}
+            height={105}
+            className="mx-auto h-auto w-[240px] sm:mx-0 lg:w-[358px]"
+          />
+        </Reveal>
 
         {/*
-          Column origins are the comp's, measured from the content edge at
-          x=107: Contact at 0, Quick Links at 556, Services at 797. Each track
-          therefore carries its own trailing gutter (556 = 409 content + 147
-          clear) and the grid gap is zero, which is the only way to hit three
-          different gutters with one template.
+          Column origins are the comp's, measured from the content edge: Contact
+          at 0, Quick Links at 565, Services at 819. Each track carries its own
+          trailing gutter and the grid gap is zero, which is the only way to hit
+          three different gutters with one template.
         */}
-        <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:mt-[44px] lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[556px_241px_269px] xl:gap-0">
+        <div className="mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[565px_254px_minmax(0,1fr)] xl:gap-0">
           {/*
             <address> is the right element here: it means "contact details for
             the nearest article or body", which is exactly what this block is.
           */}
           <address className="not-italic">
-            <h2
-              className="mb-6 text-[18px] leading-tight font-semibold"
-              style={{ color: CREAM }}
+            <Reveal variant="text" delay={0.08}>
+              <ColumnHeading>Contact Us</ColumnHeading>
+            </Reveal>
+            <Stagger
+              as="ul"
+              delayChildren={0.12}
+              className="flex flex-col gap-4"
+              // Colour stays here: the glyphs are stroked with `currentColor`
+              // and inherit it from the list.
+              style={{ color: BODY_COLOR }}
             >
-              Contact Us
-            </h2>
-            <p
-              className="mb-5 text-[18px] leading-[150%] font-normal"
-              style={{ color: CREAM }}
-            >
-              {CONTACT.blurb}
-            </p>
-            <ul className="flex flex-col gap-4" style={{ color: CREAM }}>
-              <li className="flex items-center gap-3">
+              <StaggerItem
+                as="li"
+                variant="text"
+                className="flex items-start justify-center gap-3 sm:justify-start"
+              >
+                <LocationGlyph />
+                <span className={`${BODY} max-w-[340px] text-left`}>
+                  {CONTACT.address}
+                </span>
+              </StaggerItem>
+              <StaggerItem
+                as="li"
+                variant="text"
+                className="flex items-start justify-center gap-3 sm:justify-start"
+              >
                 <MailGlyph />
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="text-[18px] leading-tight transition-opacity duration-200 hover:opacity-80"
+                  className={`${BODY} text-left transition-colors duration-200 hover:text-[#DCCB8E]`}
                 >
                   {CONTACT.email}
                 </a>
-              </li>
-              <li className="flex items-center gap-3">
+              </StaggerItem>
+              <StaggerItem
+                as="li"
+                variant="text"
+                className="flex items-start justify-center gap-3 sm:justify-start"
+              >
                 <PhoneGlyph />
                 {/*
                   ⚠️ The comp's placeholder number. Not dialable — rendered as
                   text rather than a tel: link, because a tel: href built from a
                   placeholder is a link that silently fails.
                 */}
-                <span className="text-[18px] leading-tight">
-                  {CONTACT.telephone}
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <MessageGlyph />
-                <a
-                  href="#design-contact"
-                  className="text-[18px] leading-tight transition-opacity duration-200 hover:opacity-80"
-                >
-                  {CONTACT.link}
-                </a>
-              </li>
-            </ul>
+                <span className={`${BODY} text-left`}>{CONTACT.telephone}</span>
+              </StaggerItem>
+            </Stagger>
           </address>
 
-          <LinkColumn heading="Quick Links" items={QUICK_LINKS} />
-          <LinkColumn heading="Services" items={SERVICE_LINKS} />
+          <LinkColumn heading="Quick Links" items={QUICK_LINKS} delay={0.16} />
+          <LinkColumn heading="Services" items={SERVICE_LINKS} delay={0.24} />
         </div>
 
-        {/*
-          The comp runs the rule 103→1176, i.e. 4px wider than the content
-          column on the left and 3px on the right, so it is nudged out rather
-          than left flush with the columns above it.
-        */}
         <hr
-          className="mt-12 border-0 lg:mt-[70px] xl:-ml-1 xl:w-[1073px]"
-          style={{ height: 1, backgroundColor: CREAM }}
+          className="mt-16 mb-6 border-0"
+          style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* The comp insets the bottom bar 25px inside the divider on both ends. */}
+        {/* The comp insets the bottom bar 25px inside the rule on both ends. */}
         <div
-          className="mt-5 flex flex-col gap-3 text-[14px] leading-tight font-normal sm:flex-row sm:items-center sm:justify-between xl:px-[25px]"
-          style={{ color: CREAM }}
+          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] sm:flex-row sm:justify-between sm:text-left xl:px-[25px]"
+          style={{ color: BODY_COLOR }}
         >
           <span>{COPYRIGHT_LEFT}</span>
           <span>{COPYRIGHT_RIGHT}</span>

@@ -1,36 +1,73 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Menu, Phone, X, ArrowRight } from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
-import { Container } from '@/components/layout/Container';
 import { Logo } from '@/components/layout/Logo';
 import { MobileDrawer } from '@/components/layout/MobileDrawer';
-import { PRIMARY_CTA, PRIMARY_NAV, SITE } from '@/content/site';
 import { SERVICES } from '@/content/services';
+import { PRIMARY_CTA, PRIMARY_NAV, SITE } from '@/content/site';
 import { isCurrentRoute } from '@/lib/nav';
 import { cn } from '@/lib/utils';
 
 /**
- * Past this, content sits under the bar and it needs separating from the page.
+ * The nav pill, transcribed from the design's "Hero" frame.
+ *
+ * Every measurement below is the comp's, taken from the pill's own left edge in
+ * its 1280 frame: a 66px bar inset 49px from the top, logo at 35, nav block at
+ * 261 running 573px wide, CTA at 944, and 66px of clear space after it. The
+ * type is 18px/500 — not the 12px uppercase treatment the process band uses.
+ *
+ * TWO DELIBERATE DIVERGENCES from the comp, both because the comp is a static
+ * 1280 canvas and this is a live site:
+ *
+ *   1. The comp draws the pill *inside* the hero frame, in normal flow. This
+ *      header is `fixed`, because it is the site's header on every route and
+ *      dropping that is a functional regression, not a restyle. The hero's top
+ *      padding reproduces the comp's y-coordinates exactly, so at scroll-top —
+ *      the only state the comp depicts — the two are identical.
+ *   2. Because it is fixed, it lifts a hairline and a shadow once content is
+ *      underneath it. That state does not exist in the comp either.
+ *
+ * The Services dropdown opens on hover and on focus-within rather than from a
+ * caret button. The comp draws no caret, and a caret is 20px of nav width that
+ * would push the CTA off the coordinate the comp puts it on — opening from the
+ * item itself keeps both the metrics and the menu.
  */
+
+/** Past this, content sits under the bar and it needs separating from the page. */
 const SCROLL_THRESHOLD_PX = 24;
 
+const CREAM = '#FDFBEE';
+
 /**
- * Nav label treatment, shared by the plain links and by the Services link that
- * sits beside the dropdown caret so the two cannot drift apart.
+ * The comp gives the nav block both a 573px width and a 44px gutter, and those
+ * two facts disagree: the same five labels at 18px/500 measure 526px in the
+ * browser. Width wins, distributed with `justify-between` — it is what puts the
+ * CTA after it on the comp's x=944, where honouring the 44px gutter instead
+ * drags it 37px left.
  *
- * The underline is an `::after` rule rather than a `border-bottom` because the
- * design wants it to grow from the left on hover. A border can only fade, and it
- * would also run the full width of the padding box; this one is the width of the
- * text, which is what the comp draws.
+ * No nav label is ever gold. The current page is marked by full-strength white
+ * over the 88% the others sit at, plus the hairline gold rule beneath it — the
+ * gold stays as punctuation under the word rather than becoming the word.
+ *
+ * Both states carry a `border-b`, one transparent, so the underline costs the
+ * same 1px of box in either state and the baseline never shifts when the route
+ * changes. Colour is set with classes rather than an inline `style`, because an
+ * inline colour outranks `hover:text-white` and the hover would not fire.
  */
 const NAV_LINK =
-  'ease-house relative inline-block py-1 text-[0.8125rem] font-medium tracking-[0.06em] uppercase transition-colors duration-200 xl:text-[0.9375rem] ' +
-  "after:bg-accent after:absolute after:right-0 after:bottom-0 after:left-0 after:h-px after:origin-left after:transition-transform after:duration-200 after:content-['']";
+  'block pb-1 text-[18px] leading-none font-medium whitespace-nowrap uppercase ' +
+  'border-b transition-colors duration-[250ms] ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCCB8E]';
+
+const NAV_LINK_CURRENT = 'border-[#DCCB8E] text-white';
+const NAV_LINK_DEFAULT =
+  'border-transparent text-white/[0.88] hover:text-white';
 
 export function Header() {
   const pathname = usePathname();
@@ -76,10 +113,7 @@ export function Header() {
           });
           setIsOverDarkSection(activeDarkSet.size > 0);
         },
-        {
-          rootMargin: '-10px 0px -85% 0px',
-          threshold: 0,
-        },
+        { rootMargin: '-10px 0px -85% 0px', threshold: 0 },
       );
 
       darkSections.forEach((el) => observer.observe(el));
@@ -91,7 +125,7 @@ export function Header() {
     return () => clearTimeout(timeoutId);
   }, [pathname]);
 
-  const handleMouseEnterDropdown = useCallback(() => {
+  const openDropdown = useCallback(() => {
     if (dropdownCloseTimeoutRef.current) {
       clearTimeout(dropdownCloseTimeoutRef.current);
       dropdownCloseTimeoutRef.current = null;
@@ -99,7 +133,7 @@ export function Header() {
     setIsDropdownOpen(true);
   }, []);
 
-  const handleMouseLeaveDropdown = useCallback(() => {
+  const scheduleDropdownClose = useCallback(() => {
     if (dropdownCloseTimeoutRef.current) {
       clearTimeout(dropdownCloseTimeoutRef.current);
     }
@@ -108,7 +142,6 @@ export function Header() {
     }, 250);
   }, []);
 
-  // Cleanup close timeout on unmount
   useEffect(() => {
     return () => {
       if (dropdownCloseTimeoutRef.current) {
@@ -117,7 +150,7 @@ export function Header() {
     };
   }, []);
 
-  // Escape key closes desktop dropdown
+  // Escape closes the desktop dropdown.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isDropdownOpen) {
@@ -140,7 +173,6 @@ export function Header() {
     triggerRef.current?.focus();
   }, []);
 
-  // Lock body scroll when drawer is open
   useEffect(() => {
     if (!isDrawerOpen) return;
     const { overflow } = document.body.style;
@@ -151,82 +183,73 @@ export function Header() {
   }, [isDrawerOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 pt-4 sm:pt-6 lg:pt-8">
-      <Container width="wide">
+    <header className="fixed inset-x-0 top-0 z-40 pt-6 lg:pt-[49px]">
+      {/*
+        The pill's own gutters, which are narrower than the page measure — the
+        comp insets the bar 46px in its 1280 frame where the content sits at 85.
+      */}
+      <div className="mx-auto w-full max-w-[1348px] px-4 sm:px-6 lg:px-6 xl:px-0">
         <div
           className={cn(
-            'bg-brand-panel text-surface rounded-[100px] border transition-all duration-300 ease-in-out',
-            isOverDarkSection ? 'border-surface/20' : 'border-transparent',
-            isScrolled || isOverDarkSection ? 'shadow-lift' : 'shadow-soft',
+            'bg-brand-panel text-surface rounded-[100px] transition-all duration-300 ease-in-out',
+            // A ring, not a border. A 1px border grows the pill to 68px and
+            // pushes the logo and CTA 1px off the comp's x-coordinates; a ring
+            // is a box-shadow and costs no layout. In Tailwind v4 the ring and
+            // shadow slots compose rather than overwrite, so both can apply.
+            isOverDarkSection ? 'ring-surface/20 ring-1' : 'ring-0',
+            isScrolled || isOverDarkSection ? 'shadow-lift' : 'shadow-none',
           )}
         >
-          <div className="flex h-[60px] items-center justify-between gap-4 pr-3 pl-4 sm:pr-4 sm:pl-6 lg:h-[66px] lg:gap-6 lg:pr-5 lg:pl-8">
+          <div className="flex h-[66px] items-center justify-between pr-3 pl-4 sm:pl-6 lg:pr-8 lg:pl-8 xl:px-10">
             <Link
               href="/"
               className="shrink-0 rounded-sm"
               aria-label={`${SITE.name} — home`}
             >
-              <Logo tone="cream" className="h-[34px] sm:h-[38px] lg:h-[42px]" />
+              {/*
+                Width is pinned, not height. The lockup is 640×177 (ratio 3.62)
+                where the comp's export is 167×49 (ratio 3.41), so one axis has
+                to give. Pinning width keeps the logo's right edge — and the nav
+                and CTA that follow it — on the comp's x-coordinates.
+              */}
+              <Logo tone="cream" className="h-auto w-[128px] lg:w-[167px]" />
             </Link>
 
-            {/* Desktop Navigation with Dropdown */}
-            <nav aria-label="Primary" className="hidden lg:block">
-              <ul className="flex items-center gap-6 xl:gap-10">
+            <nav
+              aria-label="Primary"
+              className="hidden lg:block xl:ml-[59px] xl:w-[573px]"
+            >
+              <ul className="flex items-center gap-6 xl:justify-between xl:gap-[44px]">
                 {PRIMARY_NAV.map((item) => {
                   const isCurrent = isCurrentRoute(item.href, pathname);
                   const isServices = item.href === '/services';
 
                   const linkClass = cn(
                     NAV_LINK,
-                    isCurrent
-                      ? 'text-accent after:scale-x-100'
-                      : 'text-surface hover:text-accent after:scale-x-0 hover:after:scale-x-100',
+                    isCurrent ? NAV_LINK_CURRENT : NAV_LINK_DEFAULT,
                   );
 
                   if (isServices) {
                     return (
                       <li
                         key={item.href}
-                        className="relative flex items-center gap-1.5 py-2"
-                        onMouseEnter={handleMouseEnterDropdown}
-                        onMouseLeave={handleMouseLeaveDropdown}
+                        className="relative"
+                        onMouseEnter={openDropdown}
+                        onMouseLeave={scheduleDropdownClose}
+                        onFocus={openDropdown}
+                        onBlur={scheduleDropdownClose}
                       >
                         <Link
                           href={item.href}
                           aria-current={isCurrent ? 'page' : undefined}
+                          aria-expanded={isDropdownOpen}
+                          aria-haspopup="menu"
+                          aria-controls={dropdownId}
                           className={linkClass}
                         >
                           {item.label}
                         </Link>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (dropdownCloseTimeoutRef.current) {
-                              clearTimeout(dropdownCloseTimeoutRef.current);
-                            }
-                            setIsDropdownOpen((prev) => !prev);
-                          }}
-                          aria-expanded={isDropdownOpen}
-                          aria-haspopup="menu"
-                          aria-controls={dropdownId}
-                          aria-label="Toggle Services submenu"
-                          className={cn(
-                            'ease-house focus-visible:ring-accent rounded p-0.5 transition-colors duration-200 focus-visible:ring-1 focus-visible:outline-none',
-                            isCurrent || isDropdownOpen
-                              ? 'text-accent'
-                              : 'text-surface hover:text-accent',
-                          )}
-                        >
-                          <ChevronDown
-                            className={cn(
-                              'h-3.5 w-3.5 transition-transform duration-200',
-                              isDropdownOpen && 'rotate-180',
-                            )}
-                          />
-                        </button>
 
-                        {/* Services Dropdown Panel */}
                         <AnimatePresence>
                           {isDropdownOpen && (
                             <motion.div
@@ -239,10 +262,8 @@ export function Header() {
                                 duration: 0.2,
                                 ease: [0.16, 1, 0.3, 1],
                               }}
-                              onMouseEnter={handleMouseEnterDropdown}
-                              onMouseLeave={handleMouseLeaveDropdown}
                               className={cn(
-                                'bg-brand-panel/95 border-surface/20 shadow-lift text-surface absolute top-full left-1/2 z-50 mt-3 w-72 -translate-x-1/2 rounded-2xl border p-3 backdrop-blur-xl',
+                                'bg-brand-panel/95 border-surface/20 shadow-lift text-surface absolute top-full left-1/2 z-50 mt-4 w-72 -translate-x-1/2 rounded-2xl border p-3 backdrop-blur-xl',
                                 "before:absolute before:-top-4 before:right-0 before:left-0 before:h-4 before:content-['']",
                               )}
                             >
@@ -253,7 +274,7 @@ export function Header() {
                                 <Link
                                   href="/services"
                                   onClick={() => setIsDropdownOpen(false)}
-                                  className="text-accent flex items-center gap-1 text-[0.65rem] font-semibold uppercase hover:underline"
+                                  className="flex items-center gap-1 text-[0.65rem] font-semibold text-[#DCCB8E] uppercase hover:underline"
                                 >
                                   All Services{' '}
                                   <ArrowRight className="h-2.5 w-2.5" />
@@ -261,32 +282,35 @@ export function Header() {
                               </div>
 
                               <ul className="space-y-0.5" role="none">
-                                <li role="none">
-                                  <Link
-                                    href="/services"
-                                    role="menuitem"
-                                    onClick={() => setIsDropdownOpen(false)}
-                                    className="group text-accent hover:bg-surface/10 flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-colors"
-                                  >
-                                    <span>View All Services</span>
-                                    <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                                  </Link>
-                                </li>
-                                {SERVICES.map((s) => (
-                                  <li key={s.slug} role="none">
-                                    <Link
-                                      href={`/services/${s.slug}`}
-                                      role="menuitem"
-                                      onClick={() => setIsDropdownOpen(false)}
-                                      className="group text-surface/85 hover:bg-surface/10 hover:text-surface flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors"
-                                    >
-                                      <span>{s.title}</span>
-                                      <span className="text-accent text-xs opacity-0 transition-opacity group-hover:opacity-100">
-                                        →
-                                      </span>
-                                    </Link>
-                                  </li>
-                                ))}
+                                {SERVICES.map((s) => {
+                                  const isSubCurrent = isCurrentRoute(
+                                    `/services/${s.slug}`,
+                                    pathname,
+                                  );
+                                  return (
+                                    <li key={s.slug} role="none">
+                                      <Link
+                                        href={`/services/${s.slug}`}
+                                        role="menuitem"
+                                        aria-current={
+                                          isSubCurrent ? 'page' : undefined
+                                        }
+                                        onClick={() => setIsDropdownOpen(false)}
+                                        className={cn(
+                                          'group hover:bg-surface/10 flex items-center justify-between rounded-xl px-3 py-2 text-xs transition-colors duration-300',
+                                          isSubCurrent
+                                            ? 'font-semibold text-[#DCCB8E]'
+                                            : 'text-surface/85 font-medium hover:text-[#DCCB8E]',
+                                        )}
+                                      >
+                                        <span>{s.title}</span>
+                                        <span className="text-xs text-[#DCCB8E] opacity-0 transition-opacity group-hover:opacity-100">
+                                          →
+                                        </span>
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
                               </ul>
                             </motion.div>
                           )}
@@ -296,7 +320,7 @@ export function Header() {
                   }
 
                   return (
-                    <li key={item.href} className="py-2">
+                    <li key={item.href}>
                       <a
                         href={item.href}
                         aria-current={isCurrent ? 'page' : undefined}
@@ -313,13 +337,35 @@ export function Header() {
             <a
               href={PRIMARY_CTA.href}
               className={cn(
-                'bg-surface text-brand hidden h-[40px] shrink-0 items-center gap-2 rounded-full border border-transparent px-5 lg:inline-flex',
-                'text-[0.75rem] font-medium tracking-[0.06em] uppercase xl:text-[0.8125rem]',
-                'ease-house transition-all duration-200',
-                'hover:border-accent hover:-translate-y-0.5 hover:shadow-[0_6px_14px_rgba(0,0,0,0.18)]',
+                'hidden h-[38px] w-[177px] shrink-0 items-center gap-[9px] rounded-full pl-5 lg:inline-flex xl:ml-[110px]',
+                'text-[18px] leading-none font-medium uppercase',
+                'ease-house transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#DCCB8E] hover:shadow-[0_6px_14px_rgba(0,0,0,0.18)]',
               )}
+              style={{ backgroundColor: CREAM, color: '#035551' }}
             >
-              <Phone aria-hidden="true" className="h-4 w-4" />
+              {/*
+                The comp's own 16×18 handset. Drawn at its intrinsic size so it
+                is never resampled, and `aria-hidden` with an empty alt because
+                the adjacent label already says "Book a call".
+
+                The artwork is dark teal on transparent, which is why no
+                recolouring is needed: it reads correctly on the cream default
+                and on the gold hover fill. A `currentColor` swap is not
+                available to a raster, so the palette had to already work.
+              */}
+              <Image
+                src="/brand/call.png"
+                alt=""
+                aria-hidden="true"
+                width={16}
+                height={18}
+                // Fixed and above the fold on every route, so the default lazy
+                // load would let this pop in after paint. Eager rather than
+                // `priority`: at ~1KB it does not deserve a preload slot ahead
+                // of the hero image.
+                loading="eager"
+                className="h-[18px] w-4 shrink-0"
+              />
               {PRIMARY_CTA.label}
             </a>
 
@@ -340,9 +386,8 @@ export function Header() {
             </button>
           </div>
         </div>
-      </Container>
+      </div>
 
-      {/* Luxury Vault Door Mobile Navigation Drawer */}
       <MobileDrawer
         isOpen={isDrawerOpen}
         onClose={closeDrawer}

@@ -1,4 +1,5 @@
 import { Container } from '@/components/layout/Container';
+import { Reveal } from '@/components/motion/Reveal';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import { SERVICES_PAGE } from '@/content/services-page';
 
@@ -16,12 +17,17 @@ export function ServicesHero() {
         <div className="flex flex-col items-center justify-center text-center">
           {/* Centered Title & Description */}
           <div className="mx-auto max-w-3xl">
-            <h1 className="font-display text-ink text-[clamp(2.25rem,5.2vw,4rem)] leading-[1.08] font-bold tracking-[-0.02em] uppercase">
-              <HeadingText segments={SERVICES_PAGE.hero.heading} />
-            </h1>
-            <p className="text-ink-muted mx-auto mt-5 max-w-xl text-sm leading-relaxed font-normal sm:text-base lg:text-lg">
-              {SERVICES_PAGE.hero.body}
-            </p>
+            {/* Whole blocks, not words — the heading used to type itself in. */}
+            <Reveal variant="text">
+              <h1 className="font-display text-ink text-[clamp(2.25rem,5.2vw,4rem)] leading-[1.08] font-bold tracking-[-0.02em] uppercase">
+                <HeadingText segments={SERVICES_PAGE.hero.heading} />
+              </h1>
+            </Reveal>
+            <Reveal variant="text" delay={0.08} className="mt-5">
+              <p className="text-ink-muted mx-auto max-w-xl text-sm leading-relaxed font-normal sm:text-base lg:text-lg">
+                {SERVICES_PAGE.hero.body}
+              </p>
+            </Reveal>
           </div>
         </div>
       </Container>

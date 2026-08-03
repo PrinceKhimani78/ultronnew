@@ -1,8 +1,7 @@
 import { DesignContact } from '@/components/home-design-preview/DesignContact';
-import { DesignCoreServices } from '@/components/home-design-preview/DesignCoreServices';
 import { DesignHero } from '@/components/home-design-preview/DesignHero';
-import { DesignHowItWorks } from '@/components/home-design-preview/DesignHowItWorks';
 import { DesignWhoWeHelp } from '@/components/home-design-preview/DesignWhoWeHelp';
+import { HowUltronWorks } from '@/components/home/HowUltronWorks';
 import { buildMetadata } from '@/lib/seo';
 
 /**
@@ -23,6 +22,17 @@ import { buildMetadata } from '@/lib/seo';
  * modified to accommodate it. The header and footer come from the root layout
  * unchanged — they already implement this comp's nav pill and footer, having
  * been built from the same Figma.
+ *
+ * ⚠️ ONE EXCEPTION to the "comp's own copy" rule above: the process band renders
+ * the live `HowUltronWorks`, not a preview twin. That is deliberate — the two
+ * were required to be indistinguishable, and the only way to guarantee that
+ * over time is to render the same component rather than a copy that drifts.
+ *
+ * It follows that this band alone carries the approved `content/process` copy
+ * and the site's `Container` measure rather than the comp's lorem and
+ * `DesignContainer`. The four illustrations are unaffected: the preview's
+ * `process-1…4.webp` are byte-identical to `/brand/process-*.webp`, in the same
+ * order, so the artwork on screen does not change.
  */
 export const metadata = buildMetadata({
   title: 'Home design preview',
@@ -37,8 +47,7 @@ export default function HomeDesignPreviewPage() {
     <main id="content">
       <DesignHero />
       <DesignWhoWeHelp />
-      <DesignCoreServices />
-      <DesignHowItWorks />
+      <HowUltronWorks />
       <DesignContact />
     </main>
   );

@@ -22,71 +22,17 @@ type IconProps = {
   className?: string;
 };
 
-/** Hero statistic 1 — bank / institution. */
-export function BankIcon({ className }: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M3 10h18L12 4 3 10Z" />
-      <path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8" />
-      <path d="M3 20h18" />
-    </svg>
-  );
-}
-
-/** Hero statistic 2 — structured business setup. */
-export function BriefcaseIcon({ className }: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <rect x="2.5" y="7.5" width="19" height="12" rx="2.5" />
-      <path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5" />
-      <path d="M2.5 12.5h19" />
-    </svg>
-  );
-}
-
-/** Hero statistic 3 — all nationalities. */
-export function GlobeIcon({ className }: IconProps) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.75}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 12h18" />
-      <path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z" />
-    </svg>
-  );
-}
-
-export const STAT_ICONS = {
-  bank: BankIcon,
-  briefcase: BriefcaseIcon,
-  globe: GlobeIcon,
-} as const;
+/**
+ * The three hero statistic glyphs now live in `ui/StatIcons` and are re-exported
+ * here so this file stays the single import site for the preview. They are
+ * shared rather than duplicated because the live hero draws the same strip.
+ */
+export {
+  BankIcon,
+  BriefcaseIcon,
+  GlobeIcon,
+  STAT_ICONS,
+} from '@/components/ui/StatIcons';
 
 /**
  * The diagonal arrow inside every button's ring.

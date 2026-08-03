@@ -1,4 +1,3 @@
-import { CoreServices } from '@/components/home/CoreServices';
 import { CtaContact } from '@/components/home/CtaContact';
 import { Hero } from '@/components/home/Hero';
 import { HowUltronWorks } from '@/components/home/HowUltronWorks';
@@ -14,16 +13,6 @@ export const metadata = buildMetadata({
   path: '/',
 });
 
-/**
- * Home.
- *
- * A Server Component composing the five core bands matching the Figma prototype:
- * 1. Hero (proposition, inline statistics, 3D monogram brand panel)
- * 2. WhoWeHelp (audience qualification grid)
- * 3. CoreServices (tabbed service catalogue)
- * 4. HowUltronWorks (dark timeline process)
- * 5. CtaContact (proposition + consultation form)
- */
 export default function Home() {
   return (
     <>
@@ -33,7 +22,6 @@ export default function Home() {
       <main id="content" className="flex-1">
         <Hero />
         <WhoWeHelp />
-        <CoreServices />
         <HowUltronWorks />
         <CtaContact />
       </main>

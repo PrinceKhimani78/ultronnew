@@ -1,127 +1,129 @@
 import {
-  DESIGN_BRAND,
-  DESIGN_GOLD,
-  DESIGN_MUTED,
-  DesignButton,
-  DesignContainer,
-  DesignEyebrow,
-  DesignHeadingText,
-} from './DesignBand';
-import { CORE_SERVICES } from './content';
-import { CheckIcon } from './icons';
+  Landmark,
+  Briefcase,
+  TrendingUp,
+  ShieldCheck,
+  Coins,
+  Home,
+  ArrowUpRight,
+} from 'lucide-react';
+import { DesignContainer } from './DesignBand';
+
+const SERVICES_DATA = [
+  {
+    title: 'Business Bank Account Opening',
+    description:
+      'Corporate and individual account opening across every nationality and activity type, including profiles already declined elsewhere. We find out why a bank said no, then fix that before we file again.',
+    Icon: Landmark,
+  },
+  {
+    title: 'Business Setup',
+    description:
+      'Mainland, free zone and offshore company formation across the UAE, built around how you plan to bank and operate, not just how you plan to register.',
+    Icon: Briefcase,
+  },
+  {
+    title: 'Financial Advisory',
+    description:
+      'Strategic guidance across banking, financing and structuring decisions, built on an honest assessment before recommendations are made.',
+    Icon: TrendingUp,
+  },
+  {
+    title: 'Tax Structuring Advisory',
+    description:
+      'UAE VAT and Corporate Tax advisory that translates regulation into practical action and exposure reduction.',
+    Icon: ShieldCheck,
+  },
+  {
+    title: 'Business Finance',
+    description:
+      'Business finance and lender matching based on institutions that genuinely suit your profile.',
+    Icon: Coins,
+  },
+  {
+    title: 'Real Estate Mortgages',
+    description:
+      'Mortgage advisory for residents and non-residents, including stalled and complex equity cases.',
+    Icon: Home,
+  },
+] as const;
 
 /**
- * Core Services, from the comp's 1280×792 frame.
- *
- * Rendered static, with "Financial Advisory" selected, because that is what the
- * comp specifies: it is a single frame, and it draws detail content for that
- * one service only. The remaining five have no panel anywhere in the export.
- *
- * Wiring the list up as real tabs was the obvious temptation and would have
- * been wrong twice over — it would invent five panels the design does not
- * define, and it would promise interaction the comp never shows. The list is
- * therefore marked up as a list with a current item, not as an ARIA tablist:
- * `role="tab"` on something that cannot be operated is a worse lie than a
- * static picture of a tab.
+ * Core Services section for `/home-design-preview`.
+ * Redesigned to match reference spec:
+ * - Dark teal section background
+ * - Top-left "CORE SERVICES" label with outlined circle icon
+ * - "Six Disciplines. One Standard." main heading
+ * - 6 cards in a 4-top / 2-bottom left-aligned grid
+ * - Dark teal cards with glowing icon, title, description, divider, EXPLORE link and circular arrow button
  */
 export function DesignCoreServices() {
   return (
     <section
       id="design-services"
-      className="overflow-hidden bg-white py-[52px] lg:pt-[52px] lg:pb-[88px]"
+      className="overflow-hidden bg-[#035551] py-16 sm:py-20 lg:py-24"
       aria-labelledby="design-services-heading"
     >
       <DesignContainer>
-        <div className="flex flex-col items-center text-center">
-          <DesignEyebrow>{CORE_SERVICES.eyebrow}</DesignEyebrow>
+        {/* Upper-left section label */}
+        <div className="mb-10 lg:mb-12">
+          <div className="flex items-center gap-2 text-xs font-bold tracking-[0.15em] text-white uppercase">
+            <span
+              aria-hidden="true"
+              className="inline-block h-2 w-2 rounded-full border border-white/80"
+            />
+            <span>CORE SERVICES</span>
+          </div>
           <h2
             id="design-services-heading"
-            className="mt-3 text-[clamp(2rem,4.6vw,48px)] leading-[100%] font-bold tracking-[-0.017em]"
+            className="mt-3 text-[32px] leading-tight font-bold tracking-tight text-white sm:text-[42px] lg:text-[48px] lg:whitespace-nowrap"
           >
-            <DesignHeadingText segments={CORE_SERVICES.heading} />
+            Six Disciplines. One Standard.
           </h2>
         </div>
 
-        <div className="mt-10 flex flex-col gap-8 lg:mt-[75px] lg:flex-row lg:gap-[78px]">
-          {/*
-            The service list. One 1.5px ring around the whole stack with 1px
-            rules between rows — drawn as a border on the wrapper plus a
-            divide-y, so the 20px radius clips the selected row's fill.
-          */}
-          <ul
-            className="w-full overflow-hidden rounded-[20px] lg:w-[277px] lg:shrink-0 lg:self-start"
-            style={{ border: `1.5px solid ${DESIGN_BRAND}` }}
-          >
-            {CORE_SERVICES.tabs.map((tab, index) => {
-              const isActive = index === CORE_SERVICES.activeIndex;
-              return (
-                <li
-                  key={tab}
-                  aria-current={isActive ? 'true' : undefined}
-                  className="flex h-[55px] items-center justify-center px-4 text-center text-[18px] leading-tight font-semibold"
-                  style={{
-                    backgroundColor: isActive ? DESIGN_BRAND : '#ffffff',
-                    color: isActive ? '#ffffff' : DESIGN_BRAND,
-                    borderBottom:
-                      index === CORE_SERVICES.tabs.length - 1
-                        ? undefined
-                        : `1px solid ${DESIGN_BRAND}`,
-                  }}
-                >
-                  {tab}
-                </li>
-              );
-            })}
-          </ul>
+        {/* 6-Card Grid Layout (4 cards top row, 2 cards bottom row aligned left) */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {SERVICES_DATA.map((service) => {
+            const { Icon } = service;
+            return (
+              <a
+                key={service.title}
+                href="#design-contact"
+                className="group flex h-full flex-col justify-between rounded-[16px] border border-white/12 bg-[#023c39] p-6 shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-emerald-300/40 hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)]"
+              >
+                <div>
+                  {/* Glowing Icon */}
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-emerald-300 shadow-[0_0_15px_rgba(10,167,155,0.35)] ring-1 ring-white/20 transition-transform duration-300 group-hover:scale-105">
+                    <Icon className="h-5 w-5" />
+                  </div>
 
-          <div
-            className="flex-1 rounded-[20px] bg-white p-6 sm:p-10"
-            style={{
-              boxShadow: `inset 0 0 0 1px ${DESIGN_BRAND}, 4px 4px 8px 2px rgba(3,85,81,0.25)`,
-            }}
-          >
-            <span
-              className="block text-[18px] leading-none font-bold"
-              style={{ color: DESIGN_BRAND }}
-            >
-              {CORE_SERVICES.panel.index}
-            </span>
-            <h3
-              className="mt-2 mb-4 text-[22px] leading-snug font-semibold"
-              style={{ color: DESIGN_BRAND }}
-            >
-              {CORE_SERVICES.panel.title}
-            </h3>
-            <p
-              className="mb-6 text-[16px] leading-[150%] font-normal"
-              style={{ color: DESIGN_MUTED }}
-            >
-              {CORE_SERVICES.panel.body}
-            </p>
-            <span
-              className="mb-4 block text-[14px] leading-none font-normal"
-              style={{ color: DESIGN_GOLD }}
-            >
-              {CORE_SERVICES.panel.benefitsLabel}
-            </span>
-            <ul className="flex flex-col gap-[14px]">
-              {CORE_SERVICES.panel.benefits.map((benefit) => (
-                <li key={benefit} className="flex items-center gap-3">
-                  {/* The comp's tick is a filled teal disc with a white check. */}
-                  <CheckIcon className="h-[17px] w-[17px] shrink-0 text-[#035551]" />
-                  <span className="text-[16px] leading-snug font-normal text-black">
-                    {benefit}
+                  {/* Title */}
+                  <h3 className="mb-2.5 text-[20px] leading-snug font-bold text-white">
+                    {service.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="mb-6 text-[14px] leading-relaxed font-normal text-white/75">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* Bottom Divider & Action Link */}
+                <div className="mt-auto flex items-center justify-between border-t border-white/12 pt-4">
+                  <span className="text-[12px] font-bold tracking-[0.12em] text-white uppercase transition-colors duration-200 group-hover:text-emerald-300">
+                    EXPLORE
                   </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-10 flex justify-center lg:mt-[46px]">
-          <DesignButton href="#design-contact">
-            {CORE_SERVICES.cta}
-          </DesignButton>
+                  <span
+                    aria-hidden="true"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/30 text-white transition-all duration-200 group-hover:border-emerald-300 group-hover:bg-emerald-300 group-hover:text-[#023c39]"
+                  >
+                    <ArrowUpRight className="h-3.5 w-3.5 stroke-[2.5]" />
+                  </span>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </DesignContainer>
     </section>

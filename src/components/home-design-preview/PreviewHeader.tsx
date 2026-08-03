@@ -3,31 +3,30 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
+import { MobileDrawer } from '@/components/layout/MobileDrawer';
 import { cn } from '@/lib/utils';
 
 /**
  * Header for `/home-design-preview` only, rebuilt from the comp's "Hero" frame.
  *
- * It is NOT the shared `components/layout/Header`, and differs from it in ways
- * that matter, which is why this variant exists rather than a prop on the
- * shared one:
+ * It is NOT the shared `components/layout/Header`, and differs from it in one
+ * way that matters and is why this variant still exists: it is *static*, drawn
+ * inside the hero frame at y=49, where the site header is fixed and follows the
+ * scroll. Everything else — the pill colour, the 66px bar, the 18px/500 nav, the
+ * white-on-gold-rule active state, the cream CTA — is now identical to the
+ * shared header,
+ * which was rebuilt from this same frame.
  *
- *   - the pill is #154B47, a lighter teal than the site's `--color-brand`
- *   - it is *static*, drawn inside the hero frame at y=49 — the site header is
- *     fixed and follows the scroll
- *   - nav is 18px/500 with a 44px gutter; the site header is 12px uppercase
- *   - SERVICES carries no dropdown caret in the comp
- *
- * The comp defines no mobile layout at all (its export is a fixed 1280 canvas
- * with no media queries), so the drawer below is a necessary addition rather
- * than something transcribed. It follows the same contract as the site header:
- * trap Tab, close on Escape, restore focus to the trigger, and keep the panel
- * in the DOM so `aria-controls` is never a dangling reference.
+ * The mobile menu is the shared `MobileDrawer`: full-screen, brand green, logo
+ * top-left and close top-right. The rounded in-pill drawer this file used to
+ * carry was a second design for the same job, and the brief calls for one.
+ * Because that component reads the live nav, the preview's mobile menu shows
+ * production links rather than the comp's — the comp defines no mobile layout
+ * at all, so there is nothing here to be unfaithful to.
  */
 
 const PILL = '#154B47';
 const CREAM = '#FDFBEE';
-const GOLD = '#C9B37E';
 const BRAND = '#035551';
 
 const NAV = [
@@ -39,9 +38,6 @@ const NAV = [
 ] as const;
 
 const CTA_LABEL = 'BOOK A CALL';
-
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /** The 16×18 handset the comp places before the CTA label. */
 function PhoneGlyph({ className }: { className?: string }) {
@@ -64,7 +60,6 @@ function PhoneGlyph({ className }: { className?: string }) {
 export function PreviewHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const drawerId = useId();
-  const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const close = useCallback(() => {
@@ -74,55 +69,17 @@ export function PreviewHeader() {
 
   useEffect(() => {
     if (!isOpen) return;
-    const panel = panelRef.current;
-    panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
-
     const { overflow } = document.body.style;
     document.body.style.overflow = 'hidden';
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        close();
-        return;
-      }
-      if (event.key !== 'Tab' || !panel) return;
-
-      // The trigger sits outside the panel; including it is what makes the
-      // drawer escapable by keyboard alone.
-      const focusable = [
-        ...(triggerRef.current ? [triggerRef.current] : []),
-        ...Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)),
-      ];
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-
-    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = overflow;
     };
-  }, [isOpen, close]);
+  }, [isOpen]);
 
   return (
     <header className="relative z-30 pt-6 lg:pt-[49px]">
-      <div className="mx-auto w-full max-w-[1187px] px-4 sm:px-6 lg:px-6 xl:px-0">
-        <div
-          className={cn(
-            'rounded-[100px]',
-            isOpen && 'rounded-b-[28px] lg:rounded-b-[100px]',
-          )}
-          style={{ backgroundColor: PILL }}
-        >
+      <div className="mx-auto w-full max-w-[1348px] px-4 sm:px-6 lg:px-6 xl:px-0">
+        <div className="rounded-[100px]" style={{ backgroundColor: PILL }}>
           {/*
             Horizontal placement is the comp's, measured from the pill's own
             left edge (x=46 in the 1280 frame): logo at 35, nav at 261, CTA at
@@ -130,7 +87,7 @@ export function PreviewHeader() {
             than `justify-between`, which would distribute the slack evenly and
             put the nav ~25px right of where the comp has it.
           */}
-          <div className="flex h-[66px] items-center justify-between pr-3 pl-4 sm:pl-6 lg:pr-6 lg:pl-8 xl:justify-start xl:pr-[66px] xl:pl-[35px]">
+          <div className="flex h-[66px] items-center justify-between pr-3 pl-4 sm:pl-6 lg:pr-8 lg:pl-8 xl:px-10">
             {/*
               ⚠️ SUBSTITUTED ASSET. The comp points at
               `assets/35d9345d34d0b43d.png` (167×49), which the Design MCP
@@ -173,17 +130,23 @@ export function PreviewHeader() {
               <ul className="flex items-center gap-6 xl:justify-between xl:gap-[44px]">
                 {NAV.map((item) => (
                   <li key={item.label}>
+                    {/*
+                      No nav label is gold. The current page reads as
+                      full-strength white against the 88% its siblings sit at,
+                      with the hairline gold rule beneath it — matching the
+                      shared header exactly.
+                    */}
                     <a
                       href={item.href}
                       aria-current={item.current ? 'page' : undefined}
-                      className="pb-1 text-[18px] leading-none font-medium whitespace-nowrap transition-opacity duration-200 hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
-                      style={{
-                        color: item.current ? GOLD : CREAM,
-                        borderBottom: item.current
-                          ? `1px solid ${GOLD}`
-                          : '1px solid transparent',
-                        outlineColor: GOLD,
-                      }}
+                      className={cn(
+                        'block border-b pb-1 text-[18px] leading-none font-medium whitespace-nowrap uppercase',
+                        'transition-colors duration-[250ms]',
+                        'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#DCCB8E]',
+                        item.current
+                          ? 'border-[#DCCB8E] text-white'
+                          : 'border-transparent text-white/[0.88] hover:text-white',
+                      )}
                     >
                       {item.label}
                     </a>
@@ -194,7 +157,11 @@ export function PreviewHeader() {
 
             <a
               href="#design-contact"
-              className="hidden h-[38px] w-[177px] items-center gap-[9px] rounded-full pl-5 text-[18px] leading-none font-medium transition-opacity duration-200 hover:opacity-90 lg:inline-flex xl:ml-[110px]"
+              className={cn(
+                'hidden h-[38px] w-[177px] shrink-0 items-center gap-[9px] rounded-full pl-5 lg:inline-flex xl:ml-[110px]',
+                'text-[18px] leading-none font-medium uppercase',
+                'ease-house transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#DCCB8E] hover:shadow-[0_6px_14px_rgba(0,0,0,0.18)]',
+              )}
               style={{ backgroundColor: CREAM, color: BRAND }}
             >
               <PhoneGlyph className="h-[18px] w-4 shrink-0" />
@@ -237,61 +204,10 @@ export function PreviewHeader() {
               </span>
             </button>
           </div>
-
-          {/* Kept mounted so `aria-controls` always resolves. */}
-          <div
-            ref={panelRef}
-            id={drawerId}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Preview site menu"
-            hidden={!isOpen}
-            className="max-h-[calc(100dvh-8rem)] overflow-y-auto px-5 pb-6 lg:hidden"
-            style={{ borderTop: `1px solid ${CREAM}26` }}
-          >
-            <nav aria-label="Preview primary (mobile)" className="pt-2">
-              <ul className="flex flex-col">
-                {NAV.map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      onClick={close}
-                      aria-current={item.current ? 'page' : undefined}
-                      className="block py-4 text-[18px] font-medium"
-                      style={{
-                        color: item.current ? GOLD : CREAM,
-                        borderBottom: `1px solid ${CREAM}1a`,
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#design-contact"
-                onClick={close}
-                className="mt-6 flex h-[46px] items-center justify-center gap-[9px] rounded-full text-[18px] font-medium"
-                style={{ backgroundColor: CREAM, color: BRAND }}
-              >
-                <PhoneGlyph className="h-[18px] w-4 shrink-0" />
-                {CTA_LABEL}
-              </a>
-            </nav>
-          </div>
         </div>
       </div>
 
-      {isOpen ? (
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-hidden="true"
-          onClick={close}
-          className="fixed inset-0 -z-10 lg:hidden"
-          style={{ backgroundColor: 'rgba(1,36,34,0.4)' }}
-        />
-      ) : null}
+      <MobileDrawer isOpen={isOpen} onClose={close} drawerId={drawerId} />
     </header>
   );
 }

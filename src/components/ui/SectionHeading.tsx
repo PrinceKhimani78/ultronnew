@@ -1,7 +1,3 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
-
 import type { HeadingSegment } from '@/types/content';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +8,18 @@ import { cn } from '@/lib/utils';
  * not markup. The emphasis colour is `brand-bright` — a green, not the gold.
  * Gold appears in exactly three places in this design (nav underline, timeline
  * markers, active footer link) and heading emphasis is not one of them.
+ *
+ * This file used to be `'use client'`. The only reason was a character-by-
+ * character typewriter reveal on `HeadingText`, which is gone: headings animate
+ * as whole blocks now, via a `Reveal` wrapper around them. Removing it took the
+ * eyebrow, the heading and the body copy out of the client bundle and off the
+ * hydration path, and it took an IntersectionObserver and a `setTimeout` per
+ * character off the main thread.
+ *
+ * Typing effects are also a real accessibility cost that the reveal does not
+ * have: the accessible name of a heading mutates on every tick, so a screen
+ * reader can announce a partial word, and text that arrives one glyph at a time
+ * cannot be read at the reader's own pace.
  */
 
 type SectionHeadingProps = {
@@ -64,109 +72,44 @@ export function Eyebrow({
 }
 
 /**
- * Renders coloured heading segments with a character-by-character typewriter reveal.
+ * Coloured heading segments.
+ *
+ * Static, and deliberately so — headings reveal as one block via `Reveal`, not
+ * one glyph at a time. Each segment is its own `<span>` only so an accented word
+ * can take a different colour; the text itself is one continuous run, so it
+ * wraps and is selected exactly as unmarked-up copy would be.
  */
 export function HeadingText({
   segments,
   inverted = false,
-  speed = 30,
+  accentClassName,
 }: {
   segments: readonly HeadingSegment[];
   inverted?: boolean;
-  speed?: number;
+  /**
+   * Overrides the emphasis colour. The cream home-page bands set accented words
+   * in the full brand teal (#035551), which is what the comp draws; the default
+   * `brand-bright` is the lighter green used where the type is small enough to
+   * need the extra separation from the ground. Both clear AA on cream.
+   */
+  accentClassName?: string;
 }) {
-  const containerRef = useRef<HTMLSpanElement | null>(null);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [revealedLength, setRevealedLength] = useState(0);
-  const [isReducedMotion, setIsReducedMotion] = useState(false);
-
-  const fullText = segments.map((s) => s.text).join('');
-  const totalLength = fullText.length;
-
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      requestAnimationFrame(() => {
-        setIsReducedMotion(true);
-        setRevealedLength(totalLength);
-      });
-      return;
-    }
-
-    const node = containerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [totalLength]);
-
-  useEffect(() => {
-    if (!hasStarted || isReducedMotion) return;
-    if (revealedLength >= totalLength) return;
-
-    const timer = setTimeout(() => {
-      setRevealedLength((prev) => prev + 1);
-    }, speed);
-
-    return () => clearTimeout(timer);
-  }, [hasStarted, isReducedMotion, revealedLength, totalLength, speed]);
-
-  const isTypingActive =
-    hasStarted && !isReducedMotion && revealedLength < totalLength;
-  const currentRevealed = isReducedMotion ? totalLength : revealedLength;
-
   return (
-    <span ref={containerRef} className="relative inline-block">
-      {segments.map((segment, index) => {
-        const startOffset = segments
-          .slice(0, index)
-          .reduce((acc, s) => acc + s.text.length, 0);
-        const segLen = segment.text.length;
-        const visibleInSeg = Math.max(
-          0,
-          Math.min(segLen, currentRevealed - startOffset),
-        );
-
-        if (visibleInSeg <= 0) return null;
-
-        const visibleText = segment.text.slice(0, visibleInSeg);
-
-        return (
-          <span
-            key={`${segment.text}-${index}`}
-            className={
-              segment.accent
-                ? inverted
-                  ? 'text-accent'
-                  : 'text-brand-bright'
-                : undefined
-            }
-          >
-            {visibleText}
-          </span>
-        );
-      })}
-
-      {/* Blinking typewriter cursor at active position */}
-      {isTypingActive && (
+    <>
+      {segments.map((segment, index) => (
         <span
-          aria-hidden="true"
-          className="bg-brand-bright ml-0.5 inline-block h-[0.75em] w-[3px] animate-pulse align-baseline"
-        />
-      )}
-    </span>
+          key={`${segment.text}-${index}`}
+          className={
+            segment.accent
+              ? (accentClassName ??
+                (inverted ? 'text-accent' : 'text-brand-bright'))
+              : undefined
+          }
+        >
+          {segment.text}
+        </span>
+      ))}
+    </>
   );
 }
 
