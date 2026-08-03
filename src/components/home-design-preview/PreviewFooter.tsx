@@ -7,6 +7,7 @@ import {
   MailGlyph,
   PhoneGlyph,
 } from '@/components/ui/ContactIcons';
+import { cn } from '@/lib/utils';
 
 /**
  * Footer for `/home-design-preview` only, rebuilt from the comp's "Footer"
@@ -33,11 +34,11 @@ import {
  */
 
 const PILL = '#154B47';
-/** The comp's active-link gold. */
-const GOLD = '#DCCB8E';
 /** 18px body throughout, at the comp's 30px line box. */
 const BODY = 'text-[18px] leading-[30px] font-normal';
 const BODY_COLOR = 'rgba(255,255,255,0.85)';
+/** Contact glyphs and NAP copy. Pure white — no muted typography in the footer. */
+const CONTACT_COLOR = '#FFFFFF';
 
 const QUICK_LINKS = [
   { label: 'Home', current: false },
@@ -100,11 +101,21 @@ function LinkColumn({
       >
         {items.map((item) => (
           <StaggerItem as="li" variant="text" key={item.label}>
+            {/*
+              Colour is a CLASS, never an inline `style`. As a style it silently
+              disabled the hover: an inline `color` outranks a `hover:text-*`
+              utility, which is not `!important`, so the gold never applied.
+            */}
             <a
               href="#design-contact"
               aria-current={item.current ? 'page' : undefined}
-              className={`${BODY} transition-colors duration-200 hover:text-[#DCCB8E]`}
-              style={{ color: item.current ? GOLD : BODY_COLOR }}
+              className={cn(
+                BODY,
+                'transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]',
+                item.current
+                  ? 'text-[#DCCB8E]'
+                  : 'text-white hover:text-[#DCCB8E]',
+              )}
             >
               {item.label}
             </a>
@@ -167,9 +178,10 @@ export function PreviewFooter() {
               as="ul"
               delayChildren={0.12}
               className="flex flex-col gap-4"
-              // Colour stays here: the glyphs are stroked with `currentColor`
-              // and inherit it from the list.
-              style={{ color: BODY_COLOR }}
+              // Colour stays here: the glyphs are stroked with
+              // `currentColor` and inherit it from the list, so one
+              // declaration holds the icons and the copy to white.
+              style={{ color: CONTACT_COLOR }}
             >
               <StaggerItem
                 as="li"
@@ -189,7 +201,7 @@ export function PreviewFooter() {
                 <MailGlyph />
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className={`${BODY} text-left transition-colors duration-200 hover:text-[#DCCB8E]`}
+                  className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
                 >
                   {CONTACT.email}
                 </a>
