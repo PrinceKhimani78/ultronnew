@@ -267,10 +267,20 @@ export function Header() {
                                 "before:absolute before:-top-4 before:right-0 before:left-0 before:h-4 before:content-['']",
                               )}
                             >
-                              <div className="border-surface/15 mb-2 flex items-center justify-between border-b px-3 pt-1.5 pb-2">
-                                <span className="text-surface/60 text-[0.65rem] font-bold tracking-wider uppercase">
-                                  Our Services
-                                </span>
+                              {/*
+                                `justify-end` rather than `justify-between`.
+                                With the "Our Services" heading removed this row
+                                has a single child, and `justify-between` packs a
+                                lone child to the START — the link would silently
+                                jump from the right edge to the left. Stating the
+                                alignment keeps it on the corner the design puts
+                                it on.
+
+                                `mb-1` where it was `mb-2`: the brief asks the
+                                service list to move up into the space the
+                                heading vacated.
+                              */}
+                              <div className="border-surface/15 mb-1 flex items-center justify-end border-b px-3 pt-1.5 pb-2">
                                 <Link
                                   href="/services"
                                   onClick={() => setIsDropdownOpen(false)}
@@ -311,6 +321,36 @@ export function Header() {
                                     </li>
                                   );
                                 })}
+
+                                {/*
+                                  The list's own closing entry. It is a real menu
+                                  item — same row geometry, same `role`, same
+                                  dismiss-on-click — carrying the top link's
+                                  treatment: gold, uppercase, semibold, and the
+                                  same `ArrowRight` glyph rather than the `→`
+                                  character the service rows use on hover.
+
+                                  Separation is `pt-2` on the `li`, NOT `mt-2`.
+                                  The `space-y-0.5` on the `ul` compiles to
+                                  `.space-y-0\.5 > :not(…) ~ :not(…)`, which is a
+                                  more specific selector than a bare `.mt-2` —
+                                  a margin utility here is simply overruled and
+                                  the gap never appears. Padding is not in that
+                                  fight.
+                                */}
+                                <li role="none" className="pt-2">
+                                  <Link
+                                    href="/services"
+                                    role="menuitem"
+                                    onClick={() => setIsDropdownOpen(false)}
+                                    className="group hover:bg-surface/10 flex items-center justify-between rounded-xl px-3 py-2 text-[0.65rem] font-semibold text-[#DCCB8E] uppercase transition-colors duration-300"
+                                  >
+                                    <span className="group-hover:underline">
+                                      All Services
+                                    </span>
+                                    <ArrowRight className="h-2.5 w-2.5" />
+                                  </Link>
+                                </li>
                               </ul>
                             </motion.div>
                           )}
