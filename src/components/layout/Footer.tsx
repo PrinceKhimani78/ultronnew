@@ -44,7 +44,14 @@ import { FOOTER_DISCLAIMER, FOOTER_NAV, SITE } from '@/content/site';
 
 /** 18px body throughout, at the comp's 30px line box. */
 const BODY = 'text-[18px] leading-[30px] font-normal';
+/**
+ * The copyright row only. It is the quietest line on the page and the brief
+ * allows body copy a slightly reduced opacity; nothing in the nav columns or the
+ * NAP block uses it.
+ */
 const BODY_COLOR = 'rgba(255,255,255,0.85)';
+/** Contact glyphs and NAP copy. Pure white — no muted typography in the footer. */
+const CONTACT_COLOR = '#FFFFFF';
 
 export function Footer() {
   return (
@@ -87,9 +94,10 @@ export function Footer() {
               delayChildren={0.12}
               className="flex flex-col gap-4"
               // Colour stays on the list. The contact glyphs are stroked with
-              // `currentColor` and inherit it from here — pushing it down to the
-              // text leaves would have silently recoloured all three icons.
-              style={{ color: BODY_COLOR }}
+              // `currentColor` and inherit it from here, so one declaration
+              // holds the icons and the NAP copy to white — pushing it down to
+              // the text leaves would have silently left the icons behind.
+              style={{ color: CONTACT_COLOR }}
             >
               <StaggerItem
                 as="li"
@@ -109,7 +117,7 @@ export function Footer() {
                 <MailGlyph />
                 <a
                   href={`mailto:${SITE.email}`}
-                  className={`${BODY} text-left transition-colors duration-200 hover:text-[#DCCB8E]`}
+                  className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
                 >
                   {SITE.email}
                 </a>
@@ -122,7 +130,7 @@ export function Footer() {
                 <PhoneGlyph />
                 <a
                   href={`tel:${SITE.telephone.replace(/\s/g, '')}`}
-                  className={`${BODY} text-left transition-colors duration-200 hover:text-[#DCCB8E]`}
+                  className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
                 >
                   {SITE.telephone}
                 </a>
