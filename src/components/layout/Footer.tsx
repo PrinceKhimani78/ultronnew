@@ -194,11 +194,10 @@ export function Footer() {
             element in the footer. */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:justify-between sm:text-left"
+          className="flex flex-col items-center justify-between gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:text-left"
           style={{ color: BODY_COLOR }}
         >
-          <span>All rights reserved by {SITE.legalName}</span>
-          <span>Copyrights &copy; {SITE.builtBy}</span>
+          <span>&copy; 2026 Ultron Financials. All Rights Reserved.</span>
         </Reveal>
       </div>
     </footer>
