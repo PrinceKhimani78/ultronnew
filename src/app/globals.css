@@ -193,53 +193,36 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* #DCCB8E — brand golden sand shadow color */
-  --card-shadow-color: 220 203 142;
-
-  /* The comp's drop-shadow geometry. */
+  /* Figma inspect specs for card drop shadow: X 0, Y 20px, Blur 40px, Spread 0, Color #000000 20% */
+  --card-shadow-x: 0px;
   --card-shadow-y: 20px;
   --card-shadow-blur: 40px;
-  --card-shadow-x: 20px;
 
-  --card-shadow-alpha: 0.2;
-  --card-shadow-alpha-center: 0.2;
-
-  /* Stacked layout: no left or right to lean toward, so the shadow sits under
-     the card with inner shadow from Figma inspect. */
+  /* Figma inspect drop shadow + inner shadow (inset 0 1px 2px 0 rgba(255,255,255,0.20)) */
   --card-shadow-mobile:
-    0 12px 28px 0 rgb(0 0 0 / 0.2), inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
+    0 20px 40px 0 rgba(0, 0, 0, 0.2), inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
 }
 
 @layer components {
   /**
-   * Cards lean away from the page centre: the left column's shadow falls left,
-   * the right column's falls right, and anything spanning the middle gets the
-   * balanced one. Includes Figma inspect inner shadow (inset 0 1px 2px 0 rgba(255,255,255,0.20)).
+   * Cards use the exact drop shadow and inner shadow transcribed from Figma inspect:
+   * Drop shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.20)
+   * Inner shadow: inset 0 1px 2px 0 rgba(255, 255, 255, 0.20)
    */
   .card-shadow-left,
   .card-shadow-right,
   .card-shadow-center {
-    box-shadow: var(--card-shadow-mobile);
+    box-shadow:
+      0 20px 40px 0 rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
   }
 
   @media (min-width: 640px) {
-    .card-shadow-left {
-      box-shadow:
-        calc(-1 * var(--card-shadow-x)) var(--card-shadow-y)
-          var(--card-shadow-blur) 0 rgb(0 0 0 / 0.2),
-        inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
-    }
-
-    .card-shadow-right {
-      box-shadow:
-        var(--card-shadow-x) var(--card-shadow-y) var(--card-shadow-blur) 0
-          rgb(0 0 0 / 0.2),
-        inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
-    }
-
+    .card-shadow-left,
+    .card-shadow-right,
     .card-shadow-center {
       box-shadow:
-        0 var(--card-shadow-y) var(--card-shadow-blur) 0 rgb(0 0 0 / 0.2),
+        0 20px 40px 0 rgba(0, 0, 0, 0.2),
         inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
     }
   }

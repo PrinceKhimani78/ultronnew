@@ -1,7 +1,6 @@
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
-import { ActionButton } from '@/components/ui/ActionButton';
 import { CTA_CONTACT } from '@/content/home';
 import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
@@ -25,8 +24,8 @@ import { cn } from '@/lib/utils';
 const CREAM = '#FDFBEE';
 
 const FIELD_CLASS =
-  'h-10 w-full rounded-lg border-none px-3 text-[16px] outline-none ' +
-  'ease-house transition-shadow focus:shadow-[inset_0_0_0_2px_#FDFBEE]';
+  'h-11 w-full rounded-[10px] border-none px-3.5 text-[15px] outline-none ' +
+  'ease-house transition-all focus:shadow-[inset_0_0_0_2px_#FDFBEE]';
 
 const FIELD_STYLE = {
   backgroundColor: 'rgba(255,255,255,0.1)',
@@ -95,44 +94,34 @@ export function ConsultationForm() {
   return (
     <form
       suppressHydrationWarning
-      // The panel sits in the right-hand column of the contact band, so its
-      // shadow leans right. `card-shadow-right` rather than an inline
-      // `boxShadow`: an inline value cannot carry the mobile breakpoint, and it
-      // would be a second opinion about a shadow the whole site shares.
-      className="card-shadow-right w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
+      className="card-shadow-right relative w-full rounded-[20px] px-6 py-7 sm:px-8 sm:py-8 lg:w-[630px] lg:shrink-0"
       style={{
         backgroundImage:
           'conic-gradient(from -46.16deg at 50% 50%, #035551 0deg, #058881 178.8deg, #035551 360deg)',
+        boxShadow:
+          '4px 4px 16px 5px rgba(3, 85, 81, 0.25), 0 20px 40px rgba(0, 0, 0, 0.2)',
       }}
     >
-      {/*
-        The form's own sequence, per the brief: heading, then the field rows one
-        after another, then the submit. `FIELD_COUNT` is what keeps the button
-        genuinely last — a hard-coded delay would silently overlap the moment a
-        seventh field was added.
-      */}
-      <Reveal className="mb-[30px]">
+      {/* Header section with horizontal divider line as in Figma comp */}
+      <Reveal className="mb-6">
         <h3
-          className="font-display text-[22px] leading-tight font-bold uppercase"
+          className="font-display text-[20px] leading-tight font-bold tracking-[0.02em] uppercase sm:text-[22px]"
           style={{ color: CREAM }}
         >
           {CTA_CONTACT.form.title}
         </h3>
+        <div className="mt-4 h-[1px] w-full bg-white/20" />
       </Reveal>
 
-      {/*
-        `Stagger` renders this grid itself — it does not wrap it — so the two-up
-        template, the gap and the hydration flag are all unchanged. Fields arrive
-        one after another, starting one beat after the heading.
-      */}
+      {/* Grid of fields */}
       <Stagger
         delay={STAGGER_MS}
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
         suppressHydrationWarning
       >
-        <StaggerItem className="flex flex-col gap-2" suppressHydrationWarning>
+        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-name" required>
-            Full name
+            Full Name
           </FieldLabel>
           <input
             id="contact-name"
@@ -147,9 +136,9 @@ export function ConsultationForm() {
           />
         </StaggerItem>
 
-        <StaggerItem className="flex flex-col gap-2" suppressHydrationWarning>
+        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-email" required>
-            Email address
+            Email Address
           </FieldLabel>
           <input
             id="contact-email"
@@ -164,9 +153,9 @@ export function ConsultationForm() {
           />
         </StaggerItem>
 
-        <StaggerItem className="flex flex-col gap-2" suppressHydrationWarning>
+        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-phone" required>
-            Phone number
+            Phone Number
           </FieldLabel>
           <input
             id="contact-phone"
@@ -181,9 +170,9 @@ export function ConsultationForm() {
           />
         </StaggerItem>
 
-        <StaggerItem className="flex flex-col gap-2" suppressHydrationWarning>
+        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
           <FieldLabel htmlFor="contact-business" required>
-            Business type
+            Business Type
           </FieldLabel>
           <input
             id="contact-business"
@@ -198,13 +187,12 @@ export function ConsultationForm() {
           />
         </StaggerItem>
 
-        {/* The comp's one full-width field, and the one that is a select. */}
         <StaggerItem
-          className="flex flex-col gap-2 sm:col-span-2"
+          className="flex flex-col gap-1.5 sm:col-span-2"
           suppressHydrationWarning
         >
           <FieldLabel htmlFor="contact-service" required>
-            Service interested in
+            Service Interested In
           </FieldLabel>
           <select
             id="contact-service"
@@ -232,7 +220,7 @@ export function ConsultationForm() {
         </StaggerItem>
 
         <StaggerItem
-          className="flex flex-col gap-2 sm:col-span-2"
+          className="flex flex-col gap-1.5 sm:col-span-2"
           suppressHydrationWarning
         >
           <FieldLabel htmlFor="contact-message">Message</FieldLabel>
@@ -248,7 +236,7 @@ export function ConsultationForm() {
         </StaggerItem>
       </Stagger>
 
-      {/* Honeypot. Not in the comp; bots are not in the comp either. */}
+      {/* Honeypot for spam protection */}
       <div aria-hidden="true" className="hidden">
         <label htmlFor="contact-website">Website</label>
         <input
@@ -257,32 +245,25 @@ export function ConsultationForm() {
           type="text"
           tabIndex={-1}
           autoComplete="off"
-          // Not for the hydration mismatch — this field is hidden, so no
-          // extension decorates it. It is so a password manager cannot autofill
-          // the trap and get a real visitor classified as a bot.
           {...NO_AUTOFILL_UI}
         />
       </div>
 
-      {/*
-        Last, deliberately: the heading takes beat 0, the six fields take beats
-        1–6, so the submit takes the beat after them and settles once the form
-        it submits has finished arriving.
-
-        `fullWidth` because the submit spans the panel in this layout — the one
-        place on the site where a CTA is not sized to its label. The shared
-        button's `justify-between` is what keeps the label on the left edge and
-        the disc on the right at that width rather than centring the pair.
-      */}
+      {/* Form Submit Button matching Figma comp precisely */}
       <Reveal delay={(FIELD_COUNT + 1) * STAGGER_MS} className="mt-6 block">
-        <ActionButton type="submit" fullWidth>
-          {CTA_CONTACT.form.submitLabel}
-        </ActionButton>
+        <button
+          type="submit"
+          className="group relative flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[12px] border-none px-6 text-center transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E] active:scale-[0.99]"
+          style={{
+            backgroundColor: CREAM,
+            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+          }}
+        >
+          <span className="font-display text-[16px] leading-none font-bold tracking-[0.03em] text-[#035551] uppercase transition-colors group-hover:text-[#023c39] sm:text-[18px]">
+            {CTA_CONTACT.form.submitLabel}
+          </span>
+        </button>
       </Reveal>
-
-      <p className="pt-4 text-center text-xs" style={{ color: `${CREAM}99` }}>
-        {CTA_CONTACT.form.reassurance}
-      </p>
     </form>
   );
 }

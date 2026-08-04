@@ -209,7 +209,7 @@ export function ServiceTabs() {
               hidden={!isActive}
               tabIndex={0}
               className={cn(
-                'ease-house card-shadow-right h-full flex-col overflow-y-auto rounded-[20px] border border-[#035551] bg-white p-8 transition-opacity duration-300',
+                'ease-house h-full flex-col overflow-y-auto rounded-[20px] border border-[#035551] bg-white p-8 shadow-[4px_4px_8px_2px_rgba(3,85,81,0.25)] transition-opacity duration-300',
                 isActive ? 'flex opacity-100' : 'hidden opacity-0',
               )}
             >

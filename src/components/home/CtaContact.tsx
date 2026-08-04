@@ -30,9 +30,9 @@ export function CtaContact() {
       aria-labelledby="contact-heading"
     >
       <Container width="wide">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[62px]">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-[62px]">
           {/* Proposition first, then the form it argues for. */}
-          <Reveal className="lg:w-[394px] lg:shrink-0 lg:pt-[13px]">
+          <Reveal className="lg:w-[394px] lg:shrink-0">
             <BandEyebrow>{CTA_CONTACT.eyebrow}</BandEyebrow>
             <h2
               id="contact-heading"
