@@ -193,8 +193,8 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* #000000 20% — exact Figma inspect panel drop shadow color & alpha */
-  --card-shadow-color: 0 0 0;
+  /* #DCCB8E — brand golden sand shadow color */
+  --card-shadow-color: 220 203 142;
 
   /* The comp's drop-shadow geometry. */
   --card-shadow-y: 20px;
