@@ -14,7 +14,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
   return (
     <div
       className={cn(
-        'flex h-full min-h-[247px] w-full flex-col justify-between rounded-[20px] p-6 sm:p-8 lg:max-w-[461px]',
+        'flex h-full min-h-[247px] w-full flex-col justify-between rounded-[20px] p-6 sm:p-8',
         'bg-[conic-gradient(from_180deg_at_50%_50%,#FDFBEE_0deg,#FFFFFF_160deg,#FDFBEE_320deg,#FDFBEE_360deg)]',
         'ease-house transition-all duration-300 hover:-translate-y-1',
       )}

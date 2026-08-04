@@ -40,14 +40,14 @@ export function ServicesGrid() {
           must never animate together, so the pair in each row is offset from
           each other rather than sharing a row delay.
         */}
-        <ul className="mt-12 grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+        <ul className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-[461px_461px] lg:gap-8 xl:gap-10">
           {SERVICES.map((service, index) => (
             <Reveal
               as="li"
               key={service.slug}
               delay={index * STAGGER_MS}
               amount={0.1}
-              className="flex h-full w-full justify-center lg:justify-start"
+              className="flex h-full w-full"
             >
               <ServiceCard service={service} />
             </Reveal>
