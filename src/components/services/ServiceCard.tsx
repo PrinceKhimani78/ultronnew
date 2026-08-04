@@ -1,9 +1,8 @@
 'use client';
 
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-import { SERVICES_PAGE } from '@/content/services-page';
 import type { Service } from '@/content/services';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +22,6 @@ export function ServiceCard({ service }: ServiceCardProps) {
         boxShadow: 'inset 4px -4px 4px 0px rgba(3, 85, 81, 0.25)',
       }}
     >
-      {/* Top content block */}
       <div>
         <h3 className="font-display text-[20px] leading-tight font-bold text-black">
           {service.headline}
@@ -32,29 +30,6 @@ export function ServiceCard({ service }: ServiceCardProps) {
         <p className="mt-3 text-[15px] leading-relaxed text-[#5A5A5A]">
           {service.description}
         </p>
-
-        {/* Full Key Benefits displayed directly when present (no accordion) */}
-        {service.benefits && service.benefits.length > 0 && (
-          <div className="mt-6 border-t border-[#035551]/10 pt-5">
-            <p className="text-[11px] font-semibold tracking-[0.14em] text-[#5A5A5A] uppercase">
-              {SERVICES_PAGE.card.benefitsLabel}
-            </p>
-            <ul className="mt-3 space-y-2.5">
-              {service.benefits.map((benefit) => (
-                <li
-                  key={benefit}
-                  className="flex items-start gap-2.5 text-[14px] text-black"
-                >
-                  <Check
-                    aria-hidden="true"
-                    className="mt-0.5 h-4 w-4 shrink-0 text-[#035551]"
-                  />
-                  <span>{benefit}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
 
       {/* Bottom CTA block: Full Detail link */}
