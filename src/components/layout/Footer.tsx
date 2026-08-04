@@ -107,7 +107,7 @@ export function Footer() {
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[565px_254px_minmax(0,1fr)] xl:gap-0">
+        <div className="mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[587px_364px_minmax(0,1fr)] xl:gap-0">
           <address className="not-italic">
             <Reveal delay={BEAT.contact}>
               <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
