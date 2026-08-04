@@ -99,7 +99,7 @@ export function ConsultationForm() {
       style={{
         backgroundImage:
           'conic-gradient(from -46.16deg at 50% 50%, #035551 0deg, #058881 178.8deg, #035551 360deg)',
-        boxShadow: '4px 4px 8px 5px rgba(3,85,81,0.25)',
+        boxShadow: '6px 6px 20px 0px rgba(220,203,142,0.38)',
       }}
     >
       {/*

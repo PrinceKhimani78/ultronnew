@@ -45,12 +45,22 @@ import { cn } from '@/lib/utils';
  * clipped text is a worse failure than a card twelve pixels tall. See
  * HOME_PAGE_REVIEW.md for the arithmetic and the three ways to close it.
  */
-const CARD_PLATE =
+const BASE_CARD_PLATE =
   'relative flex w-full flex-col rounded-[20px] p-[5px] ' +
   'bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,#DCCB8E_100%)] ' +
-  'shadow-[0px_20px_40px_0px_rgba(0,0,0,0.20)] backdrop-blur-[40px] ' +
+  'backdrop-blur-[40px] ' +
   // Mobile fills its column up to the design's 360px ceiling; desktop pins to 306.
   'mx-auto max-w-[360px] lg:mx-0 lg:max-w-[306px] lg:min-h-[287px]';
+
+const LEFT_CARD_PLATE = cn(
+  BASE_CARD_PLATE,
+  'shadow-[0px_6px_16px_0px_rgba(220,203,142,0.25)] lg:shadow-[-6px_8px_24px_0px_rgba(220,203,142,0.38)]',
+);
+
+const RIGHT_CARD_PLATE = cn(
+  BASE_CARD_PLATE,
+  'shadow-[0px_6px_16px_0px_rgba(220,203,142,0.25)] lg:shadow-[6px_8px_24px_0px_rgba(220,203,142,0.38)]',
+);
 
 /**
  * The white fill. Its radius is 15px, not 20px — the 20px in the panel is the
@@ -270,7 +280,10 @@ export function HowUltronWorks() {
                           own passage through the viewport — so the four steps
                           arrive at the reader's scrolling pace rather than as
                           one block when the band's top edge clears the fold. */}
-                      <Reveal className={CARD_PLATE} amount={0.25}>
+                      <Reveal
+                        className={isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE}
+                        amount={0.25}
+                      >
                         <StepCardContent title={step.title} body={step.body} />
                       </Reveal>
                     </div>

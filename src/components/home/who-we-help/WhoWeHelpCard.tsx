@@ -15,23 +15,35 @@ import { cn } from '@/lib/utils';
  * entrance and the hover state each own a transform without a fight.
  */
 
-const CARD_CLASS = [
-  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7',
-  'border border-[rgba(3,85,81,0.08)]',
-  'shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
-  'transition-all duration-[250ms] ease-out',
-  'hover:-translate-y-1.5 hover:border-[#035551] hover:shadow-[inset_4px_-4px_6px_0px_rgba(3,85,81,0.35),0_18px_40px_rgba(3,85,81,0.14)]',
-].join(' ');
+type CardPosition = 'left' | 'right' | 'center';
+
+const BASE_CARD_CLASS =
+  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5';
+
+const SHADOW_CLASSES: Record<CardPosition, string> = {
+  left: 'shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] sm:shadow-[-6px_6px_16px_0px_rgba(220,203,142,0.35)] hover:shadow-[-8px_8px_24px_0px_rgba(220,203,142,0.45)]',
+  right:
+    'shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] sm:shadow-[6px_6px_16px_0px_rgba(220,203,142,0.35)] hover:shadow-[8px_8px_24px_0px_rgba(220,203,142,0.45)]',
+  center:
+    'shadow-[0px_4px_16px_0px_rgba(220,203,142,0.30)] hover:shadow-[0px_6px_24px_0px_rgba(220,203,142,0.40)]',
+};
 
 type WhoWeHelpCardProps = {
   item: WhoWeHelpItem;
   /** Position in the bento, 0-based. Drives the stagger delay. */
   index: number;
+  /** Position of the card in the layout for directional shadow. */
+  position?: CardPosition;
   /** Grid placement for this card's slot. Applied to the wrapper. */
   className?: string;
 };
 
-export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
+export function WhoWeHelpCard({
+  item,
+  index,
+  position = 'left',
+  className,
+}: WhoWeHelpCardProps) {
   return (
     <Reveal
       delay={index * STAGGER_MS}
@@ -41,7 +53,7 @@ export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
       // column waiting. A tenth of a card is unambiguously on screen.
       amount={0.1}
     >
-      <div className={CARD_CLASS}>
+      <div className={cn(BASE_CARD_CLASS, SHADOW_CLASSES[position])}>
         <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
           {item.title}
         </h3>

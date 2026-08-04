@@ -97,13 +97,15 @@ export function WhoWeHelpSection() {
           <WhoWeHelpCard
             item={card1}
             index={0}
+            position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
-          <WhoWeHelpCard item={card2} index={1} />
-          <WhoWeHelpCard item={card3} index={2} />
+          <WhoWeHelpCard item={card2} index={1} position="left" />
+          <WhoWeHelpCard item={card3} index={2} position="center" />
           <WhoWeHelpCard
             item={card4}
             index={3}
+            position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
 
@@ -113,10 +115,16 @@ export function WhoWeHelpSection() {
             source order, so 1–6 reads the same at every width.
           */}
           <div className="flex flex-col gap-5 sm:col-span-2 sm:flex-row lg:col-span-1 lg:col-start-3 lg:row-span-3 lg:row-start-1 lg:flex-col lg:gap-6">
-            <WhoWeHelpCard item={card5} index={4} className="sm:flex-1" />
+            <WhoWeHelpCard
+              item={card5}
+              index={4}
+              position="right"
+              className="sm:flex-1"
+            />
             <WhoWeHelpCard
               item={card6}
               index={5}
+              position="right"
               className="sm:flex-1 lg:flex-1"
             />
           </div>
