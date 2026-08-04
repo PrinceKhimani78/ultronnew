@@ -1,8 +1,7 @@
 'use client';
 
-import { ArrowUpRight, Check, ChevronRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
-import { useId, useState } from 'react';
 
 import { SERVICES_PAGE } from '@/content/services-page';
 import type { Service } from '@/content/services';
@@ -10,92 +9,69 @@ import { cn } from '@/lib/utils';
 
 type ServiceCardProps = {
   service: Service;
-  position?: 'left' | 'right' | 'center';
 };
 
-export function ServiceCard({
-  service,
-  position: _position = 'left',
-}: ServiceCardProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const panelId = useId();
-
+export function ServiceCard({ service }: ServiceCardProps) {
   return (
     <div
       className={cn(
-        'flex h-full flex-col rounded-[20px] p-6 sm:p-8',
+        'flex h-full min-h-[247px] w-full flex-col justify-between rounded-[20px] p-6 sm:p-8 lg:max-w-[461px]',
         'bg-[conic-gradient(from_180deg_at_50%_50%,#FDFBEE_0deg,#FFFFFF_160deg,#FDFBEE_320deg,#FDFBEE_360deg)]',
         'ease-house transition-all duration-300 hover:-translate-y-1',
       )}
       style={{
-        boxShadow:
-          'inset 4px -4px 4px 0px rgba(3, 85, 81, 0.25), 0 10px 25px rgba(0, 0, 0, 0.06)',
+        boxShadow: 'inset 4px -4px 4px 0px rgba(3, 85, 81, 0.25)',
       }}
     >
-      <h3 className="font-display text-[20px] font-bold tracking-tight text-[#035551]">
-        {service.headline}
-      </h3>
+      {/* Top content block */}
+      <div>
+        <h3 className="font-display text-[20px] leading-tight font-bold text-black">
+          {service.headline}
+        </h3>
 
-      <p className="text-ink-muted mt-3 text-sm leading-relaxed">
-        {service.description}
-      </p>
-
-      <div
-        id={panelId}
-        hidden={!isOpen}
-        className="border-line mt-6 border-t pt-6"
-      >
-        <p className="text-ink-muted text-[0.7rem] font-medium tracking-[0.16em] uppercase">
-          {SERVICES_PAGE.card.benefitsLabel}
+        <p className="mt-3 text-[15px] leading-relaxed text-[#5A5A5A]">
+          {service.description}
         </p>
-        <ul className="mt-4 space-y-3">
-          {service.benefits.map((benefit) => (
-            <li key={benefit} className="flex items-start gap-3 text-sm">
-              <Check
-                aria-hidden="true"
-                className="text-brand-bright mt-0.5 h-4 w-4 shrink-0"
-              />
-              <span className="text-ink">{benefit}</span>
-            </li>
-          ))}
-        </ul>
+
+        {/* Full Key Benefits displayed directly when present (no accordion) */}
+        {service.benefits && service.benefits.length > 0 && (
+          <div className="mt-6 border-t border-[#035551]/10 pt-5">
+            <p className="text-[11px] font-semibold tracking-[0.14em] text-[#5A5A5A] uppercase">
+              {SERVICES_PAGE.card.benefitsLabel}
+            </p>
+            <ul className="mt-3 space-y-2.5">
+              {service.benefits.map((benefit) => (
+                <li
+                  key={benefit}
+                  className="flex items-start gap-2.5 text-[14px] text-black"
+                >
+                  <Check
+                    aria-hidden="true"
+                    className="mt-0.5 h-4 w-4 shrink-0 text-[#035551]"
+                  />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
-      <div className="mt-auto flex items-center justify-between gap-4 pt-6">
-        <button
-          type="button"
-          onClick={() => setIsOpen((open) => !open)}
-          aria-expanded={isOpen}
-          aria-controls={panelId}
-          className={cn(
-            'group flex items-center gap-2 font-bold text-[#035551]',
-            'text-xs tracking-[0.05em] underline underline-offset-4',
-            'ease-house hover:text-brand-bright transition-colors',
-          )}
-        >
-          {isOpen ? 'View less' : 'View more'}
-          <span
-            aria-hidden="true"
-            className="ease-house inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#035551] text-[#FDFBEE] transition-transform duration-200 group-hover:translate-x-0.5"
-          >
-            <ArrowUpRight
-              className={cn(
-                'ease-house h-3.5 w-3.5 transition-transform duration-200',
-                isOpen && 'rotate-180',
-              )}
-            />
-          </span>
-        </button>
-
+      {/* Bottom CTA block: Full Detail link */}
+      <div className="mt-6 pt-2">
         <Link
           href={`/services/${service.slug}`}
-          className={cn(
-            'text-brand-bright hover:text-brand group flex items-center gap-1.5',
-            'text-xs font-semibold tracking-[0.1em] uppercase transition-colors',
-          )}
+          className="group inline-flex items-center gap-2.5 transition-colors"
         >
-          Full Details
-          <ChevronRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+          <span className="font-display text-[15px] leading-none font-semibold text-[#035551] underline decoration-[#035551] underline-offset-4">
+            Full Detail
+          </span>
+          <span
+            aria-hidden="true"
+            className="ease-house flex h-6 w-6 items-center justify-center rounded-full bg-[#035551] text-white transition-transform duration-200 group-hover:translate-x-1"
+          >
+            <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
+          </span>
         </Link>
       </div>
     </div>

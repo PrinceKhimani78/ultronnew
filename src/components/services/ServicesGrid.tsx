@@ -40,21 +40,16 @@ export function ServicesGrid() {
           must never animate together, so the pair in each row is offset from
           each other rather than sharing a row delay.
         */}
-        <ul className="mt-12 grid items-start gap-6 lg:grid-cols-2">
+        <ul className="mt-12 grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
           {SERVICES.map((service, index) => (
             <Reveal
               as="li"
               key={service.slug}
               delay={index * STAGGER_MS}
               amount={0.1}
-              className="h-full"
+              className="flex h-full w-full justify-center lg:justify-start"
             >
-              {/* Two-up grid: even indices sit in the left column, odd in the
-                  right, so each card's shadow leans away from the centre. */}
-              <ServiceCard
-                service={service}
-                position={index % 2 === 0 ? 'left' : 'right'}
-              />
+              <ServiceCard service={service} />
             </Reveal>
           ))}
         </ul>
