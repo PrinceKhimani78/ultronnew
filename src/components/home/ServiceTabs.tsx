@@ -93,7 +93,7 @@ export function ServiceTabs() {
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
               className={cn(
-                'ease-house relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-[16px] font-semibold transition-colors duration-200',
+                'ease-house relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-[18px] font-semibold transition-colors duration-200',
                 'border-b border-[#035551]/15 last:border-b-0',
                 isActive
                   ? 'bg-[#035551] text-white'
@@ -125,7 +125,7 @@ export function ServiceTabs() {
                 onClick={() => setActiveIndex(isActive ? -1 : index)}
                 aria-expanded={isActive}
                 className={cn(
-                  'flex w-full items-center justify-between p-4 text-left text-[16px] font-semibold transition-colors duration-200',
+                  'flex w-full items-center justify-between p-4 text-left text-[18px] font-semibold transition-colors duration-200',
                   isActive
                     ? 'bg-[#035551] text-white'
                     : 'bg-[#FDFBEE] text-[#035551]',
