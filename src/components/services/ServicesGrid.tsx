@@ -30,7 +30,7 @@ export function ServicesGrid() {
               accentClassName="text-[#035551]"
             />
           </h2>
-          <p className="mt-5 max-w-3xl text-[16px] leading-[170%] font-normal text-[#5A5A5A]">
+          <p className="mt-5 max-w-[855px] text-[16px] leading-[170%] font-normal text-[#5A5A5A]">
             {SERVICES_PAGE.intro.body}
           </p>
         </Reveal>
