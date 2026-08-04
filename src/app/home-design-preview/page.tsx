@@ -1,6 +1,7 @@
 import { DesignContact } from '@/components/home-design-preview/DesignContact';
 import { DesignHero } from '@/components/home-design-preview/DesignHero';
 import { DesignWhoWeHelp } from '@/components/home-design-preview/DesignWhoWeHelp';
+import { CoreServices } from '@/components/home/CoreServices';
 import { HowUltronWorks } from '@/components/home/HowUltronWorks';
 import { buildMetadata } from '@/lib/seo';
 
@@ -47,6 +48,7 @@ export default function HomeDesignPreviewPage() {
     <main id="content">
       <DesignHero />
       <DesignWhoWeHelp />
+      <CoreServices />
       <HowUltronWorks />
       <DesignContact />
     </main>
