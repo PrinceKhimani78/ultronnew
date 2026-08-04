@@ -159,7 +159,9 @@ export function PreviewFooter() {
         below. Stated as max-width plus inset rather than as a 1070px box, so the
         two numbers stay traceable to the frame.
       */}
-      <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10 xl:px-[105px]">
+      {/* The shared shell, as everywhere else. This carried its own 1280px box
+          and 105px inset, which put it on a different line from the content. */}
+      <div className="page-shell">
         {/*
           ⚠️ SUBSTITUTED ASSET — `assets/35d9345d34d0b43d.png`, drawn 358×105,
           exceeds the Design MCP's 256 KiB cap. The repo's cream lockup stands
@@ -258,11 +260,11 @@ export function PreviewFooter() {
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* The comp insets the bottom bar 25px inside the rule on both ends.
-            Last beat on the page, and the quietest. */}
+        {/* Last beat on the page, and the quietest. The 25px `xl` inset is
+            gone — it put this row on its own line, right of the columns. */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] sm:flex-row sm:justify-between sm:text-left xl:px-[25px]"
+          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] sm:flex-row sm:justify-between sm:text-left"
           style={{ color: BODY_COLOR }}
         >
           <span>{COPYRIGHT_LEFT}</span>

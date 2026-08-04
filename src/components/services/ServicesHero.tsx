@@ -30,7 +30,10 @@ export function ServicesHero() {
         width="wide"
         className="relative flex min-h-[380px] flex-col justify-center pt-[124px] pb-10 sm:min-h-[420px] sm:pt-[140px] sm:pb-12 lg:min-h-[453px] lg:pt-[152px] lg:pb-14"
       >
-        <div className="relative mx-auto flex w-full max-w-[1280px] items-center justify-center">
+        {/* No second measure here — the `Container` above is already the page
+            measure. A nested `mx-auto max-w-*` is inert today only because it
+            happens to be wider than the shell's content box. */}
+        <div className="relative flex w-full items-center justify-center">
           {/* Centered Hero Heading & Description */}
           <div className="relative z-10 mx-auto w-full max-w-[620px] text-center">
             {/* Heading, body, monogram — the same 100ms sequence the home

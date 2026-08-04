@@ -60,7 +60,10 @@ export function DesignHero() {
         carry. It was 198px while the site's *fixed* header sat above instead.
       */}
       <DesignContainer className="pt-10 pb-0 sm:pt-14 lg:pt-[102px]">
-        <div className="mx-auto flex max-w-[1150px] flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 xl:gap-6">
+        {/* No `mx-auto max-w-*` here. A narrower centred box inside the shell
+            re-centres the hero and pushes its heading right of every other
+            section on the page — the shell is already the measure. */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 xl:gap-6">
           <div className="w-full lg:w-[670px] lg:shrink-0 xl:w-[700px]">
             <Reveal delay={0}>
               <h1
@@ -87,7 +90,10 @@ export function DesignHero() {
             <Reveal
               as="ul"
               delay={BEAT.stats}
-              className="mt-[34px] flex w-full flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
+              /* Cancels this strip's own padding so the stat icons sit on the
+                 page's vertical line — see the note on the same strip in
+                 `home/Hero.tsx`. The two must stay identical. */
+              className="mt-[34px] flex w-full flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0 lg:-ml-[30px]"
               style={{ backgroundColor: '#FEFDF2', minHeight: 156 }}
             >
               {HERO.stats.map((stat, index) => {

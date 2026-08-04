@@ -78,7 +78,9 @@ export function PreviewHeader() {
 
   return (
     <header className="relative z-30 pt-6 lg:pt-[49px]">
-      <div className="mx-auto w-full max-w-[1348px] px-4 sm:px-6 lg:px-6 xl:px-0">
+      {/* Same shell and same pill gutter as the live `Header` — see the note
+          there. The logo lands on the shared content line. */}
+      <div className="page-shell px-[var(--pill-gutter)]">
         <div className="rounded-[100px]" style={{ backgroundColor: PILL }}>
           {/*
             Horizontal placement is the comp's, measured from the pill's own
@@ -87,7 +89,7 @@ export function PreviewHeader() {
             than `justify-between`, which would distribute the slack evenly and
             put the nav ~25px right of where the comp has it.
           */}
-          <div className="flex h-[66px] items-center justify-between pr-3 pl-4 sm:pl-6 lg:pr-8 lg:pl-8 xl:px-10">
+          <div className="flex h-[66px] items-center justify-between px-[calc(var(--page-gutter)-var(--pill-gutter))]">
             {/*
               ⚠️ SUBSTITUTED ASSET. The comp points at
               `assets/35d9345d34d0b43d.png` (167×49), which the Design MCP

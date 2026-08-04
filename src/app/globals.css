@@ -111,6 +111,83 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   Page measure
+
+   ONE definition of where the page edge is, for the whole site.
+
+   Before this, four wrappers each carried their own max-width and gutters —
+   `Container`, `Header`, `Footer` and the preview equivalents — and at desktop
+   they produced three different left edges: content at 0 (the container's
+   gutter collapsed to `px-0` above 1280), the header logo at 40, and the footer
+   at 105 inside a *narrower* 1280 box. Nothing lined up because nothing shared
+   a source.
+
+   Everything that spans the page now reads these two variables, so the vertical
+   guideline is structural rather than four numbers that happen to agree.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The measure itself. Content sits inside this, never wider. */
+  --page-max: 1348px;
+
+  /* Distance from the measure's edge to the content line — the vertical
+     guideline every heading, card, form and footer column starts on. */
+  --page-gutter: 20px;
+
+  /* The header pill's own inset.
+
+     Smaller than the content gutter on purpose: the design floats the bar
+     slightly wider than the content it sits above (the comp draws the pill at
+     x=46 in a 1280 frame where content starts at x=85). The pill's inner
+     padding is derived as `--page-gutter - --pill-gutter`, which is what lands
+     the logo exactly on the content line — see `Header.tsx`. Keep this BELOW
+     `--page-gutter` at every breakpoint or that subtraction goes negative and
+     the logo crosses to the wrong side of the line. */
+  --pill-gutter: 12px;
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: 32px;
+    --pill-gutter: 16px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: 48px;
+    --pill-gutter: 24px;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1280px) {
+  :root {
+    --page-gutter: 64px;
+    --pill-gutter: 32px;
+  }
+}
+
+@layer components {
+  /**
+   * The shared shell. Every full-width band's inner wrapper uses this and
+   * nothing else sets a page max-width or a page gutter.
+   *
+   * It lives in the `components` layer so a Tailwind utility still outranks it
+   * — that is what lets `Container`'s `narrow` variant pass `max-w-3xl`, and
+   * the header override its padding, without `!important` anywhere.
+   */
+  .page-shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: var(--page-max);
+    padding-inline: var(--page-gutter);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    Base
    ═══════════════════════════════════════════════════════════════════════════ */
 

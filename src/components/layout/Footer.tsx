@@ -20,10 +20,10 @@ import { FOOTER_DISCLAIMER, FOOTER_NAV, SITE } from '@/content/site';
  * between them. Setting an explicit height instead would clip the moment a line
  * of the address wrapped.
  *
- * The measure here is NOT the page measure. The comp's footer frame is 1280 wide
- * and insets its content 105px, which produces a 1070px footer measure — the
- * exact width of the rule above the copyright row. Stated as max-width plus
- * inset rather than as a 1070px box, so the two numbers stay traceable.
+ * The measure here IS the page measure — `.page-shell`, the same shell the
+ * header and every content band use. It previously carried its own 1280px box
+ * and a 105px desktop inset, which is why the footer used to start on a
+ * different vertical line from the content above it.
  *
  * Column origins are the comp's, measured from the content edge: Contact at 0,
  * Quick Links at 565, Services at 819. Each track carries its own trailing
@@ -75,7 +75,17 @@ export function Footer() {
       data-header-tone="dark"
       className="bg-brand-panel text-surface overflow-hidden pt-14 pb-8 lg:pt-[84px] lg:pb-10"
     >
-      <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10 xl:px-[105px]">
+      {/*
+        The same shell as every band above it. It previously carried its own
+        1280px box and a 105px desktop inset, which put the footer's left edge
+        on a different vertical line from the content and from the header logo —
+        the footer was the single worst offender on the page.
+
+        The column origins below are unchanged: they are absolute offsets from
+        the content line, so widening the measure gives the last column more
+        trailing room without moving where any column starts.
+      */}
+      <div className="page-shell">
         {/*
           Width pinned rather than height: the lockup is ratio 3.62 against the
           comp's 3.41, so height follows at 99px. Matching the drawn width keeps
@@ -177,11 +187,14 @@ export function Footer() {
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* The comp insets the bottom bar 25px inside the rule on both ends.
-            Last beat on the page, and the quietest. */}
+        {/* Last beat on the page, and the quietest.
+
+            The 25px inset this used to carry at `xl` is gone: it put the
+            copyright row on its own vertical line, 25px right of every other
+            element in the footer. */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:justify-between sm:text-left xl:px-[25px]"
+          className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:justify-between sm:text-left"
           style={{ color: BODY_COLOR }}
         >
           <span>All rights reserved by {SITE.legalName}</span>

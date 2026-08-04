@@ -1,38 +1,48 @@
 import { cn } from '@/lib/utils';
 
 /**
- * The measure. Sole owner of max-width and horizontal gutters in the codebase —
- * if a section sets its own `px-*`, two files now disagree about where the page
- * edge is, and they will drift.
+ * The measure.
+ *
+ * A thin wrapper over `.page-shell` in `globals.css`, which is the single
+ * definition of the page's max-width and gutters for the entire site. This
+ * component no longer carries either number — if it did, it would be a second
+ * opinion about where the page edge is, and a second opinion is how the header,
+ * the content and the footer ended up on three different vertical lines.
+ *
+ * The header and footer use `.page-shell` directly rather than this component,
+ * because neither renders a plain `div` at that level. They are still on the
+ * same measure for exactly that reason.
  */
 
 type ContainerProps = React.ComponentPropsWithoutRef<'div'> & {
   /**
    * `narrow` is for reading — roughly 68 characters, past which the eye loses
-   * the start of the next line. `wide` is for grids that need the room.
+   * the start of the next line. `default` and `wide` are both the full page
+   * measure; they are kept distinct so a future narrowing of one does not
+   * silently move the other.
    */
   width?: 'narrow' | 'default' | 'wide';
 };
 
+/**
+ * `narrow` overrides the shell's max-width. It can, without `!important`,
+ * because `.page-shell` is declared in the `components` cascade layer and
+ * `max-w-3xl` is a utility — utilities are layered after components.
+ *
+ * `default` and `wide` add nothing: the shell already is the page measure.
+ */
 const WIDTHS = {
   narrow: 'max-w-3xl',
-  default: 'max-w-[1348px]',
-  wide: 'max-w-[1348px]',
+  default: '',
+  wide: '',
 } as const;
-
-/**
- * Gutters are the comp's, not a rounded approximation of them: the design frame
- * is 1280 wide with its content inset 85px, and it draws the page edge at 20 /
- * 32 / 40px as the viewport narrows. `xl:px-0` is what lets the 1348px measure
- * actually reach 1348 on a wide screen — with a gutter still applied it never
- * does, and every section sits a few pixels narrower than the design.
- */
-const GUTTERS = 'mx-auto w-full px-5 sm:px-8 lg:px-10 xl:px-0';
 
 export function Container({
   width = 'default',
   className,
   ...props
 }: ContainerProps) {
-  return <div className={cn(GUTTERS, WIDTHS[width], className)} {...props} />;
+  return (
+    <div className={cn('page-shell', WIDTHS[width], className)} {...props} />
+  );
 }

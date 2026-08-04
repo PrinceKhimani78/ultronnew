@@ -113,7 +113,17 @@ export function Hero() {
             <Reveal
               as="ul"
               delay={BEAT.stats}
-              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
+              /*
+                `lg:-ml-[30px]` cancels this strip's own `px-[30px]`, so the
+                stat icons land on the same vertical line as the h1 above them
+                while the cream plate still overhangs to the left — which is
+                exactly how the comp draws it.
+
+                Only from `lg`, where the gutter is 48px and can absorb a 30px
+                pull. At mobile the gutter is 20px and the plate would breach
+                the viewport edge.
+              */
+              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0 lg:-ml-[30px]"
               // The strip's own ground and its 156px floor. Both are layout, not
               // motion — they stay on the element that `Reveal` renders.
               style={{ backgroundColor: STRIP, minHeight: 156 }}

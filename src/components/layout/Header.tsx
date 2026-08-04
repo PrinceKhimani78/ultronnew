@@ -191,10 +191,16 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 pt-6 lg:pt-[49px]">
       {/*
-        The pill's own gutters, which are narrower than the page measure — the
-        comp insets the bar 46px in its 1280 frame where the content sits at 85.
+        The pill's own gutter, which is narrower than the page measure — the
+        comp insets the bar 46px in its 1280 frame where the content sits at 85,
+        so the bar floats slightly wider than the content beneath it.
+
+        `.page-shell` supplies the max-width and centring; the padding utility
+        overrides the shell's content gutter with the pill's smaller one. That
+        override is safe without `!important` because the shell is declared in
+        the `components` layer and this is a utility.
       */}
-      <div className="mx-auto w-full max-w-[1348px] px-4 sm:px-6 lg:px-6 xl:px-0">
+      <div className="page-shell px-[var(--pill-gutter)]">
         <div
           className={cn(
             'bg-brand-panel text-surface rounded-[100px] transition-all duration-300 ease-in-out',
@@ -206,7 +212,21 @@ export function Header() {
             isScrolled || isOverDarkSection ? 'shadow-lift' : 'shadow-none',
           )}
         >
-          <div className="flex h-[66px] items-center justify-between pr-3 pl-4 sm:pl-6 lg:pr-8 lg:pl-8 xl:px-10">
+          {/*
+            THIS PADDING IS WHAT ALIGNS THE WHOLE SITE.
+
+            The logo's left edge is `--pill-gutter + this padding` from the
+            measure's edge. Deriving the padding as the difference between the
+            content gutter and the pill gutter makes that sum resolve to exactly
+            `--page-gutter` — the same line `.page-shell` puts every heading,
+            card, form and footer column on.
+
+            It is a subtraction rather than a hard-coded number so the alignment
+            survives a change to either gutter. A literal value here would hold
+            at one breakpoint and quietly drift at the other three, which is the
+            bug this replaced.
+          */}
+          <div className="flex h-[66px] items-center justify-between px-[calc(var(--page-gutter)-var(--pill-gutter))]">
             <Link
               href="/"
               className="shrink-0 rounded-sm"
