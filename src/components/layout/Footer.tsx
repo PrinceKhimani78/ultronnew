@@ -171,7 +171,7 @@ export function Footer() {
             ALL RIGHTS RESERVED BY ULTRON FINANCIALS
           </span>
           <span className="text-white/80">
-            COPYRIGHTS &copy; MUTANT TECHNOLOGIES
+            &copy; 2026 Ultron Financials. All rights reserved.
           </span>
         </Reveal>
       </div>
