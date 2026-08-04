@@ -91,7 +91,7 @@ export function Footer() {
         </Reveal>
 
         {/* 3-Column Navigation & Contact Grid */}
-        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-3 lg:gap-12 xl:grid-cols-[450px_240px_minmax(0,1fr)] xl:gap-0">
+        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1.2fr] lg:gap-12 xl:gap-16">
           {/* Column 1: Contact Us */}
           <address className="not-italic">
             <Reveal delay={BEAT.contact}>
@@ -112,7 +112,7 @@ export function Footer() {
               >
                 <LocationGlyph className="shrink-0 text-white" />
                 <span
-                  className={`${BODY} max-w-[340px] text-left text-white/90`}
+                  className={`${BODY} max-w-[420px] text-left text-white/90`}
                 >
                   {SITE.address.streetAddress}
                 </span>
