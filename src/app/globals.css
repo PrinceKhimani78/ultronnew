@@ -213,23 +213,13 @@
       inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
   }
 
-  /* Timeline cards in "How Ultron Works" section: Gold shadow (#DCCB8E) behind white card */
+  /* Timeline cards drop shadow matching Figma inspect panel specs */
   .timeline-card-left {
-    border: none !important;
-    outline: none !important;
-    box-shadow:
-      -5px 5px 14px rgba(220, 203, 142, 0.65),
-      -6px 6px 0 rgba(220, 203, 142, 0.95),
-      0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);
   }
 
   .timeline-card-right {
-    border: none !important;
-    outline: none !important;
-    box-shadow:
-      5px 5px 14px rgba(220, 203, 142, 0.65),
-      6px 6px 0 rgba(220, 203, 142, 0.95),
-      0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);
   }
 
   @media (min-width: 640px) {

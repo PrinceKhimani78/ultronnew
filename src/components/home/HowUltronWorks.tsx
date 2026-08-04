@@ -43,26 +43,29 @@ import { cn } from '@/lib/utils';
  * HOME_PAGE_REVIEW.md for the arithmetic and the three ways to close it.
  */
 const BASE_CARD_PLATE =
-  'relative flex w-full flex-col rounded-[20px] bg-white ' +
-  'pt-[40px] pr-[34px] pb-[34px] pl-[34px] ' +
+  'relative flex w-full flex-col rounded-[20px] p-[5px] ' +
+  'bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,#DCCB8E_100%)] ' +
+  'backdrop-blur-[40px] ' +
   'mx-auto max-w-[360px] lg:mx-0 lg:max-w-[306px] lg:min-h-[287px]';
 
 const LEFT_CARD_PLATE = cn(BASE_CARD_PLATE, 'timeline-card-left');
 const RIGHT_CARD_PLATE = cn(BASE_CARD_PLATE, 'timeline-card-right');
 
-/**
- * Card contents rendered inside the single white card container.
- */
+const CARD_FILL =
+  'flex flex-1 flex-col rounded-[15px] bg-white ' +
+  'shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] ' +
+  'pt-[42px] pr-[34px] pb-[34px] pl-[34px]';
+
 function StepCardContent({ title, body }: { title: string; body: string }) {
   return (
-    <>
+    <div className={CARD_FILL}>
       <h3 className="font-display mb-[28px] text-[18px] leading-[1.3] font-bold text-[#035551]">
         {title}
       </h3>
       <p className="text-[18px] leading-[1.5] font-normal tracking-[0] text-[rgba(35,35,35,0.82)]">
         {body}
       </p>
-    </>
+    </div>
   );
 }
 
