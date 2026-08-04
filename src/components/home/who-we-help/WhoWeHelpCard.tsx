@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 type CardPosition = 'left' | 'right' | 'center';
 
 const BASE_CARD_CLASS =
-  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5 shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]';
+  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5';
 
 /**
  * The site's one card shadow, in three directions — defined in `globals.css`.
