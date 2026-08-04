@@ -77,7 +77,7 @@ export function WhoWeHelpSection() {
               {WHO_WE_HELP_HEADER.body}
             </p>
             <Reveal delay={STAGGER_MS * 2} className="mt-8 inline-block">
-              <ActionButton href={WHO_WE_HELP_HEADER.cta.href}>
+              <ActionButton href={WHO_WE_HELP_HEADER.cta.href} variant="cream">
                 {WHO_WE_HELP_HEADER.cta.label}
               </ActionButton>
             </Reveal>

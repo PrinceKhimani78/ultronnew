@@ -48,22 +48,20 @@ function ArrowUpRightIcon({ className }: { className?: string }) {
   );
 }
 
-const SURFACE = [
-  'group inline-flex items-center justify-between rounded-[999px] gap-4',
-  'border-0 bg-[#035551] text-white',
+const BASE_SURFACE = [
+  'group inline-flex items-center justify-between rounded-[999px] gap-4 border-0',
   'text-[18px] leading-none font-bold tracking-[0.02em]',
-  'shadow-[0_10px_24px_rgba(3,85,81,0.22)]',
-  // Only colour and transform move. Nothing here relayouts the page.
   'transition-[background-color,transform] duration-300 ease-[ease]',
-  'hover:bg-[#02443F] active:scale-[0.98]',
-  // Beats the global `:focus-visible` in `@layer base` — utilities cascade after
-  // base, so this is the ring that lands.
+  'active:scale-[0.98]',
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E]',
-  // Vertical padding is fixed; horizontal eases in slightly below the desktop
-  // breakpoint, per the brief. 14px top and bottom against a 28px disc puts the
-  // button at 56px tall at every width.
   'py-[14px] pr-[16px] pl-[20px] lg:pr-[18px] lg:pl-[24px]',
 ].join(' ');
+
+const VARIANTS = {
+  teal: 'bg-[#035551] text-white hover:bg-[#02443F] shadow-[0_10px_24px_rgba(3,85,81,0.22)]',
+  cream:
+    'bg-[#FDFBEE] text-[#035551] hover:bg-[#F5F1D7] shadow-[0_10px_24px_rgba(3,85,81,0.12)]',
+};
 
 export type ActionButtonProps = {
   children: ReactNode;
@@ -76,16 +74,28 @@ export type ActionButtonProps = {
    */
   fullWidth?: boolean;
   type?: 'button' | 'submit';
+  variant?: 'teal' | 'cream';
   className?: string;
 };
 
-function ButtonBody({ children }: { children: ReactNode }) {
+function ButtonBody({
+  children,
+  variant = 'teal',
+}: {
+  children: ReactNode;
+  variant?: 'teal' | 'cream';
+}) {
   return (
     <>
       <span>{children}</span>
       <span
         aria-hidden="true"
-        className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[#035551]"
+        className={cn(
+          'relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full',
+          variant === 'cream'
+            ? 'bg-[#035551] text-[#FDFBEE]'
+            : 'bg-white text-[#035551]',
+        )}
       >
         {/* Leaves through the top-right corner. */}
         <ArrowUpRightIcon className="h-[13px] w-[13px] transition-transform duration-300 ease-[ease] group-hover:translate-x-full group-hover:-translate-y-full group-hover:opacity-0 motion-reduce:transform-none motion-reduce:group-hover:opacity-100" />
@@ -101,21 +111,27 @@ export function ActionButton({
   href,
   fullWidth = false,
   type = 'button',
+  variant = 'teal',
   className,
 }: ActionButtonProps) {
-  const classes = cn(SURFACE, fullWidth && 'w-full', className);
+  const classes = cn(
+    BASE_SURFACE,
+    VARIANTS[variant],
+    fullWidth && 'w-full',
+    className,
+  );
 
   if (href) {
     return (
       <a href={href} className={classes}>
-        <ButtonBody>{children}</ButtonBody>
+        <ButtonBody variant={variant}>{children}</ButtonBody>
       </a>
     );
   }
 
   return (
     <button type={type} className={cn(classes, 'cursor-pointer')}>
-      <ButtonBody>{children}</ButtonBody>
+      <ButtonBody variant={variant}>{children}</ButtonBody>
     </button>
   );
 }
