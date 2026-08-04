@@ -18,20 +18,7 @@ import { cn } from '@/lib/utils';
 type CardPosition = 'left' | 'right' | 'center';
 
 const BASE_CARD_CLASS =
-  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5';
-
-/**
- * The site's one card shadow, in three directions — defined in `globals.css`.
- *
- * Nothing here restates a colour, blur or offset. Five near-identical gold
- * values spread across five files is exactly how a shadow system stops matching
- * itself, which is the state this replaced.
- */
-const SHADOW_CLASSES: Record<CardPosition, string> = {
-  left: 'card-shadow-left',
-  right: 'card-shadow-right',
-  center: 'card-shadow-center',
-};
+  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5 shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]';
 
 type WhoWeHelpCardProps = {
   item: WhoWeHelpItem;
@@ -43,12 +30,7 @@ type WhoWeHelpCardProps = {
   className?: string;
 };
 
-export function WhoWeHelpCard({
-  item,
-  index,
-  position = 'left',
-  className,
-}: WhoWeHelpCardProps) {
+export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
   return (
     <Reveal
       delay={index * STAGGER_MS}
@@ -58,7 +40,7 @@ export function WhoWeHelpCard({
       // column waiting. A tenth of a card is unambiguously on screen.
       amount={0.1}
     >
-      <div className={cn(BASE_CARD_CLASS, SHADOW_CLASSES[position])}>
+      <div className={BASE_CARD_CLASS}>
         <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
           {item.title}
         </h3>
