@@ -15,24 +15,31 @@ import { cn } from '@/lib/utils';
 
 const BASE_CARD_PLATE =
   'relative mx-auto flex w-full max-w-[360px] flex-col rounded-[20px] bg-white ' +
-  'lg:mx-0 lg:min-h-[287px] lg:max-w-[306px]';
+  'border-0 outline-none ring-0 ' +
+  'lg:mx-0 lg:min-h-[287px] lg:max-w-[360px]';
 
 const LEFT_CARD_PLATE = cn(
   BASE_CARD_PLATE,
-  'shadow-[-5px_5px_0px_0px_#DCCB8E,0px_20px_40px_0px_rgba(0,0,0,0.20)]',
+  'shadow-[-4px_0px_0px_4px_#DCCB8E]',
 );
 
 const RIGHT_CARD_PLATE = cn(
   BASE_CARD_PLATE,
-  'shadow-[5px_5px_0px_0px_#DCCB8E,0px_20px_40px_0px_rgba(0,0,0,0.20)]',
+  'shadow-[4px_0px_0px_4px_#DCCB8E]',
 );
 
 const CARD_FILL =
   'flex flex-1 flex-col rounded-[20px] bg-white ' +
-  'shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] ' +
-  'pt-[42px] pr-[34px] pb-[34px] pl-[34px]';
+  'border-0 outline-none ring-0 shadow-none ' +
+  'pt-[10px] pr-[34px] pb-[34px] pl-[34px]';
 
-function StepCardContent({ title, body }: { title: string; body: string }) {
+function StepCardContent({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
   return (
     <div className={CARD_FILL}>
       <h3 className="font-display mb-[28px] text-[18px] leading-[1.3] font-bold text-[#035551]">
@@ -175,10 +182,15 @@ export function HowUltronWorks() {
                       }
                     >
                       <Reveal
-                        className={isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE}
+                        className={
+                          isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE
+                        }
                         amount={0.25}
                       >
-                        <StepCardContent title={step.title} body={step.body} />
+                        <StepCardContent
+                          title={step.title}
+                          body={step.body}
+                        />
                       </Reveal>
                     </div>
 
