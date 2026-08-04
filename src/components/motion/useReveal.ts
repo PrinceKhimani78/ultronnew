@@ -62,9 +62,13 @@ export function useReveal<T extends HTMLElement = HTMLElement>(
     if (!node || revealed || typeof IntersectionObserver === 'undefined')
       return;
 
-    const tooTall =
-      node.getBoundingClientRect().height >
-      window.innerHeight * TALL_ELEMENT_RATIO;
+    const rect = node.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      const handle = requestAnimationFrame(() => setRevealed(true));
+      return () => cancelAnimationFrame(handle);
+    }
+
+    const tooTall = rect.height > window.innerHeight * TALL_ELEMENT_RATIO;
 
     const observer = new IntersectionObserver(
       (entries) => {

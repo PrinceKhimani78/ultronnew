@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useEffect,
   useState,
   type AnimationEvent,
   type CSSProperties,
@@ -75,6 +76,15 @@ export function Reveal({
   const Component = as as 'div';
 
   const animating = revealed && !finished;
+
+  useEffect(() => {
+    if (revealed && !finished) {
+      const timer = setTimeout(() => {
+        setFinished(true);
+      }, delay + 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [revealed, finished, delay]);
 
   return (
     <Component
