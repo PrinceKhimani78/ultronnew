@@ -58,9 +58,9 @@ const BASE_SURFACE = [
 ].join(' ');
 
 const VARIANTS = {
-  teal: 'bg-[#035551] text-white hover:bg-[#02443F] shadow-[0_10px_24px_rgba(3,85,81,0.22)]',
+  teal: 'border-0 bg-[#035551] text-white hover:bg-[#02443F] shadow-[0_10px_24px_rgba(3,85,81,0.22)]',
   cream:
-    'bg-[#FDFBEE] text-[#035551] hover:bg-[#F5F1D7] shadow-[0_10px_24px_rgba(3,85,81,0.12)]',
+    'border-2 border-[#035551] bg-[#FDFBEE] text-[#035551] hover:bg-[#F5F1D7] shadow-[0px_4px_9px_0px_rgba(0,0,0,0.20)]',
 };
 
 export type ActionButtonProps = {
