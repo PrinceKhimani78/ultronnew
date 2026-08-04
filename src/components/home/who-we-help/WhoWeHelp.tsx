@@ -72,7 +72,10 @@ export function WhoWeHelpSection() {
             </h2>
           </Reveal>
 
-          <Reveal delay={STAGGER_MS} className="lg:w-[428px] lg:shrink-0">
+          <Reveal
+            delay={STAGGER_MS}
+            className="lg:w-[428px] lg:shrink-0 lg:pt-[34px]"
+          >
             <p className="text-[16px] leading-[150%] font-normal text-black">
               {WHO_WE_HELP_HEADER.body}
             </p>
