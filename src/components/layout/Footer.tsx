@@ -104,7 +104,7 @@ export function Footer() {
                 as="li"
                 className="flex items-start justify-start gap-3"
               >
-                <LocationGlyph className="text-[#DCCB8E]" />
+                <LocationGlyph className="text-white" />
                 <span className={`${BODY} max-w-[340px] text-left`}>
                   {SITE.address.streetAddress}
                 </span>
@@ -113,7 +113,7 @@ export function Footer() {
                 as="li"
                 className="flex items-start justify-start gap-3"
               >
-                <MailGlyph className="text-[#DCCB8E]" />
+                <MailGlyph className="text-white" />
                 <a
                   href={`mailto:${SITE.email}`}
                   className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
@@ -125,7 +125,7 @@ export function Footer() {
                 as="li"
                 className="flex items-start justify-start gap-3"
               >
-                <PhoneGlyph className="text-[#DCCB8E]" />
+                <PhoneGlyph className="text-white" />
                 <a
                   href={`tel:${SITE.telephone.replace(/\s/g, '')}`}
                   className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
@@ -167,7 +167,7 @@ export function Footer() {
           style={{ color: BODY_COLOR }}
         >
           <span>ALL RIGHTS RESERVED BY ULTRON FINANCIALS</span>
-          <span>COPYRIGHTS &copy; {SITE.builtBy.toUpperCase()}</span>
+          <span>&copy; 2026 Ultron Financials. All rights reserved.</span>
         </Reveal>
       </div>
     </footer>
