@@ -31,15 +31,9 @@ const RIGHT_CARD_PLATE = cn(
 const CARD_FILL =
   'flex flex-1 flex-col rounded-[20px] bg-white ' +
   'border-0 outline-none ring-0 shadow-none ' +
-  'pt-[10px] pr-[34px] pb-[34px] pl-[34px]';
+  'pt-[42px] pr-[34px] pb-[34px] pl-[34px]';
 
-function StepCardContent({
-  title,
-  body,
-}: {
-  title: string;
-  body: string;
-}) {
+function StepCardContent({ title, body }: { title: string; body: string }) {
   return (
     <div className={CARD_FILL}>
       <h3 className="font-display mb-[28px] text-[18px] leading-[1.3] font-bold text-[#035551]">
@@ -182,15 +176,10 @@ export function HowUltronWorks() {
                       }
                     >
                       <Reveal
-                        className={
-                          isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE
-                        }
+                        className={isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE}
                         amount={0.25}
                       >
-                        <StepCardContent
-                          title={step.title}
-                          body={step.body}
-                        />
+                        <StepCardContent title={step.title} body={step.body} />
                       </Reveal>
                     </div>
 
