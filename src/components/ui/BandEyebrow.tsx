@@ -16,8 +16,8 @@ import { cn } from '@/lib/utils';
  * a second opinion about the same element.
  */
 
-/** Decorative gold. Never carries meaning on its own — it fails AA as text. */
-const GOLD = '#C9B37E';
+/** Brand teal green (#035551). */
+const BRAND = '#035551';
 
 export function BandEyebrow({
   children,
@@ -36,12 +36,12 @@ export function BandEyebrow({
         'flex items-center gap-2 text-[16px] leading-none font-normal uppercase',
         className,
       )}
-      style={{ color: GOLD }}
+      style={{ color: BRAND }}
     >
       <span
         aria-hidden="true"
         className="inline-block h-px w-8 shrink-0"
-        style={{ backgroundColor: GOLD }}
+        style={{ backgroundColor: BRAND }}
       />
       {children}
     </p>

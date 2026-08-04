@@ -1,5 +1,6 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { WHY_CHOOSE } from '@/content/home';
@@ -23,9 +24,11 @@ export function WhyChooseUs() {
           />
         </Reveal>
 
+        {/* Per item, not per row — the brief is explicit that entries in a grid
+            must never arrive together, and these previously shared a row delay. */}
         <dl className="mt-14 grid gap-x-12 gap-y-10 md:grid-cols-2">
           {WHY_CHOOSE.reasons.map((reason, index) => (
-            <Reveal key={reason.title} delay={Math.floor(index / 2) * 0.08}>
+            <Reveal key={reason.title} delay={index * STAGGER_MS} amount={0.1}>
               <dt className="font-display border-accent border-l-2 pl-5 text-xl font-medium tracking-tight">
                 {reason.title}
               </dt>

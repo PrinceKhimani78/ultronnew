@@ -1,3 +1,4 @@
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 
@@ -9,6 +10,8 @@ import {
   DesignEyebrow,
   DesignHeadingText,
 } from './DesignBand';
+import { ActionButton } from '@/components/ui/ActionButton';
+
 import { CONTACT } from './content';
 
 /**
@@ -65,11 +68,7 @@ export function DesignContact() {
     >
       <DesignContainer>
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[62px]">
-          <Reveal
-            variant="text"
-            direction="left"
-            className="lg:w-[394px] lg:shrink-0 lg:pt-[13px]"
-          >
+          <Reveal className="lg:w-[394px] lg:shrink-0 lg:pt-[13px]">
             <DesignEyebrow>{CONTACT.eyebrow}</DesignEyebrow>
             <h2
               id="design-contact-heading"
@@ -89,17 +88,14 @@ export function DesignContact() {
               {CONTACT.body}
             </p>
             <Reveal
-              variant="button"
-              delay={0.24}
+              delay={STAGGER_MS * 2}
               className="mt-8 inline-block lg:mt-[40px]"
             >
-              <DesignButton href="#design-contact" radius="rounded">
-                {CONTACT.cta}
-              </DesignButton>
+              <DesignButton href="#design-contact">{CONTACT.cta}</DesignButton>
             </Reveal>
           </Reveal>
 
-          <Reveal variant="card" direction="right" delay={0.08}>
+          <Reveal delay={STAGGER_MS} amount={0.1}>
             <form
               suppressHydrationWarning
               className="w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
@@ -109,7 +105,7 @@ export function DesignContact() {
                 boxShadow: '4px 4px 8px 5px rgba(3,85,81,0.25)',
               }}
             >
-              <Reveal variant="text" className="mb-[30px]">
+              <Reveal className="mb-[30px]">
                 <h3
                   className="text-[22px] leading-tight font-bold"
                   style={{ color: DESIGN_CREAM }}
@@ -118,7 +114,10 @@ export function DesignContact() {
                 </h3>
               </Reveal>
 
+              {/* Heading, then the field rows, then the submit — the same
+                  sequence the live `ConsultationForm` runs. */}
               <Stagger
+                delay={STAGGER_MS}
                 className="grid grid-cols-1 gap-5 sm:grid-cols-2"
                 suppressHydrationWarning
               >
@@ -167,18 +166,16 @@ export function DesignContact() {
                 </StaggerItem>
               </Stagger>
 
-              <Reveal variant="button" delay={0.52} className="block">
-                <button
-                  type="submit"
-                  className="mt-6 h-[46px] w-full cursor-pointer rounded-[10px] border-none text-[18px] leading-none font-bold"
-                  style={{
-                    backgroundColor: DESIGN_CREAM,
-                    boxShadow: `inset 0 0 0 2px ${DESIGN_CREAM}`,
-                    color: '#035551',
-                  }}
-                >
+              {/* Full width: the submit spans the panel, as on the live form.
+                  One beat past the last field — the mapped fields plus the
+                  message row, plus the heading's own beat. */}
+              <Reveal
+                delay={(CONTACT.form.fields.length + 2) * STAGGER_MS}
+                className="mt-6 block"
+              >
+                <ActionButton type="submit" fullWidth>
                   {CONTACT.form.submitLabel}
-                </button>
+                </ActionButton>
               </Reveal>
             </form>
           </Reveal>

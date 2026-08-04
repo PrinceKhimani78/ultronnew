@@ -1,9 +1,9 @@
 import Image from 'next/image';
 
 import { Container } from '@/components/layout/Container';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Parallax } from '@/components/motion/Parallax';
 import { Reveal } from '@/components/motion/Reveal';
-import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
@@ -31,6 +31,29 @@ const STRIP = '#FEFDF2';
 const SAND = '#DCCB8E';
 const BRAND = '#035551';
 
+/**
+ * The hero's entrance order, as beats of `STAGGER_MS`.
+ *
+ * The hero is the one place on the site where the sequence is authored rather
+ * than derived, because its elements sit in three different containers — the
+ * copy column, the illustration column and the gradient band below — and no
+ * single `Stagger` spans them. Naming the beats here keeps the order readable
+ * as a list instead of as five unexplained numbers scattered through the JSX.
+ *
+ * All five are above the fold at load, so all five observers fire together and
+ * the delays alone carry the rhythm.
+ *
+ * The comp draws no hero badge. If one is ever added it takes beat 0 and
+ * everything below shifts down one.
+ */
+const BEAT = {
+  heading: 0,
+  stats: STAGGER_MS,
+  body: STAGGER_MS * 2,
+  cta: STAGGER_MS * 3,
+  image: STAGGER_MS * 4,
+} as const;
+
 export function Hero() {
   return (
     <section
@@ -50,7 +73,7 @@ export function Hero() {
               character at a time; that is gone, along with the per-character
               timer and the mutating accessible name it produced.
             */}
-            <Reveal variant="text">
+            <Reveal delay={BEAT.heading}>
               <h1
                 id="home-hero-heading"
                 className="font-display m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em] text-black"
@@ -74,25 +97,31 @@ export function Hero() {
               Opened"), so there is nothing to split into a separate term and
               definition. The whole string is the item; the icon is decoration.
 
-              `Stagger` renders the `<ul>` itself — it does not wrap it — so the
+              The strip is ONE beat of the hero sequence, not three. It is a
+              single drawn object in the comp — one cream plate with two hairline
+              dividers — so revealing its three figures separately would animate
+              a division the design does not draw, and it would push the
+              paragraph and the button out of the 100ms rhythm they share with
+              everything else here.
+
+              `Reveal` renders the `<ul>` itself — it does not wrap it — so the
               strip's own flex layout, background and min-height are untouched.
 
               ⚠️ PLACEHOLDER FIGURES. `HOME_HERO.stats` carries numbers that have
               not been client-verified. They must be confirmed before launch.
             */}
-            <Stagger
+            <Reveal
               as="ul"
-              delayChildren={0.12}
+              delay={BEAT.stats}
               className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
               // The strip's own ground and its 156px floor. Both are layout, not
-              // motion — they stay on the element that `Stagger` renders.
+              // motion — they stay on the element that `Reveal` renders.
               style={{ backgroundColor: STRIP, minHeight: 156 }}
             >
               {HOME_HERO.stats.map((stat, index) => {
                 const Icon = STAT_ICONS[stat.icon as StatIconName];
                 return (
-                  <StaggerItem
-                    as="li"
+                  <li
                     key={stat.label}
                     className="flex flex-1 items-center sm:py-[28px]"
                   >
@@ -115,14 +144,14 @@ export function Hero() {
                         {stat.value} {stat.label}
                       </span>
                     </div>
-                  </StaggerItem>
+                  </li>
                 );
               })}
-            </Stagger>
+            </Reveal>
 
             {/* `mt-[58px]` moves to the wrapper — the reveal IS the element in
                 flow now, so the margin has to live where the box does. */}
-            <Reveal variant="text" delay={0.08} className="mt-[58px]">
+            <Reveal delay={BEAT.body} className="mt-[58px]">
               <p className="max-w-[654px] text-[20px] leading-[130%] font-medium text-black lg:leading-[100%]">
                 {HOME_HERO.body}
               </p>
@@ -133,10 +162,10 @@ export function Hero() {
             The comp's 3D monogram, 441×473 at x=792.
 
             Two layers, and they have to be separate elements: `Parallax` writes
-            a scroll-linked `y` on every frame, while `Reveal` runs a one-shot
-            `y` on entry. Both on one node and the last writer wins — the reveal
-            would be dragged back by the parallax mid-flight. Outer drifts,
-            inner arrives.
+            a scroll-linked `transform` on every frame, while the reveal's
+            keyframes animate a `transform` of their own. Both on one node and
+            the last writer wins — the reveal would be dragged back by the
+            parallax mid-flight. Outer drifts, inner arrives.
 
             The parallax div carries the layout classes so no box is added to the
             flex row; the reveal is inside it and wraps only the image.
@@ -145,7 +174,7 @@ export function Hero() {
             distance={24}
             className="flex justify-center lg:mt-[-54px] lg:block lg:w-[441px] lg:shrink-0"
           >
-            <Reveal variant="image">
+            <Reveal delay={BEAT.image}>
               <Image
                 src="/brand/hero-monogram.webp"
                 alt=""
@@ -176,9 +205,9 @@ export function Hero() {
       >
         <Container width="wide">
           {/* `inline-block` so the reveal box hugs the button rather than
-              spanning the measure — a full-width wrapper would make the 12px
-              rise read as the whole band moving. */}
-          <Reveal variant="button" delay={0.16} className="inline-block">
+              spanning the measure — a full-width wrapper would make the rise
+              read as the whole band moving. */}
+          <Reveal delay={BEAT.cta} className="inline-block">
             <ActionButton href={HOME_HERO.cta.href}>
               {HOME_HERO.cta.label.toUpperCase()}
             </ActionButton>

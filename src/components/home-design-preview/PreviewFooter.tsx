@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import {
@@ -67,6 +68,19 @@ const CONTACT = {
 const COPYRIGHT_LEFT = 'ALL RIGHTS RESERVED BY ULTRON FINANCIALS';
 const COPYRIGHT_RIGHT = 'COPYRIGHTS © MUTANT TECHNOLOGIES';
 
+/**
+ * Entrance order, as beats of `STAGGER_MS` — the same shape as `BEAT` in
+ * `layout/Footer.tsx`, since the preview route was required to be
+ * indistinguishable from the live site.
+ */
+const BEAT = {
+  logo: 0,
+  contact: STAGGER_MS,
+  navColumn: (index: number) => STAGGER_MS * (2 + index),
+  /** Two nav columns, so the run-out sits one beat past the second. */
+  closing: STAGGER_MS * 4,
+} as const;
+
 function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
@@ -82,25 +96,32 @@ function LinkColumn({
 }: {
   heading: string;
   items: readonly { label: string; current: boolean }[];
-  /** Offsets this column against its siblings so the three do not land together. */
+  /**
+   * Milliseconds. Offsets this column against its siblings so the three do not
+   * land together.
+   */
   delay?: number;
 }) {
   return (
     <div>
-      <Reveal variant="text" delay={delay}>
+      <Reveal delay={delay}>
         <ColumnHeading>{heading}</ColumnHeading>
       </Reveal>
       {/*
         2px between items, not a comfortable list gap: the comp sets a 32px
         pitch on a 30px line box, so the rhythm is carried by the line height.
+
+        Links run at a half beat: at the full 100ms a six-item column would take
+        most of a second to finish, which reads as the list still loading.
       */}
       <Stagger
         as="ul"
-        delayChildren={delay + 0.06}
+        delay={delay + STAGGER_MS / 2}
+        step={STAGGER_MS / 2}
         className="flex flex-col gap-[2px]"
       >
         {items.map((item) => (
-          <StaggerItem as="li" variant="text" key={item.label}>
+          <StaggerItem as="li" key={item.label}>
             {/*
               Colour is a CLASS, never an inline `style`. As a style it silently
               disabled the hover: an inline `color` outranks a `hover:text-*`
@@ -149,7 +170,7 @@ export function PreviewFooter() {
           the block's footprint right; matching the height would have left it
           22px wide of the comp.
         */}
-        <Reveal variant="text" direction="none">
+        <Reveal delay={BEAT.logo}>
           <Image
             src="/brand/logo-lockup-cream.webp"
             alt="Ultron Financials"
@@ -171,12 +192,13 @@ export function PreviewFooter() {
             the nearest article or body", which is exactly what this block is.
           */}
           <address className="not-italic">
-            <Reveal variant="text" delay={0.08}>
+            <Reveal delay={BEAT.contact}>
               <ColumnHeading>Contact Us</ColumnHeading>
             </Reveal>
             <Stagger
               as="ul"
-              delayChildren={0.12}
+              delay={BEAT.contact + STAGGER_MS / 2}
+              step={STAGGER_MS / 2}
               className="flex flex-col gap-4"
               // Colour stays here: the glyphs are stroked with
               // `currentColor` and inherit it from the list, so one
@@ -185,7 +207,6 @@ export function PreviewFooter() {
             >
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <LocationGlyph />
@@ -195,7 +216,6 @@ export function PreviewFooter() {
               </StaggerItem>
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <MailGlyph />
@@ -208,7 +228,6 @@ export function PreviewFooter() {
               </StaggerItem>
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <PhoneGlyph />
@@ -222,8 +241,16 @@ export function PreviewFooter() {
             </Stagger>
           </address>
 
-          <LinkColumn heading="Quick Links" items={QUICK_LINKS} delay={0.16} />
-          <LinkColumn heading="Services" items={SERVICE_LINKS} delay={0.24} />
+          <LinkColumn
+            heading="Quick Links"
+            items={QUICK_LINKS}
+            delay={BEAT.navColumn(0)}
+          />
+          <LinkColumn
+            heading="Services"
+            items={SERVICE_LINKS}
+            delay={BEAT.navColumn(1)}
+          />
         </div>
 
         <hr
@@ -231,14 +258,16 @@ export function PreviewFooter() {
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* The comp insets the bottom bar 25px inside the rule on both ends. */}
-        <div
+        {/* The comp insets the bottom bar 25px inside the rule on both ends.
+            Last beat on the page, and the quietest. */}
+        <Reveal
+          delay={BEAT.closing}
           className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] sm:flex-row sm:justify-between sm:text-left xl:px-[25px]"
           style={{ color: BODY_COLOR }}
         >
           <span>{COPYRIGHT_LEFT}</span>
           <span>{COPYRIGHT_RIGHT}</span>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

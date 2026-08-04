@@ -6,14 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import {
-  STAGGER,
-  TRANSFORM_PERSPECTIVE,
-  revealVariants,
-} from '@/components/motion/config';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { useMotionScale } from '@/components/motion/useMotionScale';
-import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
+import { HeadingText } from '@/components/ui/SectionHeading';
 import { PROCESS_INTRO, PROCESS_STEPS } from '@/content/process';
 import { cn } from '@/lib/utils';
 
@@ -127,14 +123,13 @@ export function HowUltronWorks() {
   }, []);
 
   /**
-   * 0 when the visitor has asked for reduced motion, which is what lets this
-   * component have ONE render path instead of the two it used to carry. Every
-   * animated node below previously existed twice — once as a `motion.div` and
-   * once as a plain `div` — and the pairs had already drifted apart once. The
-   * variants collapse to a plain fade at scale 0, so the branch is unnecessary.
+   * 0 when the visitor has asked for reduced motion.
+   *
+   * This governs the scroll-linked progress line ONLY. The step reveals need no
+   * equivalent check — `globals.css` neutralises `[data-reveal]` under the same
+   * media query, so they reduce in CSS rather than in a second code path here.
    */
-  const scale = useMotionScale();
-  const isStill = scale === 0;
+  const isStill = useMotionScale() === 0;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -151,15 +146,27 @@ export function HowUltronWorks() {
       className="relative overflow-hidden bg-[#035551]"
     >
       <Container width="wide">
-        {/* Title: a fade with the smallest rise the system has. */}
-        <Reveal variant="text" className="text-center">
-          <Eyebrow align="center">{PROCESS_INTRO.eyebrow}</Eyebrow>
-          <h2 className="font-display mt-3 text-[clamp(2rem,3.8vw,2.85rem)] leading-[1.12] font-bold tracking-[-0.02em] text-white">
-            <HeadingText segments={PROCESS_INTRO.heading} inverted />
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/85">
-            {PROCESS_INTRO.body}
+        {/* Band head. One reveal for the three lines: they are set as a single
+            centred block and arriving separately would read as three unrelated
+            announcements. */}
+        <Reveal className="text-center">
+          <p
+            className="font-display flex items-center justify-center gap-2.5 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
+            style={{ color: '#C9B37E' }}
+          >
+            <span
+              aria-hidden="true"
+              className="inline-block h-px w-8 shrink-0"
+              style={{ backgroundColor: '#C9B37E' }}
+            />
+            {PROCESS_INTRO.eyebrow}
           </p>
+          <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-white sm:text-[40px] lg:text-[48px]">
+            <HeadingText
+              segments={PROCESS_INTRO.heading}
+              accentClassName="text-white"
+            />
+          </h2>
         </Reveal>
 
         {/* Timeline Container with Scroll Progress Line */}
@@ -206,15 +213,6 @@ export function HowUltronWorks() {
           <ol className="relative z-10 space-y-10 sm:space-y-12 lg:space-y-16">
             {PROCESS_STEPS.map((step, index) => {
               const isRight = index % 2 === 1;
-              /*
-                Cards enter from the side they sit on, which is what makes the
-                timeline read as two converging columns rather than four
-                unrelated blocks. Below `lg` the layout is a single left-aligned
-                column, but the 20px slide stays: alternating it there would be
-                movement with no geometry behind it.
-              */
-              const cardDirection = isRight ? 'right' : 'left';
-
               const isActive = index === activeStep;
 
               return (
@@ -227,53 +225,36 @@ export function HowUltronWorks() {
                   className="relative"
                 >
                   {/*
-                    Spine node, in three layers because each one owns a different
-                    transform and they must not fight:
+                    Spine node.
 
-                      1. the positioning box — centred on the spine with a
-                         translate, and NEVER animated, so nothing overwrites it
-                      2. the reveal — Framer scales this 0.9 → 1 as the step
-                         arrives, one after another at the reader's pace
-                      3. the state ring — CSS scales this 1 → 1.08 and adds the
-                         white ring while this is the active step
+                    Deliberately NOT revealed. The brief keeps the vertical
+                    timeline fixed and animates only the content hung off it —
+                    and that is also the honest behaviour, because the spine and
+                    its nodes are the structure the cards are positioned
+                    against. A dot that faded in after its own card would read as
+                    the timeline being drawn twice.
 
-                    Collapsing 2 and 3 onto one element is the bug this shape
-                    avoids: Framer writes an inline `transform`, and an inline
-                    transform beats a Tailwind `scale-*` class every time, so the
-                    active scale would simply never apply.
-
-                    The ring is a `box-shadow`, not a `border`. A border would
-                    have to come out of the 16px box (leaving a 12px gold core,
-                    which is the old look) or grow it (which moves the dot off
-                    the spine). A shadow paints outside the box and costs no
-                    layout, so the gold circle stays exactly 16px in both states.
+                    It still has one moving part: the active-step ring, which
+                    tracks the reader's position rather than announcing an
+                    arrival. That is a `box-shadow`, not a `border` — a border
+                    would either come out of the 16px box (leaving a 12px gold
+                    core) or grow it (moving the dot off the spine), whereas a
+                    shadow paints outside the box and costs no layout, so the
+                    gold circle stays exactly 16px in both states.
                   */}
                   <div
                     aria-hidden="true"
                     className="absolute top-1/2 left-4 z-20 h-4 w-4 -translate-x-1/2 -translate-y-1/2 lg:left-1/2"
                   >
-                    <motion.div
-                      data-reveal=""
-                      variants={revealVariants({
-                        kind: 'icon',
-                        direction: 'none',
-                        scale,
-                      })}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.6 }}
-                      className="h-full w-full"
-                    >
-                      <span
-                        className={cn(
-                          'ease-house block h-full w-full rounded-full bg-[#DCCB8E]',
-                          'transition-[box-shadow,transform] duration-300',
-                          isActive
-                            ? 'scale-[1.08] shadow-[0_0_0_2px_#FFFFFF]'
-                            : 'scale-100 shadow-none',
-                        )}
-                      />
-                    </motion.div>
+                    <span
+                      className={cn(
+                        'ease-house block h-full w-full rounded-full bg-[#DCCB8E]',
+                        'transition-[box-shadow,transform] duration-300',
+                        isActive
+                          ? 'scale-[1.08] shadow-[0_0_0_2px_#FFFFFF]'
+                          : 'scale-100 shadow-none',
+                      )}
+                    />
                   </div>
 
                   <div className="pl-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:pl-0">
@@ -285,21 +266,13 @@ export function HowUltronWorks() {
                           : 'lg:col-start-1 lg:flex lg:justify-end lg:pr-4'
                       }
                     >
-                      <motion.div
-                        data-reveal=""
-                        variants={revealVariants({
-                          kind: 'card',
-                          direction: cardDirection,
-                          scale,
-                        })}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.4 }}
-                        style={{ transformPerspective: TRANSFORM_PERSPECTIVE }}
-                        className={CARD_PLATE}
-                      >
+                      {/* Each step's card is its own reveal, triggered by its
+                          own passage through the viewport — so the four steps
+                          arrive at the reader's scrolling pace rather than as
+                          one block when the band's top edge clears the fold. */}
+                      <Reveal className={CARD_PLATE} amount={0.25}>
                         <StepCardContent title={step.title} body={step.body} />
-                      </motion.div>
+                      </Reveal>
                     </div>
 
                     {/* Circular 3D Illustration Badge */}
@@ -311,20 +284,13 @@ export function HowUltronWorks() {
                       }
                     >
                       {/*
-                        The disc trails its card by one stagger step, so the pair
-                        arrives as a phrase rather than a chord.
+                        The disc trails its own card by one stagger step, so the
+                        pair arrives as a phrase rather than a chord — card,
+                        then image, for each step in turn.
                       */}
-                      <motion.div
-                        data-reveal=""
-                        variants={revealVariants({
-                          kind: 'circle',
-                          direction: 'none',
-                          scale,
-                          delay: STAGGER.tight,
-                        })}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.4 }}
+                      <Reveal
+                        delay={STAGGER_MS}
+                        amount={0.25}
                         className="mx-auto flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_25px_rgba(0,0,0,0.20)] sm:h-52 sm:w-52 lg:mx-0"
                       >
                         <Image
@@ -336,7 +302,7 @@ export function HowUltronWorks() {
                           sizes="200px"
                           className="h-auto w-32 object-contain sm:w-40"
                         />
-                      </motion.div>
+                      </Reveal>
                     </div>
                   </div>
                 </li>

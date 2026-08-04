@@ -1,5 +1,7 @@
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { CTA_CONTACT } from '@/content/home';
 import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
@@ -46,6 +48,16 @@ const FIELD_STYLE = {
  * `data-form-type="other"` is Dashlane. None of these are credential fields, so
  * declining is also the behaviour a visitor would want.
  */
+/**
+ * How many `StaggerItem` field rows the grid below holds.
+ *
+ * Only the submit button's delay reads this — everything inside the `Stagger`
+ * derives its own beat from its position. Keep it in step with the JSX; if it
+ * drifts low the button lands on top of the last field, and if it drifts high
+ * there is a visible gap before it.
+ */
+const FIELD_COUNT = 6;
+
 const NO_AUTOFILL_UI = {
   'data-lpignore': 'true',
   'data-1p-ignore': true,
@@ -90,7 +102,13 @@ export function ConsultationForm() {
         boxShadow: '4px 4px 8px 5px rgba(3,85,81,0.25)',
       }}
     >
-      <Reveal variant="text" className="mb-[30px]">
+      {/*
+        The form's own sequence, per the brief: heading, then the field rows one
+        after another, then the submit. `FIELD_COUNT` is what keeps the button
+        genuinely last — a hard-coded delay would silently overlap the moment a
+        seventh field was added.
+      */}
+      <Reveal className="mb-[30px]">
         <h3
           className="font-display text-[22px] leading-tight font-bold uppercase"
           style={{ color: CREAM }}
@@ -102,9 +120,10 @@ export function ConsultationForm() {
       {/*
         `Stagger` renders this grid itself — it does not wrap it — so the two-up
         template, the gap and the hydration flag are all unchanged. Fields arrive
-        one after another at 80ms, which is the brief's input stagger.
+        one after another, starting one beat after the heading.
       */}
       <Stagger
+        delay={STAGGER_MS}
         className="grid grid-cols-1 gap-5 sm:grid-cols-2"
         suppressHydrationWarning
       >
@@ -243,24 +262,19 @@ export function ConsultationForm() {
       </div>
 
       {/*
-        Last, deliberately: six fields at 80ms each is 0.48s, so the button
-        settles after the form it submits rather than alongside it.
+        Last, deliberately: the heading takes beat 0, the six fields take beats
+        1–6, so the submit takes the beat after them and settles once the form
+        it submits has finished arriving.
+
+        `fullWidth` because the submit spans the panel in this layout — the one
+        place on the site where a CTA is not sized to its label. The shared
+        button's `justify-between` is what keeps the label on the left edge and
+        the disc on the right at that width rather than centring the pair.
       */}
-      <Reveal variant="button" delay={0.52} className="block">
-        <button
-          type="submit"
-          className={cn(
-            'font-display mt-6 h-[46px] w-full cursor-pointer rounded-[10px] border-none text-[18px] leading-none font-bold uppercase',
-            'ease-house transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_14px_rgba(0,0,0,0.20)]',
-          )}
-          style={{
-            backgroundColor: CREAM,
-            boxShadow: `inset 0 0 0 2px ${CREAM}`,
-            color: '#035551',
-          }}
-        >
+      <Reveal delay={(FIELD_COUNT + 1) * STAGGER_MS} className="mt-6 block">
+        <ActionButton type="submit" fullWidth>
           {CTA_CONTACT.form.submitLabel}
-        </button>
+        </ActionButton>
       </Reveal>
 
       <p className="pt-4 text-center text-xs" style={{ color: `${CREAM}99` }}>

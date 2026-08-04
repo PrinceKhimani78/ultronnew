@@ -1,5 +1,6 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Card } from '@/components/ui/Card';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -35,7 +36,10 @@ export function ComplexCases() {
             <Reveal
               as="li"
               key={item.title}
-              delay={Math.floor(index / 2) * 0.08}
+              // Per card, not per row. The pair in each row previously shared a
+              // delay and arrived together, which the brief rules out.
+              delay={index * STAGGER_MS}
+              amount={0.1}
               className="h-full"
             >
               <Card variant="inverted" className="h-full">

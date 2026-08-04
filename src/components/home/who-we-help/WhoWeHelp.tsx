@@ -1,4 +1,5 @@
 import { Container } from '@/components/layout/Container';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { BandEyebrow } from '@/components/ui/BandEyebrow';
@@ -51,12 +52,14 @@ export function WhoWeHelpSection() {
           heading, which is why there is no top offset on it.
         */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
-          {/* Header: fade with a slight upward reveal. */}
-          <Reveal variant="text">
+          {/* Band head: eyebrow and heading first, supporting copy next, the
+              button last — the same three-beat order every section on the site
+              uses. */}
+          <Reveal>
             <BandEyebrow>{WHO_WE_HELP_HEADER.eyebrow}</BandEyebrow>
             <h2
               id="who-we-help-heading"
-              className="font-display mt-3 text-[clamp(2rem,4.6vw,48px)] leading-[100%] font-bold tracking-[-0.017em] text-black"
+              className="font-display mt-3 text-[32px] leading-[100%] font-semibold tracking-[-0.017em] text-black sm:text-[40px] lg:text-[48px]"
             >
               {WHO_WE_HELP_HEADER.heading.map((segment, index) => (
                 <span
@@ -69,21 +72,12 @@ export function WhoWeHelpSection() {
             </h2>
           </Reveal>
 
-          {/* Intro: a plain fade, then the button last. */}
-          <Reveal
-            variant="text"
-            direction="none"
-            delay={0.1}
-            className="lg:w-[428px] lg:shrink-0"
-          >
+          <Reveal delay={STAGGER_MS} className="lg:w-[428px] lg:shrink-0">
             <p className="text-[16px] leading-[150%] font-normal text-black">
               {WHO_WE_HELP_HEADER.body}
             </p>
-            <Reveal variant="button" delay={0.22} className="mt-8 inline-block">
-              <ActionButton
-                href={WHO_WE_HELP_HEADER.cta.href}
-                variant="outline"
-              >
+            <Reveal delay={STAGGER_MS * 2} className="mt-8 inline-block">
+              <ActionButton href={WHO_WE_HELP_HEADER.cta.href}>
                 {WHO_WE_HELP_HEADER.cta.label}
               </ActionButton>
             </Reveal>
@@ -91,27 +85,25 @@ export function WhoWeHelpSection() {
         </div>
 
         {/*
-          Card entrances follow the bento's own geometry, per the brief: the
-          leftmost track slides in from the left, the rightmost from the right,
-          and everything spanning the middle rises. Each card carries its own
-          index-derived delay rather than relying on `staggerChildren`, because
-          the right track is a nested flex column and Framer only sequences a
-          motion element's DIRECT variant children — cards 5 and 6 would drop out
-          of the sequence. An explicit delay is deterministic at any depth.
+          The six cards arrive one after another, in source order, 100ms apart.
+
+          Each card carries its own index-derived delay rather than sitting in a
+          `Stagger`: the right-hand track is a nested flex column, so cards 5 and
+          6 are not direct children of this grid and would drop out of a
+          positional sequence. An explicit index is deterministic at any depth,
+          and it keeps reveal order welded to reading order.
         */}
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-[72px] lg:grid-cols-[1.6fr_1.6fr_1.8fr] lg:gap-6">
           <WhoWeHelpCard
             item={card1}
             index={0}
-            direction="up"
             className="sm:col-span-2 lg:col-span-2"
           />
-          <WhoWeHelpCard item={card2} index={1} direction="left" />
-          <WhoWeHelpCard item={card3} index={2} direction="up" />
+          <WhoWeHelpCard item={card2} index={1} />
+          <WhoWeHelpCard item={card3} index={2} />
           <WhoWeHelpCard
             item={card4}
             index={3}
-            direction="up"
             className="sm:col-span-2 lg:col-span-2"
           />
 
@@ -121,16 +113,10 @@ export function WhoWeHelpSection() {
             source order, so 1–6 reads the same at every width.
           */}
           <div className="flex flex-col gap-5 sm:col-span-2 sm:flex-row lg:col-span-1 lg:col-start-3 lg:row-span-3 lg:row-start-1 lg:flex-col lg:gap-6">
-            <WhoWeHelpCard
-              item={card5}
-              index={4}
-              direction="right"
-              className="sm:flex-1"
-            />
+            <WhoWeHelpCard item={card5} index={4} className="sm:flex-1" />
             <WhoWeHelpCard
               item={card6}
               index={5}
-              direction="right"
               className="sm:flex-1 lg:flex-1"
             />
           </div>

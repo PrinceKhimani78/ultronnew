@@ -1,15 +1,5 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
-import {
-  STAGGER,
-  TRANSFORM_PERSPECTIVE,
-  VIEWPORT,
-  revealVariants,
-  type RevealDirection,
-} from '@/components/motion/config';
-import { useMotionScale } from '@/components/motion/useMotionScale';
+import { STAGGER_MS } from '@/components/motion/config';
+import { Reveal } from '@/components/motion/Reveal';
 import type { WhoWeHelpItem } from '@/content/who-we-help';
 import { cn } from '@/lib/utils';
 
@@ -18,11 +8,11 @@ import { cn } from '@/lib/utils';
  * teal edge, and an inset shadow biased down-left so the card reads as lifted
  * off the cream rather than merely outlined.
  *
- * The reveal lives on a WRAPPER, not on the card. Framer Motion writes an inline
- * `transform` while it animates, and an inline transform beats a Tailwind
- * `hover:-translate-y-*` class every time — putting both on one element is how
- * the hover lift silently stopped working. Splitting them lets the entrance
- * animation and the hover state each own a transform without a fight.
+ * The reveal lives on a WRAPPER, not on the card. The entrance animates a
+ * `transform`, and so does `hover:-translate-y-1.5` — putting both on one
+ * element is how the hover lift silently stopped working, because whichever
+ * declaration wins the cascade owns the whole property. Splitting them lets the
+ * entrance and the hover state each own a transform without a fight.
  */
 
 const CARD_CLASS = [
@@ -37,37 +27,19 @@ type WhoWeHelpCardProps = {
   item: WhoWeHelpItem;
   /** Position in the bento, 0-based. Drives the stagger delay. */
   index: number;
-  /** Which edge the card enters from. The bento's left/middle/right tracks. */
-  direction?: RevealDirection;
   /** Grid placement for this card's slot. Applied to the wrapper. */
   className?: string;
 };
 
-export function WhoWeHelpCard({
-  item,
-  index,
-  direction = 'up',
-  className,
-}: WhoWeHelpCardProps) {
-  const scale = useMotionScale();
-
+export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
   return (
-    <motion.div
-      data-reveal=""
-      // Not `Reveal`: this needs the outer wrapper to be the grid cell AND to
-      // stay a plain flex box for the hover split below, so it drives the shared
-      // variants directly rather than through the wrapper component.
-      variants={revealVariants({
-        kind: 'card',
-        direction,
-        scale,
-        delay: index * STAGGER.tight,
-      })}
-      initial="hidden"
-      whileInView="visible"
-      viewport={VIEWPORT}
-      style={{ transformPerspective: TRANSFORM_PERSPECTIVE }}
+    <Reveal
+      delay={index * STAGGER_MS}
       className={cn('flex', className)}
+      // The wrapper IS the grid cell, so it is often much taller than it is
+      // wide and the default 20% threshold can leave the last card in a tall
+      // column waiting. A tenth of a card is unambiguously on screen.
+      amount={0.1}
     >
       <div className={CARD_CLASS}>
         <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
@@ -77,6 +49,6 @@ export function WhoWeHelpCard({
           {item.description}
         </p>
       </div>
-    </motion.div>
+    </Reveal>
   );
 }

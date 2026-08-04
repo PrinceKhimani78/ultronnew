@@ -57,20 +57,19 @@ export default function RootLayout({
     >
       <head>
         {/*
-          Framer Motion serialises a reveal's `initial` state into an inline
-          style during SSR, so every animated block ships as `opacity: 0` and is
-          brought in by script. With scripting off nothing brings it in and the
-          page reads as blank — to a visitor, and to any crawler that renders
-          without executing JS.
+          Scroll reveals start hidden: `globals.css` sets `opacity: 0` on every
+          `[data-reveal]` that has not finished animating, and the only thing
+          that ever clears it is an IntersectionObserver callback. With scripting
+          off nothing clears it and the page reads as blank — to a visitor, and
+          to any crawler that renders without executing JS.
 
-          `!important` in a stylesheet outranks a non-important inline
-          declaration, which is exactly the case here, so this restores the whole
-          page the moment the browser knows JavaScript is unavailable. `filter`
-          is in the list because the section variant animates a blur, and an
-          un-cleared `blur(4px)` is just as unreadable as `opacity: 0`.
+          So the hidden state is retracted the moment the browser tells us
+          JavaScript is unavailable. `transform` and `animation` are in the list
+          too: without them a `[data-revealed]` rule elsewhere could still leave
+          an element displaced or mid-keyframe.
         */}
         <noscript>
-          <style>{`[data-reveal]{opacity:1!important;transform:none!important;filter:none!important}`}</style>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important;animation:none!important}`}</style>
         </noscript>
       </head>
       <body className="flex min-h-full flex-col" suppressHydrationWarning>

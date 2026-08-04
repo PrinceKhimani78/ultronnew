@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { FooterNavColumn } from '@/components/layout/FooterNav';
 import { Logo } from '@/components/layout/Logo';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import {
@@ -53,6 +54,21 @@ const BODY_COLOR = 'rgba(255,255,255,0.85)';
 /** Contact glyphs and NAP copy. Pure white — no muted typography in the footer. */
 const CONTACT_COLOR = '#FFFFFF';
 
+/**
+ * The footer's entrance order, as beats of `STAGGER_MS`.
+ *
+ * Logo, contact, the two nav columns, then the legal run-out — reading order,
+ * top to bottom and left to right. The nav columns take one beat each from
+ * `navColumn`, which is why that is a function rather than a number.
+ */
+const BEAT = {
+  logo: 0,
+  contact: STAGGER_MS,
+  navColumn: (index: number) => STAGGER_MS * (2 + index),
+  /** Two nav columns, so the run-out sits one beat past the second. */
+  closing: STAGGER_MS * 4,
+} as const;
+
 export function Footer() {
   return (
     <footer
@@ -67,12 +83,12 @@ export function Footer() {
           wide of the comp.
         */}
         {/*
-          The footer arrives rather than appearing. `text` is the gentlest
-          variant in the system — a 24px rise, no tilt, no blur — which is what
-          the brief's "should NOT suddenly appear" asks for at the very bottom of
-          a long scroll, where anything more emphatic reads as a second hero.
+          The footer arrives rather than appearing — the same subtle rise as
+          every other block on the site, which is what the brief's "should NOT
+          suddenly appear" asks for at the bottom of a long scroll, where
+          anything more emphatic reads as a second hero.
         */}
-        <Reveal variant="text" direction="none">
+        <Reveal delay={BEAT.logo}>
           <Link href="/" aria-label={`${SITE.name} — home`} className="block">
             <Logo
               tone="cream"
@@ -83,15 +99,18 @@ export function Footer() {
 
         <div className="mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[565px_254px_minmax(0,1fr)] xl:gap-0">
           <address className="not-italic">
-            <Reveal variant="text" delay={0.08}>
+            <Reveal delay={BEAT.contact}>
               <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
                 Contact Us
               </h2>
             </Reveal>
-            {/* Stagger renders the list itself, so the NAP layout is unchanged. */}
+            {/* Stagger renders the list itself, so the NAP layout is unchanged.
+                The three lines follow their own heading rather than landing
+                with it, at a half beat so the block still reads as one unit. */}
             <Stagger
               as="ul"
-              delayChildren={0.12}
+              delay={BEAT.contact + STAGGER_MS / 2}
+              step={STAGGER_MS / 2}
               className="flex flex-col gap-4"
               // Colour stays on the list. The contact glyphs are stroked with
               // `currentColor` and inherit it from here, so one declaration
@@ -101,7 +120,6 @@ export function Footer() {
             >
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <LocationGlyph />
@@ -111,7 +129,6 @@ export function Footer() {
               </StaggerItem>
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <MailGlyph />
@@ -124,7 +141,6 @@ export function Footer() {
               </StaggerItem>
               <StaggerItem
                 as="li"
-                variant="text"
                 className="flex items-start justify-center gap-3 sm:justify-start"
               >
                 <PhoneGlyph />
@@ -145,12 +161,12 @@ export function Footer() {
               items={column.items}
               // The two link columns follow the contact block, one after the
               // other, rather than all three landing at once.
-              delay={0.16 + index * 0.08}
+              delay={BEAT.navColumn(index)}
             />
           ))}
         </div>
 
-        <Reveal variant="text" direction="none" delay={0.1} className="mt-14">
+        <Reveal delay={BEAT.closing} className="mt-14">
           <p className="text-surface/45 mx-auto max-w-4xl text-center text-xs leading-relaxed sm:mx-0 sm:text-left">
             {FOOTER_DISCLAIMER}
           </p>
@@ -161,14 +177,16 @@ export function Footer() {
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* The comp insets the bottom bar 25px inside the rule on both ends. */}
-        <div
+        {/* The comp insets the bottom bar 25px inside the rule on both ends.
+            Last beat on the page, and the quietest. */}
+        <Reveal
+          delay={BEAT.closing}
           className="flex flex-col items-center gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:justify-between sm:text-left xl:px-[25px]"
           style={{ color: BODY_COLOR }}
         >
           <span>All rights reserved by {SITE.legalName}</span>
           <span>Copyrights &copy; {SITE.builtBy}</span>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

@@ -1,5 +1,6 @@
 import { ConsultationForm } from '@/components/home/ConsultationForm';
 import { Container } from '@/components/layout/Container';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { BandEyebrow } from '@/components/ui/BandEyebrow';
@@ -30,12 +31,8 @@ export function CtaContact() {
     >
       <Container width="wide">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[62px]">
-          {/* Left content enters from the left, the form from the right. */}
-          <Reveal
-            variant="text"
-            direction="left"
-            className="lg:w-[394px] lg:shrink-0 lg:pt-[13px]"
-          >
+          {/* Proposition first, then the form it argues for. */}
+          <Reveal className="lg:w-[394px] lg:shrink-0 lg:pt-[13px]">
             <BandEyebrow>{CTA_CONTACT.eyebrow}</BandEyebrow>
             <h2
               id="contact-heading"
@@ -55,20 +52,24 @@ export function CtaContact() {
             </p>
             {/* Button last, after the copy it belongs to has landed. */}
             <Reveal
-              variant="button"
-              delay={0.24}
+              delay={STAGGER_MS * 2}
               className="mt-8 inline-block lg:mt-[40px]"
             >
-              <ActionButton href={CTA_CONTACT.cta.href} radius="rounded">
+              <ActionButton href={CTA_CONTACT.cta.href}>
                 {CTA_CONTACT.cta.label}
               </ActionButton>
             </Reveal>
           </Reveal>
 
+          {/*
+            The panel arrives as one object; its fields then sequence inside it.
+            `amount` is dropped low because the form is the tallest single
+            element on the page and, on a laptop viewport, a fifth of it is
+            below the fold at the moment the reader would say it had appeared.
+          */}
           <Reveal
-            variant="card"
-            direction="right"
-            delay={0.08}
+            delay={STAGGER_MS}
+            amount={0.1}
             className="w-full lg:w-[630px] lg:shrink-0"
           >
             <ConsultationForm />

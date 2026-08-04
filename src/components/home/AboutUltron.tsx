@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ABOUT } from '@/content/home';
@@ -24,7 +25,7 @@ export function AboutUltron() {
             />
           </Reveal>
 
-          <Reveal delay={0.1} className="lg:col-span-6">
+          <Reveal delay={STAGGER_MS} className="lg:col-span-6">
             <div className="space-y-6">
               {ABOUT.body.map((paragraph) => (
                 <p

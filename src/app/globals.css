@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'animate.css';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Design tokens
@@ -225,17 +226,6 @@
     );
   }
 
-  /* `[data-reveal]` carries NO animation.
-
-     Scroll reveals are owned entirely by `components/motion/*`, which drives
-     them on the compositor through Framer Motion. A `transition` here would run
-     against Framer's own rAF loop on the same properties and produce a visible
-     double-ease, so the rule that used to live here is deliberately gone.
-
-     The attribute survives for one job: it is the selector the `<noscript>`
-     block in the root layout uses to force every element visible when Framer's
-     inline `opacity: 0` would otherwise be permanent. */
-
   /* Concentric outlines. Centred by `inset: 0; margin: auto` rather than a
      translate, because these get animated with `transform: scale()` and a
      centring transform would be overwritten by the first keyframe. */
@@ -247,6 +237,84 @@
     border-radius: 9999px;
     border: 1px solid rgb(3 85 81 / 0.13);
     pointer-events: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scroll reveal
+
+   One animation for the whole site: Animate.css `fadeInUp`, driven by the
+   IntersectionObserver in `components/motion/*`. Every reveal on every page
+   resolves to the three declarations below, so the site has one entrance
+   gesture rather than a per-section dialect.
+
+   These rules sit OUTSIDE `@layer` on purpose. `@import 'tailwindcss'` puts its
+   own output in cascade layers, and unlayered rules outrank layered ones
+   regardless of specificity — which is what lets a single unprefixed
+   `.animate__animated` override Animate.css's defaults without `!important`.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Animate.css ships 1s. The brief specifies 0.8s. */
+  --animate-duration: 0.8s;
+
+  /* How far an element rises. The brief's range is 20–30px.
+
+     This is the entire reason `fadeInUp` is redefined below: stock Animate.css
+     translates by `100%` — a full element height, so a 600px band would fly in
+     from 600px down. That is the "dramatic slide from the bottom" the brief
+     rules out. A fixed pixel distance is the same subtle rise whether it is
+     applied to a 40px button or a 900px section. */
+  --reveal-distance: 24px;
+}
+
+/* Redefining a keyframe name that Animate.css already defined. The last
+   definition of a given name wins, so this replaces the 100% travel wholesale
+   while `.animate__fadeInUp` keeps pointing at it — the class names in the
+   markup stay exactly the ones Animate.css documents. */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    /* `translate3d`, not `translateY`: it promotes the element to its own
+       compositor layer, so the rise never touches layout or paint. */
+    transform: translate3d(0, var(--reveal-distance), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate__animated {
+  /* Animate.css leaves the timing function at the initial `ease`, which is
+     symmetric and reads as a slideshow. `ease-out` front-loads the movement so
+     the element decelerates into place — the brief's "premium, elegant". */
+  animation-timing-function: ease-out;
+  /* `both` is what makes a staggered delay work: during the delay the element
+     holds the `from` frame rather than sitting visible and then jumping. */
+  animation-fill-mode: both;
+}
+
+/* The pre-reveal state.
+
+   Scoped to `:not([data-revealed])` so it releases the moment the observer has
+   fired and the animation has ended. That is the brief's "remove hidden state
+   after animation": once an element carries `data-revealed` it is governed by
+   nothing in this block, holds no animation and occupies no compositor layer.
+
+   It is an attribute rather than a class because it must be present in the
+   server-rendered HTML — see the `<noscript>` fallback in `app/layout.tsx`. */
+[data-reveal]:not([data-revealed]) {
+  opacity: 0;
+}
+
+/* Phones get the low end of the brief's range. Less travel on a short viewport
+   keeps the rise inside the reader's field of view instead of running the
+   length of the screen. */
+@media (max-width: 639px) {
+  :root {
+    --reveal-distance: 18px;
   }
 }
 
@@ -263,17 +331,17 @@
     scroll-behavior: auto;
   }
 
-  /* A belt-and-braces backstop for reveals.
-     `useMotionScale` already returns 0 under this preference, which collapses
-     every transform to its resting value and leaves a plain fade — that is the
-     honest reading of the request, since the visitor asked for less movement,
-     not for no signal that something arrived. This rule covers the window before
-     hydration, when Framer's SSR-inlined `initial` is on the element and no
-     JavaScript has run to reconsider it. */
+  /* Reveals collapse to nothing at all.
+
+     This has to force `opacity` as well as `animation`, and the reason is the
+     `[data-reveal]:not([data-revealed])` rule above: killing the animation
+     alone would leave every un-revealed element sitting at `opacity: 0`
+     permanently, so a visitor who asked for less motion would get a blank page.
+     The content is simply present from the start. */
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
-    filter: none !important;
+    animation: none !important;
   }
 
   *,

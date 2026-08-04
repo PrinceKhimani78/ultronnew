@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import type { NavItem } from '@/content/site';
@@ -39,7 +40,10 @@ export function FooterNavColumn({
 }: {
   heading: string;
   items: readonly (NavItem & { pending?: boolean })[];
-  /** Offsets this column against its siblings so the three do not land together. */
+  /**
+   * Milliseconds. Offsets this column against its siblings so the three do not
+   * land together.
+   */
   delay?: number;
 }) {
   const pathname = usePathname();
@@ -47,7 +51,7 @@ export function FooterNavColumn({
 
   return (
     <nav aria-labelledby={headingId}>
-      <Reveal variant="text" delay={delay}>
+      <Reveal delay={delay}>
         <h2
           id={headingId}
           className="mb-7 text-[18px] leading-tight font-semibold text-white"
@@ -56,19 +60,25 @@ export function FooterNavColumn({
         </h2>
       </Reveal>
       {/*
-        Links arrive one after another. `Stagger` renders this `<ul>` itself, so
-        the 2px pitch that carries the comp's 32px rhythm is untouched.
+        Links arrive one after another, at a half beat. `Stagger` renders this
+        `<ul>` itself, so the 2px pitch that carries the comp's 32px rhythm is
+        untouched.
+
+        Half rather than a full beat because these columns run to six items: at
+        the full 100ms the last link of the Services column would land most of a
+        second after its own heading, which reads as the list still loading.
       */}
       <Stagger
         as="ul"
-        delayChildren={delay + 0.06}
+        delay={delay + STAGGER_MS / 2}
+        step={STAGGER_MS / 2}
         className="flex flex-col gap-[2px]"
       >
         {items.map((item) => {
           const isCurrent = isCurrentRoute(item.href, pathname);
 
           return (
-            <StaggerItem as="li" variant="text" key={item.label}>
+            <StaggerItem as="li" key={item.label}>
               {item.pending ? (
                 // A footer link into a 404 is worse than a non-link.
                 <span

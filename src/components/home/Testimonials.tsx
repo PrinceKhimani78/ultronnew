@@ -1,5 +1,6 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Card } from '@/components/ui/Card';
 import { TESTIMONIALS, TESTIMONIALS_INTRO } from '@/content/testimonials';
@@ -38,7 +39,8 @@ export function Testimonials() {
             <Reveal
               as="li"
               key={testimonial.attribution}
-              delay={index * 0.06}
+              delay={index * STAGGER_MS}
+              amount={0.1}
               className="h-full"
             >
               <Card variant="raised" className="h-full">

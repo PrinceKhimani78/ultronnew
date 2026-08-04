@@ -1,5 +1,6 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import {
   Accordion,
@@ -39,11 +40,25 @@ export function Faq() {
 
           <div className="lg:col-span-8">
             <Accordion type="multiple">
-              {FAQ_ITEMS.map((item) => (
-                <AccordionItem key={item.question} value={item.question}>
-                  <AccordionTrigger>{item.question}</AccordionTrigger>
-                  <AccordionContent>{item.answer}</AccordionContent>
-                </AccordionItem>
+              {/*
+                One question at a time, per the brief. The reveal wraps the item
+                rather than replacing it: `AccordionItem` carries the `border-b`
+                that draws the rule between questions, and the disclosure
+                animation is its own — `Reveal` only reacts to `animationend`
+                events fired by the wrapper itself, so an answer opening never
+                registers as the row finishing its entrance.
+              */}
+              {FAQ_ITEMS.map((item, index) => (
+                <Reveal
+                  key={item.question}
+                  delay={index * STAGGER_MS}
+                  amount={0.1}
+                >
+                  <AccordionItem value={item.question}>
+                    <AccordionTrigger>{item.question}</AccordionTrigger>
+                    <AccordionContent>{item.answer}</AccordionContent>
+                  </AccordionItem>
+                </Reveal>
               ))}
             </Accordion>
           </div>

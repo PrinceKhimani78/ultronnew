@@ -1,8 +1,6 @@
-import Link from 'next/link';
-
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import { Button } from '@/components/ui/Button';
+import { ActionButton } from '@/components/ui/ActionButton';
 
 /**
  * 404. Styled rather than default, because an unstyled framework error page on
@@ -24,9 +22,7 @@ export default function NotFound() {
             else is where you left it.
           </p>
           <div className="mt-10">
-            <Button asChild size="lg">
-              <Link href="/">Back to the home page</Link>
-            </Button>
+            <ActionButton href="/">Back to the home page</ActionButton>
           </div>
         </Container>
       </Section>

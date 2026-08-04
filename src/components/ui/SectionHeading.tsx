@@ -60,7 +60,7 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        'flex items-center gap-3 text-xs font-medium tracking-[0.2em] uppercase',
+        'flex items-center gap-3 text-[16px] leading-none font-normal tracking-[0.08em] uppercase',
         align === 'center' && 'justify-center',
         inverted ? 'text-surface/70' : 'text-brand-bright',
       )}
@@ -138,7 +138,7 @@ export function SectionHeading({
 
       <Heading
         className={cn(
-          'font-display mt-4 text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.15] font-semibold tracking-[-0.02em]',
+          'font-display mt-4 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] sm:text-[40px] lg:text-[48px]',
           inverted ? 'text-surface' : 'text-ink',
         )}
       >

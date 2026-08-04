@@ -1,8 +1,9 @@
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { ServiceTabs } from '@/components/home/ServiceTabs';
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
-import { Button } from '@/components/ui/Button';
+import { ActionButton } from '@/components/ui/ActionButton';
 import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SERVICES_INTRO } from '@/content/home';
 
@@ -30,15 +31,20 @@ export function CoreServices() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 lg:mt-12">
+        {/* Heading, then the tab panel, then the CTA — the section's three
+            beats, matching every other band on the site. */}
+        <Reveal delay={STAGGER_MS} amount={0.1} className="mt-10 lg:mt-12">
           <ServiceTabs />
-        </div>
+        </Reveal>
 
-        <div className="mt-10 flex justify-center lg:mt-12">
-          <Button asChild size="lg" arrow>
-            <a href={SERVICES_INTRO.cta.href}>{SERVICES_INTRO.cta.label}</a>
-          </Button>
-        </div>
+        <Reveal
+          delay={STAGGER_MS * 2}
+          className="mt-10 flex justify-center lg:mt-12"
+        >
+          <ActionButton href={SERVICES_INTRO.cta.href}>
+            {SERVICES_INTRO.cta.label}
+          </ActionButton>
+        </Reveal>
       </Container>
     </Section>
   );

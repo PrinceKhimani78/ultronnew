@@ -1,8 +1,8 @@
 import Image from 'next/image';
 
+import { STAGGER_MS } from '@/components/motion/config';
 import { Parallax } from '@/components/motion/Parallax';
 import { Reveal } from '@/components/motion/Reveal';
-import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 
 import {
   DESIGN_CREAM,
@@ -28,6 +28,23 @@ import { STAT_ICONS } from './icons';
  * defines no layout other than 1280 (support.js contains no media queries,
  * no scaling and no breakpoints).
  */
+
+/**
+ * The hero's entrance order, as beats of `STAGGER_MS`.
+ *
+ * Deliberately the same shape as `BEAT` in `home/Hero.tsx`. The preview route
+ * and the live home page were required to be indistinguishable, and that has to
+ * include how they open — a divergence here would show up as the two heroes
+ * arriving in a different order.
+ */
+const BEAT = {
+  heading: 0,
+  stats: STAGGER_MS,
+  body: STAGGER_MS * 2,
+  cta: STAGGER_MS * 3,
+  image: STAGGER_MS * 4,
+} as const;
+
 export function DesignHero() {
   return (
     <section
@@ -45,7 +62,7 @@ export function DesignHero() {
       <DesignContainer className="pt-10 pb-0 sm:pt-14 lg:pt-[102px]">
         <div className="mx-auto flex max-w-[1150px] flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 xl:gap-6">
           <div className="w-full lg:w-[670px] lg:shrink-0 xl:w-[700px]">
-            <Reveal variant="text">
+            <Reveal delay={0}>
               <h1
                 id="design-hero-heading"
                 className="m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em]"
@@ -65,17 +82,18 @@ export function DesignHero() {
               nothing to split into a separate <dt>. The whole string is the
               term; the icon is decoration.
             */}
-            <Stagger
+            {/* One beat, not three — see the note on the same strip in
+                `home/Hero.tsx`. The two must stay identical. */}
+            <Reveal
               as="ul"
-              delayChildren={0.12}
+              delay={BEAT.stats}
               className="mt-[34px] flex w-full flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0"
               style={{ backgroundColor: '#FEFDF2', minHeight: 156 }}
             >
               {HERO.stats.map((stat, index) => {
                 const Icon = STAT_ICONS[stat.icon];
                 return (
-                  <StaggerItem
-                    as="li"
+                  <li
                     key={stat.label}
                     className="flex flex-1 items-center sm:py-[28px]"
                   >
@@ -101,12 +119,12 @@ export function DesignHero() {
                         {stat.label}
                       </span>
                     </div>
-                  </StaggerItem>
+                  </li>
                 );
               })}
-            </Stagger>
+            </Reveal>
 
-            <Reveal variant="text" delay={0.08} className="mt-[58px]">
+            <Reveal delay={BEAT.body} className="mt-[58px]">
               <p className="w-full text-[20px] leading-[130%] font-medium text-black lg:leading-[100%]">
                 {HERO.body}
               </p>
@@ -120,7 +138,7 @@ export function DesignHero() {
             distance={24}
             className="flex justify-center lg:mt-[-40px] lg:block lg:w-[441px] lg:shrink-0"
           >
-            <Reveal variant="image">
+            <Reveal delay={BEAT.image}>
               <Image
                 src="/assets/home-design-preview/hero-monogram.webp"
                 alt=""
@@ -149,7 +167,7 @@ export function DesignHero() {
         }}
       >
         <DesignContainer>
-          <Reveal variant="button" delay={0.16} className="inline-block">
+          <Reveal delay={BEAT.cta} className="inline-block">
             <DesignButton href="#design-services">{HERO.cta}</DesignButton>
           </Reveal>
         </DesignContainer>

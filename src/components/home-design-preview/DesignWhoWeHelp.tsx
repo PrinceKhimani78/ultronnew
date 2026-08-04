@@ -1,3 +1,4 @@
+import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 
 import {
@@ -45,21 +46,19 @@ function Card({
   body,
   className,
   index = 0,
-  direction = 'up',
 }: {
   title: string;
   body: string;
   className?: string;
-  /** Position in the bento. Drives the 80ms stagger. */
+  /** Position in the bento, 0-based. Drives the stagger delay. */
   index?: number;
-  /** Which edge the card enters from — left track, middle, or right track. */
-  direction?: 'up' | 'left' | 'right';
 }) {
   return (
     <Reveal
-      variant="card"
-      direction={direction}
-      delay={index * 0.08}
+      delay={index * STAGGER_MS}
+      // A bento cell is often much taller than it is wide, and the default 20%
+      // can leave the last card in a tall column waiting.
+      amount={0.1}
       className={`${CARD_CLASS} ${className ?? ''}`}
     >
       <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
@@ -93,7 +92,7 @@ export function DesignWhoWeHelp() {
           heading, which is why there is no top offset on it.
         */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
-          <Reveal variant="text">
+          <Reveal>
             <DesignEyebrow>{WHO_WE_HELP.eyebrow}</DesignEyebrow>
             <h2
               id="design-who-heading"
@@ -103,17 +102,12 @@ export function DesignWhoWeHelp() {
             </h2>
           </Reveal>
 
-          <Reveal
-            variant="text"
-            direction="none"
-            delay={0.1}
-            className="lg:w-[428px] lg:shrink-0"
-          >
+          <Reveal delay={STAGGER_MS} className="lg:w-[428px] lg:shrink-0">
             <p className="text-[16px] leading-[150%] font-normal text-black">
               {WHO_WE_HELP.body}
             </p>
-            <Reveal variant="button" delay={0.22} className="mt-8 inline-block">
-              <DesignButton href="#design-contact" variant="outline">
+            <Reveal delay={STAGGER_MS * 2} className="mt-8 inline-block">
+              <DesignButton href="#design-contact">
                 {WHO_WE_HELP.cta}
               </DesignButton>
             </Reveal>
@@ -131,26 +125,14 @@ export function DesignWhoWeHelp() {
             title={card1.title}
             body={card1.body}
             index={0}
-            direction="up"
             className="sm:col-span-2 lg:col-span-2"
           />
-          <Card
-            title={card2.title}
-            body={card2.body}
-            index={1}
-            direction="left"
-          />
-          <Card
-            title={card3.title}
-            body={card3.body}
-            index={2}
-            direction="up"
-          />
+          <Card title={card2.title} body={card2.body} index={1} />
+          <Card title={card3.title} body={card3.body} index={2} />
           <Card
             title={card4.title}
             body={card4.body}
             index={3}
-            direction="up"
             className="sm:col-span-2 lg:col-span-2"
           />
 
@@ -170,14 +152,12 @@ export function DesignWhoWeHelp() {
               title={card5.title}
               body={card5.body}
               index={4}
-              direction="right"
               className="sm:flex-1"
             />
             <Card
               title={card6.title}
               body={card6.body}
               index={5}
-              direction="right"
               className="sm:flex-1 lg:flex-1"
             />
           </div>
