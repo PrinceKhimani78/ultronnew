@@ -35,7 +35,7 @@ export function ServicesHero() {
             happens to be wider than the shell's content box. */}
         <div className="relative flex w-full items-center justify-center">
           {/* Centered Hero Heading & Description */}
-          <div className="relative z-10 mx-auto w-full max-w-[620px] text-center">
+          <div className="relative z-10 mx-auto w-full max-w-[620px] text-end">
             {/* Heading, body, monogram — the same 100ms sequence the home
                 hero uses, so the two landing pages open the same way. */}
             <Reveal>

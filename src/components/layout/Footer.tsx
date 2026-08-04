@@ -73,31 +73,9 @@ export function Footer() {
   return (
     <footer
       data-header-tone="dark"
-      className="bg-brand-panel text-surface overflow-hidden pt-14 pb-8 lg:pt-[84px] lg:pb-10"
+      className="text-surface overflow-hidden bg-[#154B47] pt-12 pb-8 lg:pt-[84px] lg:pb-10"
     >
-      {/*
-        The same shell as every band above it. It previously carried its own
-        1280px box and a 105px desktop inset, which put the footer's left edge
-        on a different vertical line from the content and from the header logo —
-        the footer was the single worst offender on the page.
-
-        The column origins below are unchanged: they are absolute offsets from
-        the content line, so widening the measure gives the last column more
-        trailing room without moving where any column starts.
-      */}
       <div className="page-shell">
-        {/*
-          Width pinned rather than height: the lockup is ratio 3.62 against the
-          comp's 3.41, so height follows at 99px. Matching the drawn width keeps
-          the block's footprint right; matching the height would leave it 22px
-          wide of the comp.
-        */}
-        {/*
-          The footer arrives rather than appearing — the same subtle rise as
-          every other block on the site, which is what the brief's "should NOT
-          suddenly appear" asks for at the bottom of a long scroll, where
-          anything more emphatic reads as a second hero.
-        */}
         <Reveal delay={BEAT.logo}>
           <Link href="/" aria-label={`${SITE.name} — home`} className="block">
             <Logo
@@ -107,41 +85,35 @@ export function Footer() {
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[587px_364px_minmax(0,1fr)] xl:gap-0">
+        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[565px_254px_minmax(0,1fr)] xl:gap-0">
+          {/* Column 1: Contact Us */}
           <address className="not-italic">
             <Reveal delay={BEAT.contact}>
               <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
                 Contact Us
               </h2>
             </Reveal>
-            {/* Stagger renders the list itself, so the NAP layout is unchanged.
-                The three lines follow their own heading rather than landing
-                with it, at a half beat so the block still reads as one unit. */}
             <Stagger
               as="ul"
               delay={BEAT.contact + STAGGER_MS / 2}
               step={STAGGER_MS / 2}
               className="flex flex-col gap-4"
-              // Colour stays on the list. The contact glyphs are stroked with
-              // `currentColor` and inherit it from here, so one declaration
-              // holds the icons and the NAP copy to white — pushing it down to
-              // the text leaves would have silently left the icons behind.
               style={{ color: CONTACT_COLOR }}
             >
               <StaggerItem
                 as="li"
-                className="flex items-start justify-center gap-3 sm:justify-start"
+                className="flex items-start justify-start gap-3"
               >
-                <LocationGlyph />
+                <LocationGlyph className="text-[#DCCB8E]" />
                 <span className={`${BODY} max-w-[340px] text-left`}>
                   {SITE.address.streetAddress}
                 </span>
               </StaggerItem>
               <StaggerItem
                 as="li"
-                className="flex items-start justify-center gap-3 sm:justify-start"
+                className="flex items-start justify-start gap-3"
               >
-                <MailGlyph />
+                <MailGlyph className="text-[#DCCB8E]" />
                 <a
                   href={`mailto:${SITE.email}`}
                   className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
@@ -151,9 +123,9 @@ export function Footer() {
               </StaggerItem>
               <StaggerItem
                 as="li"
-                className="flex items-start justify-center gap-3 sm:justify-start"
+                className="flex items-start justify-start gap-3"
               >
-                <PhoneGlyph />
+                <PhoneGlyph className="text-[#DCCB8E]" />
                 <a
                   href={`tel:${SITE.telephone.replace(/\s/g, '')}`}
                   className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
@@ -164,40 +136,38 @@ export function Footer() {
             </Stagger>
           </address>
 
+          {/* Column 2 & 3: Quick Links and Services */}
           {FOOTER_NAV.map((column, index) => (
             <FooterNavColumn
               key={column.heading}
               heading={column.heading}
               items={column.items}
-              // The two link columns follow the contact block, one after the
-              // other, rather than all three landing at once.
               delay={BEAT.navColumn(index)}
             />
           ))}
         </div>
 
+        {/* Regulatory Disclaimer */}
         <Reveal delay={BEAT.closing} className="mt-14">
-          <p className="text-surface/45 mx-auto max-w-4xl text-center text-xs leading-relaxed sm:mx-0 sm:text-left">
+          <p className="text-surface/45 mx-auto max-w-4xl text-left text-xs leading-relaxed sm:mx-0">
             {FOOTER_DISCLAIMER}
           </p>
         </Reveal>
 
+        {/* Horizontal Divider Line */}
         <hr
           className="mt-6 mb-6 border-0"
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
         />
 
-        {/* Last beat on the page, and the quietest.
-
-            The 25px inset this used to carry at `xl` is gone: it put the
-            copyright row on its own vertical line, 25px right of every other
-            element in the footer. */}
+        {/* Bottom Bar: Left & Right Copyright text */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center justify-end gap-3 text-center text-[14px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:justify-end sm:text-right"
+          className="flex flex-col items-center justify-between gap-3 text-center text-[12px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:text-left sm:text-[13px]"
           style={{ color: BODY_COLOR }}
         >
-          <span>&copy; 2026 Ultron Financials. All Rights Reserved.</span>
+          <span>ALL RIGHTS RESERVED BY ULTRON FINANCIALS</span>
+          <span>COPYRIGHTS &copy; {SITE.builtBy.toUpperCase()}</span>
         </Reveal>
       </div>
     </footer>
