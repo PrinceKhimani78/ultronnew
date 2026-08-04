@@ -10,36 +10,29 @@ import { cn } from '@/lib/utils';
 
 type ServiceCardProps = {
   service: Service;
-  /**
-   * Which way the shadow leans. The catalogue is a two-up grid, so the left
-   * column leans left and the right column leans right.
-   */
   position?: 'left' | 'right' | 'center';
 };
 
-const SHADOW_CLASSES = {
-  left: 'card-shadow-left',
-  right: 'card-shadow-right',
-  center: 'card-shadow-center',
-} as const;
-
-export function ServiceCard({ service, position = 'left' }: ServiceCardProps) {
+export function ServiceCard({
+  service,
+  position: _position = 'left',
+}: ServiceCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const panelId = useId();
 
   return (
     <div
       className={cn(
-        // The teal hairline border and the teal inset shadow are gone: the card
-        // carries the shared golden shadow and nothing else. Radius, padding,
-        // the conic fill and the hover lift are unchanged.
         'flex h-full flex-col rounded-[20px] p-6 sm:p-8',
         'bg-[conic-gradient(from_180deg_at_50%_50%,#FDFBEE_0deg,#FFFFFF_160deg,#FDFBEE_320deg,#FDFBEE_360deg)]',
-        SHADOW_CLASSES[position],
         'ease-house transition-all duration-300 hover:-translate-y-1',
       )}
+      style={{
+        boxShadow:
+          'inset 4px -4px 4px 0px rgba(3, 85, 81, 0.25), 0 10px 25px rgba(0, 0, 0, 0.06)',
+      }}
     >
-      <h3 className="font-display text-base font-semibold tracking-tight">
+      <h3 className="font-display text-[20px] font-bold tracking-tight text-[#035551]">
         {service.headline}
       </h3>
 
@@ -75,17 +68,15 @@ export function ServiceCard({ service, position = 'left' }: ServiceCardProps) {
           aria-expanded={isOpen}
           aria-controls={panelId}
           className={cn(
-            'text-brand group flex items-center gap-2',
-            'text-xs font-semibold tracking-[0.1em] uppercase',
+            'group flex items-center gap-2 font-bold text-[#035551]',
+            'text-xs tracking-[0.05em] underline underline-offset-4',
             'ease-house hover:text-brand-bright transition-colors',
           )}
         >
-          {isOpen
-            ? SERVICES_PAGE.card.collapseLabel
-            : SERVICES_PAGE.card.expandLabel}
+          {isOpen ? 'View less' : 'View more'}
           <span
             aria-hidden="true"
-            className="bg-brand text-surface ease-house inline-flex h-6 w-6 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5"
+            className="ease-house inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#035551] text-[#FDFBEE] transition-transform duration-200 group-hover:translate-x-0.5"
           >
             <ArrowUpRight
               className={cn(
