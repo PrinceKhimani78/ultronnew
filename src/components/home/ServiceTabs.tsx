@@ -145,10 +145,13 @@ export function ServiceTabs() {
               {isActive && (
                 <div className="space-y-5 bg-white p-5">
                   <div>
-                    <h3 className="font-display text-lg font-bold text-[#035551]">
-                      {service.tagline}
+                    <h3 className="font-display text-[22px] font-bold text-[#035551]">
+                      {formattedNumber}. {service.title}
                     </h3>
-                    <p className="text-ink-muted mt-2 text-xs leading-relaxed">
+                    <h4 className="font-display mt-2 text-[16px] font-bold text-black">
+                      {service.headline}
+                    </h4>
+                    <p className="mt-2 text-[16px] leading-relaxed text-[#5A5A5A]">
                       {service.description}
                     </p>
                   </div>
@@ -164,17 +167,17 @@ export function ServiceTabs() {
                   </div>
 
                   <div>
-                    <p className="mb-3 text-xs font-semibold tracking-wider text-[#035551] uppercase">
-                      Key Benefits
+                    <p className="mb-3 text-[16px] font-bold tracking-wider text-[#A0A0A0] uppercase">
+                      KEY BENEFITS
                     </p>
                     <ul className="space-y-2.5">
                       {service.benefits.map((benefit) => (
                         <li
                           key={benefit}
-                          className="text-ink flex items-start gap-2.5 text-xs"
+                          className="flex items-start gap-2.5 text-[16px] leading-snug font-medium text-[#232323]"
                         >
-                          <span className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
-                            <Check className="h-2.5 w-2.5" />
+                          <span className="mt-0.5 inline-flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
+                            <Check className="h-3 w-3" />
                           </span>
                           <span>{benefit}</span>
                         </li>
@@ -212,14 +215,14 @@ export function ServiceTabs() {
             >
               {/* Header Section */}
               <div className="shrink-0 pb-4">
-                <h3 className="font-display text-[20px] leading-tight font-bold text-[#035551]">
+                <h3 className="font-display text-[22px] leading-tight font-bold text-[#035551]">
                   <span>{formattedNumber}. </span>
                   <span>{service.title}</span>
                 </h3>
-                <h4 className="font-display mt-3.5 text-[16px] leading-snug font-bold text-black sm:text-[18px]">
+                <h4 className="font-display mt-3.5 text-[18px] leading-snug font-bold text-black">
                   {service.headline}
                 </h4>
-                <p className="mt-2 text-[14px] leading-[1.6] font-normal text-[#5A5A5A]">
+                <p className="mt-2 text-[16px] leading-[1.6] font-normal text-[#5A5A5A]">
                   {service.description}
                 </p>
               </div>
@@ -239,14 +242,14 @@ export function ServiceTabs() {
 
                 {/* Right: Key Benefits List */}
                 <div className="md:col-span-7">
-                  <h5 className="font-display mb-3 text-[12px] font-bold tracking-[0.08em] text-[#A0A0A0] uppercase">
+                  <h5 className="font-display mb-3 text-[16px] font-bold tracking-[0.08em] text-[#A0A0A0] uppercase">
                     KEY BENEFITS
                   </h5>
                   <ul className="space-y-2.5">
                     {service.benefits.map((benefit) => (
                       <li
                         key={benefit}
-                        className="flex items-start gap-2.5 text-[14px] leading-snug font-semibold text-[#232323]"
+                        className="flex items-start gap-2.5 text-[16px] leading-snug font-medium text-[#232323]"
                       >
                         <span className="mt-0.5 inline-flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
                           <Check className="h-3 w-3" />
