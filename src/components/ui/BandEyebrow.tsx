@@ -3,17 +3,25 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
- * The section label that opens the cream bands — a short gold rule, then the
- * label at 16px.
+ * The section label that opens the cream bands — two hyphens, then the label at
+ * 16px.
  *
- * The comp draws this as a literal run of hyphens followed by two spaces
- * ("----  SERVING GLOBAL CLIENTS"). Reproduced as a drawn rule plus the label,
- * so the dashes are not read out as punctuation by a screen reader and the rule
- * scales with the type rather than depending on a glyph.
+ * The prefix is two literal U+002D HYPHEN-MINUS characters, not a drawn rule.
+ * It was a 1px-tall `<span>` with a background colour; the brief asks for real
+ * typed characters, so no border, pseudo-element or SVG stands in for them.
  *
- * Distinct from `SectionHeading`'s `Eyebrow`, which is the 12px uppercase
- * treatment the dark process band uses. Both appear in the design; this is not
- * a second opinion about the same element.
+ * They sit in an `aria-hidden` span for one reason: they are decoration, and a
+ * screen reader would otherwise announce them as punctuation before every
+ * section label on the site. The characters are still ordinary text in the DOM
+ * — `aria-hidden` hides them from assistive tech, it does not make them a
+ * pseudo-element.
+ *
+ * Colour is inherited rather than set, so the hyphens can never drift from the
+ * label they belong to.
+ *
+ * Distinct from `SectionHeading`'s `Eyebrow`, which is the uppercase treatment
+ * the dark process band uses. Both appear in the design; this is not a second
+ * opinion about the same element.
  */
 
 /** Brand teal green (#035551). */
@@ -38,11 +46,9 @@ export function BandEyebrow({
       )}
       style={{ color: BRAND }}
     >
-      <span
-        aria-hidden="true"
-        className="inline-block h-px w-8 shrink-0"
-        style={{ backgroundColor: BRAND }}
-      />
+      <span aria-hidden="true" className="shrink-0">
+        --
+      </span>
       {children}
     </p>
   );

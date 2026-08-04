@@ -164,14 +164,15 @@ export function HowUltronWorks() {
             announcements. */}
         <Reveal className="text-center">
           <p
-            className="font-display flex items-center justify-center gap-2.5 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
+            className="font-display flex items-center justify-center gap-2 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
             style={{ color: '#C9B37E' }}
           >
-            <span
-              aria-hidden="true"
-              className="inline-block h-px w-8 shrink-0"
-              style={{ backgroundColor: '#C9B37E' }}
-            />
+            {/* Two literal hyphens, not a drawn rule — see `BandEyebrow`.
+                `aria-hidden` keeps them from being announced as punctuation;
+                colour is inherited from the paragraph above. */}
+            <span aria-hidden="true" className="shrink-0">
+              --
+            </span>
             {PROCESS_INTRO.eyebrow}
           </p>
           <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-white sm:text-[40px] lg:text-[48px]">

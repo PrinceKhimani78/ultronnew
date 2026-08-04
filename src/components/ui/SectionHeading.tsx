@@ -35,16 +35,23 @@ type SectionHeadingProps = {
   children?: React.ReactNode;
 };
 
-/** The short rule the design draws before every eyebrow. */
-function EyebrowRule({ inverted }: { inverted: boolean }) {
+/**
+ * The two hyphens that open every eyebrow.
+ *
+ * Two literal U+002D HYPHEN-MINUS characters, replacing the 1px rule this used
+ * to draw. `aria-hidden` because they are decoration — without it every section
+ * label on the site would be announced with a punctuation prefix. They remain
+ * ordinary text nodes; nothing here is a pseudo-element, border or SVG.
+ *
+ * It takes no `inverted` prop any more: colour is inherited from the label, so
+ * the hyphens match it in both tones by construction rather than by keeping two
+ * colour lists in step.
+ */
+function EyebrowRule() {
   return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        'h-px w-6 shrink-0',
-        inverted ? 'bg-surface/50' : 'bg-brand-bright',
-      )}
-    />
+    <span aria-hidden="true" className="shrink-0">
+      --
+    </span>
   );
 }
 
@@ -60,12 +67,12 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        'flex items-center gap-3 text-[16px] leading-none font-normal tracking-[0.08em] uppercase',
+        'flex items-center gap-2 text-[16px] leading-none font-normal tracking-[0.08em] uppercase',
         align === 'center' && 'justify-center',
         inverted ? 'text-surface/70' : 'text-brand-bright',
       )}
     >
-      <EyebrowRule inverted={inverted} />
+      <EyebrowRule />
       {children}
     </p>
   );
