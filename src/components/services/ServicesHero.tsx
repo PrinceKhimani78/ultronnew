@@ -28,7 +28,7 @@ export function ServicesHero() {
     >
       <Container
         width="wide"
-        className="relative flex flex-col justify-center pt-[156px] pb-6 sm:pt-[172px] sm:pb-8 lg:pt-[184px] lg:pb-10"
+        className="relative flex flex-col justify-center pt-[210px] pb-10 sm:pt-[230px] sm:pb-12 lg:pt-[250px] lg:pb-14"
       >
         <div className="relative flex w-full items-center justify-center">
           {/* Centered Hero Heading & Description */}
