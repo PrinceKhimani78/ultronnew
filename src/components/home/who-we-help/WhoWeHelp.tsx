@@ -51,7 +51,7 @@ export function WhoWeHelpSection() {
           The right block's first line sits level with the eyebrow, not with the
           heading, which is why there is no top offset on it.
         */}
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-around lg:gap-16">
           {/* Band head: eyebrow and heading first, supporting copy next, the
               button last — the same three-beat order every section on the site
               uses. */}
