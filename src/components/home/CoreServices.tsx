@@ -1,10 +1,11 @@
+import Image from 'next/image';
+
+import { ServiceTabs } from '@/components/home/ServiceTabs';
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import { ServiceTabs } from '@/components/home/ServiceTabs';
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { ActionButton } from '@/components/ui/ActionButton';
-import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SERVICES_INTRO } from '@/content/home';
 
 /**
@@ -61,12 +62,30 @@ export function CoreServices() {
       tone="raised"
       className="relative overflow-hidden lg:py-16"
     >
+      {/* Bottom-left translucent monogram logo watermark */}
+      <div className="pointer-events-none absolute bottom-0 left-0 z-0 opacity-45">
+        <Image
+          src="/brand/services-monogram.png"
+          alt=""
+          aria-hidden="true"
+          width={240}
+          height={240}
+          className="h-auto w-36 object-contain sm:w-48 lg:w-56"
+        />
+      </div>
+
       <Container width="wide" className="relative z-10 flex flex-col">
         <Reveal className="text-center">
-          <Eyebrow align="center">{SERVICES_INTRO.eyebrow}</Eyebrow>
+          <p
+            className="font-display flex items-center justify-center gap-2.5 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
+            style={{ color: '#C9B37E' }}
+          >
+            <span aria-hidden="true">----</span>
+            <span>{SERVICES_INTRO.eyebrow}</span>
+          </p>
           {/* 48px flat at `lg` — the comp's size — rather than the clamp's
               52px ceiling. The clamp still governs every smaller viewport. */}
-          <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.25rem)] leading-[1.12] font-bold tracking-[-0.02em] text-[#121a18] lg:mt-[17px] lg:text-[48px]">
+          <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-[#121a18] sm:text-[40px] lg:text-[48px]">
             Our Core <span className="text-[#035551]">Services</span>
           </h2>
         </Reveal>

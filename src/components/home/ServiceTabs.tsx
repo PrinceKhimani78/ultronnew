@@ -211,28 +211,21 @@ export function ServiceTabs() {
               )}
             >
               {/* Header Section */}
-              <div className="shrink-0 border-b border-[#035551]/10 pb-6">
-                {/* 20px, the comp's size — it was 24px rising to 30px at `lg`,
-                    which pushed the card past the frame's 454px. */}
+              <div className="shrink-0 pb-4">
                 <h3 className="font-display text-[20px] leading-tight font-bold text-[#035551]">
                   <span>{formattedNumber}. </span>
-                  <span>{service.headline}</span>
+                  <span>{service.title}</span>
                 </h3>
-                <p className="font-display text-ink mt-3 text-base font-semibold">
-                  {service.tagline}
-                </p>
-                <p className="text-ink-muted mt-2 max-w-2xl text-sm leading-relaxed">
+                <h4 className="font-display mt-3.5 text-[16px] leading-snug font-bold text-black sm:text-[18px]">
+                  {service.headline}
+                </h4>
+                <p className="mt-2 text-[14px] leading-[1.6] font-normal text-[#5A5A5A]">
                   {service.description}
                 </p>
               </div>
 
-              {/* Lower Content Grid.
-
-                  `min-h-0` and `flex-1`: this row takes the card's remaining
-                  height and is allowed to shrink inside it. Without `min-h-0` a
-                  flex child refuses to go below its content size and the
-                  illustration would push the card past the frame's 454px. */}
-              <div className="mt-8 grid min-h-0 flex-1 items-center gap-8 md:grid-cols-12">
+              {/* Lower Content Grid */}
+              <div className="mt-4 grid min-h-0 flex-1 items-center gap-6 md:grid-cols-12 lg:mt-6">
                 {/* Left: 3D Brand Asset Illustration */}
                 <div className="flex h-full min-h-0 items-center justify-center p-2 md:col-span-5">
                   <Image
@@ -240,25 +233,25 @@ export function ServiceTabs() {
                     alt={service.title}
                     width={320}
                     height={240}
-                    className="h-auto max-h-full w-full max-w-[260px] object-contain transition-transform duration-300 hover:scale-105"
+                    className="h-auto max-h-full w-full max-w-[240px] object-contain transition-transform duration-300 hover:scale-105"
                   />
                 </div>
 
                 {/* Right: Key Benefits List */}
                 <div className="md:col-span-7">
-                  <h4 className="font-display mb-4 text-xs font-bold tracking-wider text-[#035551] uppercase">
-                    Key Benefits
-                  </h4>
-                  <ul className="space-y-3">
+                  <h5 className="font-display mb-3 text-[12px] font-bold tracking-[0.08em] text-[#A0A0A0] uppercase">
+                    KEY BENEFITS
+                  </h5>
+                  <ul className="space-y-2.5">
                     {service.benefits.map((benefit) => (
                       <li
                         key={benefit}
-                        className="text-ink flex items-start gap-3 text-sm font-medium"
+                        className="flex items-start gap-2.5 text-[14px] leading-snug font-semibold text-[#232323]"
                       >
-                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
+                        <span className="mt-0.5 inline-flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
                           <Check className="h-3 w-3" />
                         </span>
-                        <span className="leading-snug">{benefit}</span>
+                        <span>{benefit}</span>
                       </li>
                     ))}
                   </ul>

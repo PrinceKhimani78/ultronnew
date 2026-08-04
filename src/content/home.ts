@@ -116,14 +116,14 @@ export const WHO_WE_HELP = {
 } as const;
 
 export const SERVICES_INTRO = {
-  eyebrow: 'Our Core Services',
+  eyebrow: 'WHAT WE OFFER',
   heading: [
     { text: 'Our Core ' },
     { text: 'Services', accent: true },
   ] as readonly HeadingSegment[],
   description:
     'Specialised financial, banking and business advisory services designed for entrepreneurs, investors and companies operating in the UAE.',
-  cta: { label: 'Explore services', href: '#contact' },
+  cta: { label: 'VIEW MORE', href: '#contact' },
 } as const;
 
 export const ABOUT = {
