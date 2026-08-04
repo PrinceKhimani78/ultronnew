@@ -59,12 +59,9 @@ export function CoreServices() {
       id="services"
       spacing="default"
       tone="raised"
-      className="relative overflow-hidden lg:h-[792px] lg:py-0"
+      className="relative overflow-hidden lg:py-16"
     >
-      <Container
-        width="wide"
-        className="relative z-10 flex h-full flex-col lg:pt-[54px] lg:pb-[46px]"
-      >
+      <Container width="wide" className="relative z-10 flex flex-col">
         <Reveal className="text-center">
           <Eyebrow align="center">{SERVICES_INTRO.eyebrow}</Eyebrow>
           {/* 48px flat at `lg` — the comp's size — rather than the clamp's
@@ -75,20 +72,14 @@ export function CoreServices() {
         </Reveal>
 
         {/* Heading, then the tab panel, then the CTA — the section's three
-            beats, matching every other band on the site.
-
-            `lg:flex-1` is the load-bearing class: see the note above. */}
-        <Reveal
-          delay={STAGGER_MS}
-          amount={0.1}
-          className="mt-10 lg:mt-[63px] lg:min-h-0 lg:flex-1"
-        >
+            beats, matching every other band on the site. */}
+        <Reveal delay={STAGGER_MS} amount={0.1} className="mt-10 lg:mt-12">
           <ServiceTabs />
         </Reveal>
 
         <Reveal
           delay={STAGGER_MS * 2}
-          className="mt-10 flex shrink-0 justify-center lg:mt-[49px]"
+          className="mt-10 flex shrink-0 justify-center lg:mt-12"
         >
           <ActionButton href={SERVICES_INTRO.cta.href}>
             {SERVICES_INTRO.cta.label}

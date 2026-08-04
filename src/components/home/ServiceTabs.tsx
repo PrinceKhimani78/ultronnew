@@ -75,16 +75,7 @@ export function ServiceTabs() {
         aria-label="Our Core Services"
         aria-orientation="vertical"
         onKeyDown={onKeyDown}
-        /*
-          One bordered white plate with the tabs flush inside it, which is how
-          the comp draws it. `overflow-hidden` is what lets the active tab paint
-          its teal to the plate's edge and still be clipped by the radius, so no
-          corner leaks past the border.
-
-          The golden card shadow is deliberately NOT here: the comp gives this
-          plate a hairline border and no drop shadow.
-        */
-        className="hidden flex-col overflow-hidden rounded-lg border border-[#035551]/30 bg-white lg:flex"
+        className="hidden flex-col overflow-hidden rounded-[20px] border border-[#035551] bg-white shadow-[4px_4px_8px_2px_rgba(3,85,81,0.25)] lg:flex"
       >
         {SERVICES.map((service, index) => {
           const isActive = index === activeIndex;
@@ -101,16 +92,6 @@ export function ServiceTabs() {
               aria-controls={panelId(index)}
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
-              /*
-                55px a row: the comp's list is 329 tall across six tabs. The
-                divider is a `border-b` on every row but the last, so the rule
-                sits between tabs and never doubles against the plate's own
-                border.
-
-                Only `colors` transition. Transitioning `all` would animate the
-                border-colour change into a visible sweep as the active row
-                moves, which is more motion than the comp implies.
-              */
               className={cn(
                 'ease-house relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-[16px] font-semibold transition-colors duration-200',
                 'border-b border-[#035551]/15 last:border-b-0',
@@ -137,7 +118,7 @@ export function ServiceTabs() {
           return (
             <div
               key={service.slug}
-              className="card-shadow-center overflow-hidden rounded-[20px] bg-white"
+              className="overflow-hidden rounded-[20px] border border-[#035551] bg-white shadow-[4px_4px_8px_2px_rgba(3,85,81,0.25)]"
             >
               <button
                 type="button"
@@ -224,27 +205,8 @@ export function ServiceTabs() {
               aria-labelledby={tabId(index)}
               hidden={!isActive}
               tabIndex={0}
-              /*
-                The comp's card: white, a hairline teal border, a 16px radius
-                and no drop shadow. The golden `card-shadow-right` this used to
-                carry is gone — the comp does not draw one here, and the brief
-                is explicit that this card takes no extra styling.
-
-                `h-full` makes it fill the 454px the section reserves, so the
-                card's height is the design's rather than whatever its longest
-                service body happens to measure.
-
-                ⚠️ `overflow-y-auto`, NOT `overflow-hidden`. The comp's frame is
-                drawn with Financial Advisory, whose copy fits 454px with about
-                20px to spare. Business Banking is longer — a 199-character
-                description and a 105-character benefit against 134 and 59 —
-                and runs roughly 20px past the frame. `hidden` would silently
-                cut the last benefit off; `auto` keeps every word reachable and
-                engages on that one service only. The fix is to trim that copy,
-                not to widen the box: see the note in the section component.
-              */
               className={cn(
-                'ease-house h-full flex-col overflow-y-auto rounded-2xl border border-[#035551]/15 bg-white p-8 transition-opacity duration-300',
+                'ease-house h-full flex-col overflow-y-auto rounded-[20px] border border-[#035551] bg-white p-8 shadow-[4px_4px_8px_2px_rgba(3,85,81,0.25)] transition-opacity duration-300',
                 isActive ? 'flex opacity-100' : 'hidden opacity-0',
               )}
             >
