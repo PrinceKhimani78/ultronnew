@@ -306,17 +306,6 @@ export function Header() {
                                 service list to move up into the space the
                                 heading vacated.
                               */}
-                              <div className="border-surface/15 mb-1 flex items-center justify-end border-b px-3 pt-1.5 pb-2">
-                                <Link
-                                  href="/services"
-                                  onClick={() => setIsDropdownOpen(false)}
-                                  className="flex items-center gap-1 text-[0.65rem] font-semibold text-[#DCCB8E] uppercase hover:underline"
-                                >
-                                  All Services{' '}
-                                  <ArrowRight className="h-2.5 w-2.5" />
-                                </Link>
-                              </div>
-
                               <ul className="space-y-0.5" role="none">
                                 {SERVICES.map((s) => {
                                   const isSubCurrent = isCurrentRoute(
