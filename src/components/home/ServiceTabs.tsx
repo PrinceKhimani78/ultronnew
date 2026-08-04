@@ -75,7 +75,7 @@ export function ServiceTabs() {
         aria-label="Our Core Services"
         aria-orientation="vertical"
         onKeyDown={onKeyDown}
-        className="card-shadow-left hidden flex-col overflow-hidden rounded-[20px] border border-[#035551] bg-white lg:flex"
+        className="hidden flex-col overflow-hidden rounded-[20px] border border-[#035551] bg-white lg:flex"
       >
         {SERVICES.map((service, index) => {
           const isActive = index === activeIndex;
@@ -118,7 +118,7 @@ export function ServiceTabs() {
           return (
             <div
               key={service.slug}
-              className="card-shadow-center overflow-hidden rounded-[20px] border border-[#035551] bg-white"
+              className="overflow-hidden rounded-[20px] border border-[#035551] bg-white"
             >
               <button
                 type="button"
