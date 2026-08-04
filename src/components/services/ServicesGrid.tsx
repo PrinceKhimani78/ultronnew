@@ -49,7 +49,12 @@ export function ServicesGrid() {
               amount={0.1}
               className="h-full"
             >
-              <ServiceCard service={service} />
+              {/* Two-up grid: even indices sit in the left column, odd in the
+                  right, so each card's shadow leans away from the centre. */}
+              <ServiceCard
+                service={service}
+                position={index % 2 === 0 ? 'left' : 'right'}
+              />
             </Reveal>
           ))}
         </ul>

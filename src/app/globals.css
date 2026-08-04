@@ -170,7 +170,79 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Card shadow
+
+   ONE golden shadow for every card on the site, in three directions.
+
+   Geometry is the Figma step-card's drop shadow, transcribed from the inspect
+   panel: X 0, Y 20, blur 40, spread 0. The directional variants keep that Y,
+   blur and spread and only add an X, so a left card and a right card are
+   provably the same shadow leaning opposite ways rather than two shadows that
+   happen to look similar.
+
+   ⚠️ ONE DELIBERATE DEVIATION, and it is worth knowing about. Figma draws that
+   drop shadow as **#000000 at 20%**; the gold in the comp is the card's 5px
+   gradient BORDER, not its shadow. The brief asks for a golden shadow and no
+   golden border, so the colour here is #DCCB8E — and once the colour changes,
+   the opacity cannot stay at 20%. Black at 20% reads as a firm shadow on cream;
+   gold at 20% on #FDFBEE is very nearly invisible, because the two colours sit
+   close together in luminance. The alphas below are the smallest values that
+   still read as a shadow at this blur. To go literal-Figma instead, set
+   `--card-shadow-color` to `0 0 0` and both alphas to `0.2`.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* #DCCB8E — the brand sand, as channels so alpha can vary per variant. */
+  --card-shadow-color: 220 203 142;
+
+  /* The comp's drop-shadow geometry. */
+  --card-shadow-y: 20px;
+  --card-shadow-blur: 40px;
+  --card-shadow-x: 20px;
+
+  --card-shadow-alpha: 0.35;
+  --card-shadow-alpha-center: 0.28;
+
+  /* Stacked layout: no left or right to lean toward, so the shadow sits under
+     the card and is pulled in — a 40px blur under a full-width phone card
+     reads as haze rather than lift. */
+  --card-shadow-mobile: 0 12px 28px 0 rgb(var(--card-shadow-color) / 0.24);
+}
+
 @layer components {
+  /**
+   * Cards lean away from the page centre: the left column's shadow falls left,
+   * the right column's falls right, and anything spanning the middle gets the
+   * balanced one. Below 640px all three collapse to the same soft centred
+   * shadow, because in a single stacked column a sideways offset has no
+   * geometry behind it and reads as a mistake.
+   */
+  .card-shadow-left,
+  .card-shadow-right,
+  .card-shadow-center {
+    box-shadow: var(--card-shadow-mobile);
+  }
+
+  @media (min-width: 640px) {
+    .card-shadow-left {
+      box-shadow: calc(-1 * var(--card-shadow-x)) var(--card-shadow-y)
+        var(--card-shadow-blur) 0
+        rgb(var(--card-shadow-color) / var(--card-shadow-alpha));
+    }
+
+    .card-shadow-right {
+      box-shadow: var(--card-shadow-x) var(--card-shadow-y)
+        var(--card-shadow-blur) 0
+        rgb(var(--card-shadow-color) / var(--card-shadow-alpha));
+    }
+
+    .card-shadow-center {
+      box-shadow: 0 var(--card-shadow-y) var(--card-shadow-blur) 0
+        rgb(var(--card-shadow-color) / var(--card-shadow-alpha-center));
+    }
+  }
+
   /**
    * The shared shell. Every full-width band's inner wrapper uses this and
    * nothing else sets a page max-width or a page gutter.

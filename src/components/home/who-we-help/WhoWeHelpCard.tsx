@@ -20,12 +20,17 @@ type CardPosition = 'left' | 'right' | 'center';
 const BASE_CARD_CLASS =
   'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5';
 
+/**
+ * The site's one card shadow, in three directions — defined in `globals.css`.
+ *
+ * Nothing here restates a colour, blur or offset. Five near-identical gold
+ * values spread across five files is exactly how a shadow system stops matching
+ * itself, which is the state this replaced.
+ */
 const SHADOW_CLASSES: Record<CardPosition, string> = {
-  left: 'shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] sm:shadow-[-6px_6px_16px_0px_rgba(220,203,142,0.35)] hover:shadow-[-8px_8px_24px_0px_rgba(220,203,142,0.45)]',
-  right:
-    'shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] sm:shadow-[6px_6px_16px_0px_rgba(220,203,142,0.35)] hover:shadow-[8px_8px_24px_0px_rgba(220,203,142,0.45)]',
-  center:
-    'shadow-[0px_4px_16px_0px_rgba(220,203,142,0.30)] hover:shadow-[0px_6px_24px_0px_rgba(220,203,142,0.40)]',
+  left: 'card-shadow-left',
+  right: 'card-shadow-right',
+  center: 'card-shadow-center',
 };
 
 type WhoWeHelpCardProps = {

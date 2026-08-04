@@ -98,11 +98,12 @@ export function DesignContact() {
           <Reveal delay={STAGGER_MS} amount={0.1}>
             <form
               suppressHydrationWarning
-              className="w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
+              // Right-hand column, so the shadow leans right — the shared
+              // golden one, replacing the teal `4px 4px 8px 5px` it carried.
+              className="card-shadow-right w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
               style={{
                 backgroundImage:
                   'conic-gradient(from -46.16deg at 50% 50%, #035551 0deg, #058881 178.8deg, #035551 360deg)',
-                boxShadow: '4px 4px 8px 5px rgba(3,85,81,0.25)',
               }}
             >
               <Reveal className="mb-[30px]">

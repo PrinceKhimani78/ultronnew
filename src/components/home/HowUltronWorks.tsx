@@ -52,15 +52,18 @@ const BASE_CARD_PLATE =
   // Mobile fills its column up to the design's 360px ceiling; desktop pins to 306.
   'mx-auto max-w-[360px] lg:mx-0 lg:max-w-[306px] lg:min-h-[287px]';
 
-const LEFT_CARD_PLATE = cn(
-  BASE_CARD_PLATE,
-  'shadow-[0px_6px_16px_0px_rgba(220,203,142,0.25)] lg:shadow-[-6px_8px_24px_0px_rgba(220,203,142,0.38)]',
-);
+/**
+ * The timeline alternates sides, so each card leans away from the spine it
+ * hangs off. Both use the shared shadow from `globals.css` — the values are not
+ * restated here.
+ *
+ * The 5px gold gradient border on `BASE_CARD_PLATE` STAYS. It is the comp's own
+ * `#FFFFFF 5% → #DCCB8E` stroke, documented in the Figma inspect panel, and it
+ * is the card's chrome rather than a stand-in for a shadow.
+ */
+const LEFT_CARD_PLATE = cn(BASE_CARD_PLATE, 'card-shadow-left');
 
-const RIGHT_CARD_PLATE = cn(
-  BASE_CARD_PLATE,
-  'shadow-[0px_6px_16px_0px_rgba(220,203,142,0.25)] lg:shadow-[6px_8px_24px_0px_rgba(220,203,142,0.38)]',
-);
+const RIGHT_CARD_PLATE = cn(BASE_CARD_PLATE, 'card-shadow-right');
 
 /**
  * The white fill. Its radius is 15px, not 20px — the 20px in the panel is the

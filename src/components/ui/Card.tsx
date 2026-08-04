@@ -10,11 +10,15 @@ import { cn } from '@/lib/utils';
 const card = cva('rounded-2xl transition-shadow duration-300 ease-house', {
   variants: {
     variant: {
-      bordered: 'border border-line bg-surface-raised',
-      // Raised sits on the page without an outline. Used where a border would
-      // add a fourth line to an already busy grid.
-      raised: 'bg-surface-raised shadow-soft',
-      // For use inside a `Section tone="brand"` band only.
+      // The teal hairline is gone — cards carry the shared golden shadow and
+      // no visible border. `--color-line` still exists for rules and dividers,
+      // which is where a hairline in that colour does belong.
+      bordered: 'bg-surface-raised card-shadow-center',
+      // Raised sits on the page without an outline. `shadow-soft` was tinted
+      // with the brand teal; this is the same site-wide golden shadow.
+      raised: 'bg-surface-raised card-shadow-center',
+      // For use inside a `Section tone="brand"` band only. No golden shadow
+      // here: on a dark teal ground it reads as a glow, not a lift.
       inverted: 'border border-surface/15 bg-surface/5',
     },
     padding: {

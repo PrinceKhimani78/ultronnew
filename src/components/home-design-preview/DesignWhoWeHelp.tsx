@@ -32,26 +32,41 @@ import { WHO_WE_HELP } from './content';
  * DOM order stays 1–6, so the tablet and mobile reflows need no reordering.
  */
 
-/** Card chrome, per the comp: 18px radius, hairline teal edge, soft lift. */
+type CardPosition = 'left' | 'right' | 'center';
+
+/**
+ * Card chrome: 20px radius, white fill, and the shared golden shadow.
+ *
+ * The teal hairline border and the teal inset shadow are gone — the comp draws
+ * neither, and the brief is explicit that the card carries a shadow only.
+ * Radius, padding and the hover lift are untouched.
+ */
 const CARD_CLASS = [
   'flex flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7',
-  'border border-[rgba(3,85,81,0.08)]',
-  'shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
-  'transition-all duration-[250ms] ease-out',
-  'hover:-translate-y-1.5 hover:border-[#035551] hover:shadow-[inset_4px_-4px_6px_0px_rgba(3,85,81,0.35),0_18px_40px_rgba(3,85,81,0.14)]',
+  'transition-all duration-[250ms] ease-out hover:-translate-y-1.5',
 ].join(' ');
+
+/** One shadow, three directions. See `globals.css`. */
+const SHADOW_CLASSES: Record<CardPosition, string> = {
+  left: 'card-shadow-left',
+  right: 'card-shadow-right',
+  center: 'card-shadow-center',
+};
 
 function Card({
   title,
   body,
   className,
   index = 0,
+  position = 'left',
 }: {
   title: string;
   body: string;
   className?: string;
   /** Position in the bento, 0-based. Drives the stagger delay. */
   index?: number;
+  /** Which way the card's shadow leans. */
+  position?: CardPosition;
 }) {
   return (
     <Reveal
@@ -59,7 +74,7 @@ function Card({
       // A bento cell is often much taller than it is wide, and the default 20%
       // can leave the last card in a tall column waiting.
       amount={0.1}
-      className={`${CARD_CLASS} ${className ?? ''}`}
+      className={`${CARD_CLASS} ${SHADOW_CLASSES[position]} ${className ?? ''}`}
     >
       <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
         {title}
@@ -121,18 +136,33 @@ export function DesignWhoWeHelp() {
             'lg:mt-[72px] lg:grid-cols-[1.6fr_1.6fr_1.8fr] lg:gap-6',
           ].join(' ')}
         >
+          {/* Shadow direction follows the bento's own geometry — the left
+              track leans left, the right track leans right, and the middle
+              column gets the balanced one. Mirrors `home/who-we-help`. */}
           <Card
             title={card1.title}
             body={card1.body}
             index={0}
+            position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
-          <Card title={card2.title} body={card2.body} index={1} />
-          <Card title={card3.title} body={card3.body} index={2} />
+          <Card
+            title={card2.title}
+            body={card2.body}
+            index={1}
+            position="left"
+          />
+          <Card
+            title={card3.title}
+            body={card3.body}
+            index={2}
+            position="center"
+          />
           <Card
             title={card4.title}
             body={card4.body}
             index={3}
+            position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
 
@@ -152,12 +182,14 @@ export function DesignWhoWeHelp() {
               title={card5.title}
               body={card5.body}
               index={4}
+              position="right"
               className="sm:flex-1"
             />
             <Card
               title={card6.title}
               body={card6.body}
               index={5}
+              position="right"
               className="sm:flex-1 lg:flex-1"
             />
           </div>

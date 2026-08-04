@@ -95,11 +95,14 @@ export function ConsultationForm() {
   return (
     <form
       suppressHydrationWarning
-      className="w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
+      // The panel sits in the right-hand column of the contact band, so its
+      // shadow leans right. `card-shadow-right` rather than an inline
+      // `boxShadow`: an inline value cannot carry the mobile breakpoint, and it
+      // would be a second opinion about a shadow the whole site shares.
+      className="card-shadow-right w-full rounded-[20px] px-6 py-8 sm:px-10 sm:py-[33px] lg:w-[630px] lg:shrink-0"
       style={{
         backgroundImage:
           'conic-gradient(from -46.16deg at 50% 50%, #035551 0deg, #058881 178.8deg, #035551 360deg)',
-        boxShadow: '6px 6px 20px 0px rgba(220,203,142,0.38)',
       }}
     >
       {/*

@@ -66,7 +66,7 @@ export function ServiceTabs() {
         aria-label="Our Core Services"
         aria-orientation="vertical"
         onKeyDown={onKeyDown}
-        className="hidden flex-col space-y-1.5 rounded-[20px] bg-[#FDFBEE] p-2 shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] lg:col-span-4 lg:flex lg:shadow-[-6px_6px_16px_0px_rgba(220,203,142,0.35)]"
+        className="card-shadow-left hidden flex-col space-y-1.5 rounded-[20px] bg-[#FDFBEE] p-2 lg:col-span-4 lg:flex"
       >
         {SERVICES.map((service, index) => {
           const isActive = index === activeIndex;
@@ -108,7 +108,7 @@ export function ServiceTabs() {
           return (
             <div
               key={service.slug}
-              className="overflow-hidden rounded-[20px] bg-white shadow-[0px_4px_12px_0px_rgba(220,203,142,0.30)]"
+              className="card-shadow-center overflow-hidden rounded-[20px] bg-white"
             >
               <button
                 type="button"
@@ -196,7 +196,7 @@ export function ServiceTabs() {
               hidden={!isActive}
               tabIndex={0}
               className={cn(
-                'ease-house rounded-[20px] bg-white p-8 shadow-[0px_4px_12px_0px_rgba(220,203,142,0.25)] transition-all duration-300 lg:p-10 lg:shadow-[6px_6px_16px_0px_rgba(220,203,142,0.35)]',
+                'ease-house card-shadow-right rounded-[20px] bg-white p-8 transition-all duration-300 lg:p-10',
                 isActive
                   ? 'translate-y-0 opacity-100'
                   : 'hidden translate-y-2 opacity-0',
