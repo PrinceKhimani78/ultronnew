@@ -59,14 +59,32 @@ export function ServiceTabs() {
   };
 
   return (
-    <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-8">
-      {/* LEFT COLUMN: Vertical Navigation (25-30% width / 4 cols) */}
+    /*
+      The comp's own split, as percentages of the content measure: the tab list
+      is 278 of 1099, the gutter 41, the card 780. Percentages rather than the
+      raw pixels because the site's container is 1152 wide at a 1280 viewport
+      where the comp's frame allows 1099 — the proportions are the design, the
+      absolute widths were only ever true of the comp's own gutters.
+
+      `lg:h-full` hands the 454px the section reserves down to the card.
+    */
+    <div className="grid items-start gap-8 lg:h-full lg:grid-cols-[25.3%_minmax(0,1fr)] lg:gap-x-[3.7%]">
+      {/* LEFT COLUMN: vertical tab list */}
       <div
         role="tablist"
         aria-label="Our Core Services"
         aria-orientation="vertical"
         onKeyDown={onKeyDown}
-        className="card-shadow-left hidden flex-col space-y-1.5 rounded-[20px] bg-[#FDFBEE] p-2 lg:col-span-4 lg:flex"
+        /*
+          One bordered white plate with the tabs flush inside it, which is how
+          the comp draws it. `overflow-hidden` is what lets the active tab paint
+          its teal to the plate's edge and still be clipped by the radius, so no
+          corner leaks past the border.
+
+          The golden card shadow is deliberately NOT here: the comp gives this
+          plate a hairline border and no drop shadow.
+        */
+        className="hidden flex-col overflow-hidden rounded-lg border border-[#035551]/30 bg-white lg:flex"
       >
         {SERVICES.map((service, index) => {
           const isActive = index === activeIndex;
@@ -83,11 +101,22 @@ export function ServiceTabs() {
               aria-controls={panelId(index)}
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveIndex(index)}
+              /*
+                55px a row: the comp's list is 329 tall across six tabs. The
+                divider is a `border-b` on every row but the last, so the rule
+                sits between tabs and never doubles against the plate's own
+                border.
+
+                Only `colors` transition. Transitioning `all` would animate the
+                border-colour change into a visible sweep as the active row
+                moves, which is more motion than the comp implies.
+              */
               className={cn(
-                'ease-house relative flex w-full items-center justify-center rounded-xl px-5 py-4 text-center text-sm font-medium transition-all duration-300',
+                'ease-house relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-sm font-medium transition-colors duration-200',
+                'border-b border-[#035551]/15 last:border-b-0',
                 isActive
-                  ? 'bg-[#035551] font-semibold text-white shadow-md'
-                  : 'border-b border-[#035551]/10 bg-[#FDFBEE] text-[#035551] last:border-b-0 hover:bg-[#035551]/10',
+                  ? 'bg-[#035551] font-semibold text-white'
+                  : 'bg-white text-[#035551] hover:bg-[#035551]/5',
               )}
             >
               <span>{service.title}</span>
@@ -178,8 +207,8 @@ export function ServiceTabs() {
         })}
       </div>
 
-      {/* RIGHT COLUMN: Premium Content Card (70-75% width / 8 cols) */}
-      <div className="hidden lg:col-span-8 lg:block">
+      {/* RIGHT COLUMN: the content card */}
+      <div className="hidden lg:block lg:h-full">
         {SERVICES.map((service, index) => {
           const isActive = index === activeIndex;
           const formattedNumber = service.number.padStart(2, '0');
@@ -195,16 +224,35 @@ export function ServiceTabs() {
               aria-labelledby={tabId(index)}
               hidden={!isActive}
               tabIndex={0}
+              /*
+                The comp's card: white, a hairline teal border, a 16px radius
+                and no drop shadow. The golden `card-shadow-right` this used to
+                carry is gone — the comp does not draw one here, and the brief
+                is explicit that this card takes no extra styling.
+
+                `h-full` makes it fill the 454px the section reserves, so the
+                card's height is the design's rather than whatever its longest
+                service body happens to measure.
+
+                ⚠️ `overflow-y-auto`, NOT `overflow-hidden`. The comp's frame is
+                drawn with Financial Advisory, whose copy fits 454px with about
+                20px to spare. Business Banking is longer — a 199-character
+                description and a 105-character benefit against 134 and 59 —
+                and runs roughly 20px past the frame. `hidden` would silently
+                cut the last benefit off; `auto` keeps every word reachable and
+                engages on that one service only. The fix is to trim that copy,
+                not to widen the box: see the note in the section component.
+              */
               className={cn(
-                'ease-house card-shadow-right rounded-[20px] bg-white p-8 transition-all duration-300 lg:p-10',
-                isActive
-                  ? 'translate-y-0 opacity-100'
-                  : 'hidden translate-y-2 opacity-0',
+                'ease-house h-full flex-col overflow-y-auto rounded-2xl border border-[#035551]/15 bg-white p-8 transition-opacity duration-300',
+                isActive ? 'flex opacity-100' : 'hidden opacity-0',
               )}
             >
               {/* Header Section */}
-              <div className="border-b border-[#035551]/10 pb-6">
-                <h3 className="font-display text-2xl font-bold text-[#035551] lg:text-3xl">
+              <div className="shrink-0 border-b border-[#035551]/10 pb-6">
+                {/* 20px, the comp's size — it was 24px rising to 30px at `lg`,
+                    which pushed the card past the frame's 454px. */}
+                <h3 className="font-display text-[20px] leading-tight font-bold text-[#035551]">
                   <span>{formattedNumber}. </span>
                   <span>{service.headline}</span>
                 </h3>
@@ -216,16 +264,21 @@ export function ServiceTabs() {
                 </p>
               </div>
 
-              {/* Lower Content Grid */}
-              <div className="mt-8 grid items-center gap-8 md:grid-cols-12">
+              {/* Lower Content Grid.
+
+                  `min-h-0` and `flex-1`: this row takes the card's remaining
+                  height and is allowed to shrink inside it. Without `min-h-0` a
+                  flex child refuses to go below its content size and the
+                  illustration would push the card past the frame's 454px. */}
+              <div className="mt-8 grid min-h-0 flex-1 items-center gap-8 md:grid-cols-12">
                 {/* Left: 3D Brand Asset Illustration */}
-                <div className="flex items-center justify-center p-2 md:col-span-5">
+                <div className="flex h-full min-h-0 items-center justify-center p-2 md:col-span-5">
                   <Image
                     src={illustrationSrc}
                     alt={service.title}
                     width={320}
                     height={240}
-                    className="h-auto w-full max-w-[260px] object-contain transition-transform duration-300 hover:scale-105"
+                    className="h-auto max-h-full w-full max-w-[260px] object-contain transition-transform duration-300 hover:scale-105"
                   />
                 </div>
 

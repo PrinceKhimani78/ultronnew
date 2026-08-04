@@ -30,9 +30,6 @@ import { cn } from '@/lib/utils';
  *     very nearly transparent and reads as the teal behind it.
  *   - the radius is the OUTER corner. With a 5px border drawn inside it, the
  *     white fill's radius is 15px, not 20px.
- *
- * ⚠️ This component renders on `/` AND on `/home-design-preview`, which were
- * required to be indistinguishable. Any change here lands on both.
  */
 
 /**

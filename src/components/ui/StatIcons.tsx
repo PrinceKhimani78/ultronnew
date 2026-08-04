@@ -13,10 +13,6 @@
  * are stroke-based and inherit `currentColor`, so they stay sharp where the
  * originals would not: a 1254px raster scaled to 22px is not an upgrade.
  *
- * Shared by the live hero and by `/home-design-preview` — the two strips were
- * required to be indistinguishable, and one definition is the only way to keep
- * them so.
- *
  * TODO(client): re-export the icons at web resolution and swap them in here.
  * Every consumer imports from this file, so it is the only place that changes.
  */

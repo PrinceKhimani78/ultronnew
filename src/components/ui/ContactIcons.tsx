@@ -8,10 +8,8 @@ import { cn } from '@/lib/utils';
  * is what sits each glyph on the cap height of its first line rather than on the
  * line box, which is a 4px difference and visible.
  *
- * Shared by the live footer and by `/home-design-preview` — the two were
- * required to be indistinguishable, and one definition is the only way to keep
- * them so. Stroke-based and inheriting `currentColor`, so a colour change is a
- * class rather than a new asset.
+ * Stroke-based and inheriting `currentColor`, so a colour change is a class
+ * rather than a new asset.
  */
 
 const GLYPH =

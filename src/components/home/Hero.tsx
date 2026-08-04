@@ -10,8 +10,8 @@ import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
 import { HOME_HERO } from '@/content/home';
 
 /**
- * Hero, rebuilt from the comp's 1280×832 "Hero" frame — the same frame
- * `/home-design-preview` draws, with the client-approved copy in its place.
+ * Hero, rebuilt from the comp's 1280×832 "Hero" frame, with the
+ * client-approved copy in its place.
  *
  * The comp places the nav pill inside this frame at y=49 and sets the h1 at
  * y=217. The site header is `fixed` and lives in the root layout, so it occupies
