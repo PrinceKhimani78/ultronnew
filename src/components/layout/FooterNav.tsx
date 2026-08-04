@@ -99,10 +99,7 @@ export function FooterNavColumn({
                   aria-current={isCurrent ? 'page' : undefined}
                   className={cn(
                     BODY,
-                    'inline-block transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]',
-                    isCurrent
-                      ? 'text-[#DCCB8E]'
-                      : 'text-white hover:text-[#DCCB8E]',
+                    'inline-block text-white transition-colors duration-200 hover:text-[#DCCB8E]',
                   )}
                 >
                   {item.label}
