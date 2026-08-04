@@ -43,50 +43,26 @@ import { cn } from '@/lib/utils';
  * HOME_PAGE_REVIEW.md for the arithmetic and the three ways to close it.
  */
 const BASE_CARD_PLATE =
-  'relative flex w-full flex-col rounded-[20px] p-[5px] ' +
-  'bg-[linear-gradient(180deg,rgba(255,255,255,0.05)_0%,#DCCB8E_100%)] ' +
-  'backdrop-blur-[40px] ' +
-  // Mobile fills its column up to the design's 360px ceiling; desktop pins to 306.
+  'relative flex w-full flex-col rounded-[20px] bg-white ' +
+  'pt-[40px] pr-[34px] pb-[34px] pl-[34px] ' +
   'mx-auto max-w-[360px] lg:mx-0 lg:max-w-[306px] lg:min-h-[287px]';
 
-/**
- * The timeline alternates sides, so each card leans away from the spine it
- * hangs off. Both use the shared shadow from `globals.css` — the values are not
- * restated here.
- *
- * The 5px gold gradient border on `BASE_CARD_PLATE` STAYS. It is the comp's own
- * `#FFFFFF 5% → #DCCB8E` stroke, documented in the Figma inspect panel, and it
- * is the card's chrome rather than a stand-in for a shadow.
- */
-const LEFT_CARD_PLATE = cn(BASE_CARD_PLATE, 'card-shadow-left');
-
-const RIGHT_CARD_PLATE = cn(BASE_CARD_PLATE, 'card-shadow-right');
+const LEFT_CARD_PLATE = cn(BASE_CARD_PLATE, 'timeline-card-left');
+const RIGHT_CARD_PLATE = cn(BASE_CARD_PLATE, 'timeline-card-right');
 
 /**
- * The white fill. Its radius is 15px, not 20px — the 20px in the panel is the
- * OUTER corner, and a 5px stroke drawn inside it leaves a 15px inner corner.
- * Matching 20px here would leave a visible gold crescent at each corner.
- */
-const CARD_FILL =
-  'flex flex-1 flex-col rounded-[15px] bg-white ' +
-  'shadow-[inset_0px_1px_2px_0px_rgba(255,255,255,0.20)] ' +
-  'pt-[42px] pr-[34px] pb-[34px] pl-[34px]';
-
-/**
- * Card contents. Extracted so the type scale exists once rather than twice —
- * the animated and reduced-motion branches previously carried duplicate copies
- * of every class string, which is how two "identical" cards drift apart.
+ * Card contents rendered inside the single white card container.
  */
 function StepCardContent({ title, body }: { title: string; body: string }) {
   return (
-    <div className={CARD_FILL}>
+    <>
       <h3 className="font-display mb-[28px] text-[18px] leading-[1.3] font-bold text-[#035551]">
         {title}
       </h3>
       <p className="text-[18px] leading-[1.5] font-normal tracking-[0] text-[rgba(35,35,35,0.82)]">
         {body}
       </p>
-    </div>
+    </>
   );
 }
 
