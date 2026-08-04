@@ -20,7 +20,7 @@ import { SERVICES_PAGE } from '@/content/services-page';
  */
 export function ServicesGrid() {
   return (
-    <Section className="text-ink bg-white py-12 lg:py-16">
+    <Section className="text-ink bg-white pt-0 pb-12 sm:pt-0 lg:pt-0 lg:pb-16">
       <Container width="wide">
         <Reveal>
           <BandEyebrow>{SERVICES_PAGE.intro.eyebrow}</BandEyebrow>
