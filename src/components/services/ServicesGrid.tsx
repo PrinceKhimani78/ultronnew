@@ -20,17 +20,19 @@ import { SERVICES_PAGE } from '@/content/services-page';
  */
 export function ServicesGrid() {
   return (
-    <Section className="text-ink bg-white pt-0 pb-12 sm:pt-0 lg:pt-0 lg:pb-16">
+    <Section className="text-ink bg-white pt-8 pb-16 sm:pt-10 sm:pb-20 lg:pt-12 lg:pb-24">
       <Container width="wide">
         <Reveal>
-          <BandEyebrow>{SERVICES_PAGE.intro.eyebrow}</BandEyebrow>
-          <h2 className="font-display mt-3 text-[clamp(2rem,4.6vw,48px)] leading-[100%] font-bold tracking-[-0.017em] text-black">
+          <BandEyebrow style={{ color: '#C9B37E' }}>
+            {SERVICES_PAGE.intro.eyebrow}
+          </BandEyebrow>
+          <h2 className="font-display mt-3.5 text-[32px] leading-[105%] font-extrabold tracking-[-0.02em] text-black sm:text-[40px] lg:text-[48px]">
             <HeadingText
               segments={SERVICES_PAGE.intro.heading}
               accentClassName="text-[#035551]"
             />
           </h2>
-          <p className="mt-5 max-w-[855px] text-[16px] leading-[170%] font-normal text-[#5A5A5A]">
+          <p className="mt-4 max-w-[855px] text-[16px] leading-[170%] font-normal text-[#5A5A5A]">
             {SERVICES_PAGE.intro.body}
           </p>
         </Reveal>

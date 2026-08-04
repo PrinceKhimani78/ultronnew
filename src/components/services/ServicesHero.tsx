@@ -28,14 +28,11 @@ export function ServicesHero() {
     >
       <Container
         width="wide"
-        className="relative flex min-h-[380px] flex-col justify-center pt-[124px] pb-10 sm:min-h-[420px] sm:pt-[140px] sm:pb-12 lg:min-h-[453px] lg:pt-[152px] lg:pb-14"
+        className="relative flex flex-col justify-center pt-[124px] pb-3 sm:pt-[130px] sm:pb-4 lg:pt-[136px] lg:pb-5"
       >
-        {/* No second measure here — the `Container` above is already the page
-            measure. A nested `mx-auto max-w-*` is inert today only because it
-            happens to be wider than the shell's content box. */}
         <div className="relative flex w-full items-center justify-center">
           {/* Centered Hero Heading & Description */}
-          <div className="relative z-10 mx-auto w-full max-w-[620px] text-end">
+          <div className="relative z-10 mx-auto w-full max-w-[580px] text-center">
             {/* Heading, body, monogram — the same 100ms sequence the home
                 hero uses, so the two landing pages open the same way. */}
             <Reveal>
@@ -50,9 +47,9 @@ export function ServicesHero() {
               </h1>
             </Reveal>
 
-            <Reveal delay={STAGGER_MS} className="mt-3.5 sm:mt-4">
+            <Reveal delay={STAGGER_MS} className="mt-4 sm:mt-5">
               <p
-                className="mx-auto max-w-[420px] text-center text-[15px] leading-[170%] font-normal tracking-[-0.017em] sm:text-[16px]"
+                className="mx-auto max-w-[500px] text-center text-[15px] leading-[170%] font-normal tracking-[-0.017em] sm:text-[16px]"
                 style={{ color: '#5A5A5A' }}
               >
                 {SERVICES_PAGE.hero.body}
@@ -70,7 +67,7 @@ export function ServicesHero() {
                 width={320}
                 height={320}
                 priority
-                className="h-auto w-[180px] object-contain opacity-85 sm:w-[220px] lg:w-[260px] xl:w-[290px]"
+                className="h-auto w-[190px] object-contain opacity-90 sm:w-[230px] lg:w-[270px] xl:w-[300px]"
               />
             </Reveal>
           </div>

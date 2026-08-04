@@ -32,14 +32,14 @@ export function ServiceCard({ service }: ServiceCardProps) {
         </p>
       </div>
 
-      {/* Bottom CTA block: Full Detail link */}
+      {/* Bottom CTA block: View more link */}
       <div className="mt-6 pt-2">
         <Link
           href={`/services/${service.slug}`}
           className="group inline-flex items-center gap-2.5 transition-colors"
         >
           <span className="font-display text-[15px] leading-none font-semibold text-[#035551] underline decoration-[#035551] underline-offset-4">
-            Full Detail
+            View more
           </span>
           <span
             aria-hidden="true"

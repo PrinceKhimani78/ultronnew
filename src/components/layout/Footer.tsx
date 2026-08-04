@@ -10,7 +10,7 @@ import {
   MailGlyph,
   PhoneGlyph,
 } from '@/components/ui/ContactIcons';
-import { FOOTER_DISCLAIMER, FOOTER_NAV, SITE } from '@/content/site';
+import { FOOTER_NAV, SITE } from '@/content/site';
 
 /**
  * Site footer, from the comp's 1280×572 "Footer" frame.
@@ -73,23 +73,29 @@ export function Footer() {
   return (
     <footer
       data-header-tone="dark"
-      className="text-surface overflow-hidden bg-[#154B47] pt-12 pb-8 lg:pt-[84px] lg:pb-10"
+      className="text-surface overflow-hidden bg-[#154B47] pt-12 pb-8 lg:pt-[80px] lg:pb-10"
     >
       <div className="page-shell">
+        {/* Brand Logo */}
         <Reveal delay={BEAT.logo}>
-          <Link href="/" aria-label={`${SITE.name} — home`} className="block">
+          <Link
+            href="/"
+            aria-label={`${SITE.name} — home`}
+            className="inline-block"
+          >
             <Logo
               tone="cream"
-              className="mx-auto h-auto w-[240px] sm:mx-0 lg:w-[358px]"
+              className="h-auto w-[240px] sm:w-[280px] lg:w-[320px]"
             />
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-[565px_254px_minmax(0,1fr)] xl:gap-0">
+        {/* 3-Column Navigation & Contact Grid */}
+        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-3 lg:gap-12 xl:grid-cols-[450px_240px_minmax(0,1fr)] xl:gap-0">
           {/* Column 1: Contact Us */}
           <address className="not-italic">
             <Reveal delay={BEAT.contact}>
-              <h2 className="mb-7 text-[18px] leading-tight font-semibold text-white">
+              <h2 className="mb-6 text-[18px] leading-tight font-semibold text-white">
                 Contact Us
               </h2>
             </Reveal>
@@ -102,33 +108,35 @@ export function Footer() {
             >
               <StaggerItem
                 as="li"
-                className="flex items-start justify-start gap-3"
+                className="flex items-start justify-start gap-3.5"
               >
-                <LocationGlyph className="text-white" />
-                <span className={`${BODY} max-w-[340px] text-left`}>
+                <LocationGlyph className="shrink-0 text-white" />
+                <span
+                  className={`${BODY} max-w-[340px] text-left text-white/90`}
+                >
                   {SITE.address.streetAddress}
                 </span>
               </StaggerItem>
               <StaggerItem
                 as="li"
-                className="flex items-start justify-start gap-3"
+                className="flex items-center justify-start gap-3.5"
               >
-                <MailGlyph className="text-white" />
+                <MailGlyph className="shrink-0 text-white" />
                 <a
                   href={`mailto:${SITE.email}`}
-                  className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
+                  className={`${BODY} text-left text-white/90 transition-colors duration-200 hover:text-[#DCCB8E]`}
                 >
                   {SITE.email}
                 </a>
               </StaggerItem>
               <StaggerItem
                 as="li"
-                className="flex items-start justify-start gap-3"
+                className="flex items-center justify-start gap-3.5"
               >
-                <PhoneGlyph className="text-white" />
+                <PhoneGlyph className="shrink-0 text-white" />
                 <a
                   href={`tel:${SITE.telephone.replace(/\s/g, '')}`}
-                  className={`${BODY} text-left transition-colors duration-[250ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:text-[#DCCB8E]`}
+                  className={`${BODY} text-left text-white/90 transition-colors duration-200 hover:text-[#DCCB8E]`}
                 >
                   {SITE.telephone}
                 </a>
@@ -147,27 +155,24 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Regulatory Disclaimer */}
-        <Reveal delay={BEAT.closing} className="mt-14">
-          <p className="text-surface/45 mx-auto max-w-4xl text-left text-xs leading-relaxed sm:mx-0">
-            {FOOTER_DISCLAIMER}
-          </p>
-        </Reveal>
-
         {/* Horizontal Divider Line */}
         <hr
-          className="mt-6 mb-6 border-0"
-          style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.25)' }}
+          className="mt-12 mb-7 border-0"
+          style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.2)' }}
         />
 
-        {/* Bottom Bar: Left & Right Copyright text */}
+        {/* Bottom Bar: Left & Right Copyright text strictly matching Figma */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center justify-between gap-3 text-center text-[12px] leading-tight font-medium tracking-[0.04em] uppercase sm:flex-row sm:text-left sm:text-[13px]"
+          className="flex flex-col items-center justify-between gap-3 text-center text-[12px] leading-tight font-medium tracking-[0.06em] uppercase sm:flex-row sm:text-left sm:text-[13px]"
           style={{ color: BODY_COLOR }}
         >
-          <span>ALL RIGHTS RESERVED BY ULTRON FINANCIALS</span>
-          <span>&copy; 2026 Ultron Financials. All rights reserved.</span>
+          <span className="text-white/80">
+            ALL RIGHTS RESERVED BY ULTRON FINANCIALS
+          </span>
+          <span className="text-white/80">
+            COPYRIGHTS &copy; MUTANT TECHNOLOGIES
+          </span>
         </Reveal>
       </div>
     </footer>

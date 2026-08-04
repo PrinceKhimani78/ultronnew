@@ -30,21 +30,19 @@ const BRAND = '#035551';
 export function BandEyebrow({
   children,
   className,
+  style,
 }: {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <p
       className={cn(
-        // `uppercase` is a design decision, not a content one — the comp sets
-        // every band label in caps. Applying it here means the content files do
-        // not have to agree with each other about casing, and they did not:
-        // "SERVING GLOBAL CLIENTS" against "Get started".
         'flex items-center gap-2 text-[16px] leading-none font-normal uppercase',
         className,
       )}
-      style={{ color: BRAND }}
+      style={{ color: BRAND, ...style }}
     >
       <span aria-hidden="true" className="shrink-0">
         --
