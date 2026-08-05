@@ -179,14 +179,47 @@ export function Header() {
     triggerRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    if (!isDrawerOpen) return;
-    const { overflow } = document.body.style;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = overflow;
-    };
-  }, [isDrawerOpen]);
+  /*
+   * Force-closes the drawer on every route change, independent of how
+   * navigation happened. A drawer link's own `onClick={onClose}` handles the
+   * common case, but that handler never fires for browser Back/Forward —
+   * those are `popstate` navigations, not clicks — so without this, opening
+   * the drawer and then navigating via Back leaves `isDrawerOpen` stuck
+   * `true` on the new page: the drawer (and the scroll lock it owns) stays
+   * logically open even though nothing put it there through a click.
+   *
+   * `setState` during render off a tracked previous value, not inside a
+   * `useEffect` — the same "adjusting state when a prop changes" idiom
+   * `MobileDrawer` already uses for its own `prevIsOpen` check below. An
+   * effect here would still work, but it schedules the reset a whole
+   * render-commit-effect cycle after the pathname actually changed, and
+   * React's own guidance (and this codebase's convention) is to do the
+   * comparison inline instead.
+   */
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setIsDrawerOpen(false);
+  }
+
+  /*
+   * Body scroll-lock while the drawer is open lives entirely in
+   * `MobileDrawer`, not here. This file used to carry its own copy of the
+   * same lock, keyed off the same `isDrawerOpen` boolean — two effects
+   * independently reading and restoring `document.body.style.overflow`.
+   * React fires child effects and cleanups before their parent's on the same
+   * commit, so on open, `MobileDrawer` (child) set `overflow: hidden` a tick
+   * before this effect read `document.body.style.overflow` — meaning this
+   * effect captured `'hidden'` as the "original" value instead of the true
+   * original (`''`). On close, `MobileDrawer`'s cleanup correctly restored
+   * `''` first, and this effect's cleanup ran right after and reapplied its
+   * stale `'hidden'` capture — permanently wedging the body scroll-locked
+   * after the very first open/close of the mobile menu, until a hard reload
+   * reset all JS-applied inline styles. That was the mobile scroll-lock bug.
+   * One owner of the lock removes the race; `MobileDrawer`'s copy is correct
+   * on its own and also already handles the focus trap and Escape key that
+   * belong with it.
+   */
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 pt-6 lg:pt-[49px]">

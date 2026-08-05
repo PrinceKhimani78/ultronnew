@@ -52,16 +52,24 @@ export function AboutTeam() {
 
         {/*
           Fixed-width tracks (`grid-cols-[273px]`, not `1fr`/`justify-items-
-          center`), centred as a block via `justify-center` — never
-          `justify-between`, which would spread the row edge-to-edge on a
-          wide viewport instead of holding the comp's own 94px column gap.
-          The column count and gaps are breakpoint-exact, not a fluid scale:
-          1 col / 48px rows under 640px, 2 cols / 56×64px 640–1023px, 3 cols
-          / 94×80px from 1024px up — including on screens wider than the
-          1280px comp itself, which is why the grid caps at `lg:max-w-
-          [1007px]` (3×273 + 2×94) rather than growing with the page.
+          center`), centred within a *full-width* grid box via `justify-
+          center` — never `justify-between`, which would spread the row
+          edge-to-edge on a wide viewport instead of holding the comp's own
+          94px column gap. Deliberately `w-full`, not `max-w-[1007px] mx-
+          auto`: a narrower box centred with `mx-auto` puts a real computed
+          `margin-left`/`margin-right` on the grid that every other band on
+          this page carries as zero, so the grid's own edges sat inset from
+          the page measure everything else aligns to. `justify-center`
+          centres the fixed tracks inside the full-width box instead, which
+          lands the cards at the same on-screen position but leaves the grid
+          element itself flush with the page like its siblings. The column
+          count and gaps are breakpoint-exact, not a fluid scale: 1 col /
+          48px rows under 640px, 2 cols / 56×64px 640–1023px, 3 cols /
+          94×80px from 1024px up — including on screens wider than the
+          1280px comp itself, since the tracks stay fixed-width regardless
+          of how wide the (now full-width) grid box is.
         */}
-        <ul className="mx-auto mt-8 grid max-w-[273px] grid-cols-[273px] justify-center gap-y-[48px] sm:mt-10 sm:max-w-[602px] sm:grid-cols-[repeat(2,273px)] sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:max-w-[1007px] lg:grid-cols-[repeat(3,273px)] lg:gap-x-[94px] lg:gap-y-[80px]">
+        <ul className="mt-8 grid w-full grid-cols-[273px] justify-center gap-y-[48px] sm:mt-10 sm:grid-cols-[repeat(2,273px)] sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:grid-cols-[repeat(3,273px)] lg:gap-x-[94px] lg:gap-y-[80px]">
           {ABOUT_PAGE.team.members.map((member, index) => (
             <Reveal
               as="li"

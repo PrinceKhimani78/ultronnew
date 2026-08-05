@@ -12,12 +12,13 @@ import { cn } from '@/lib/utils';
  * "Our Vision / Our Mission / Our Story", from the one section of the About
  * frame that was available to build against (see `content/about-page.ts`).
  *
- * One continuous white band holding three compact, vertically-centred rows —
- * not three separate full-bleed coloured bands, which read as three distinct
- * sections rather than one connected one. The only ground colour is
- * `Section`'s `raised` tone (#FFFFFF) plus a single, very low-opacity warm
- * radial glow behind the middle row, echoing the comp's own faint cream tint
- * without repeating the strong alternating bands an earlier pass drew.
+ * One continuous white band holding three compact, vertically-centred rows.
+ * Vision and Story sit on plain white — the section's own `raised` tone —
+ * plus the shared, very low-opacity radial glow behind the whole band. Only
+ * Mission carries its own background: the comp's exact vertical gradient for
+ * that row (`linear-gradient(180deg, #FFFFFF 0%, #FDFBEE 50.06%, #FFFFFF
+ * 100%)`, read off Frame 64), full-bleed edge to edge rather than confined
+ * to the page's content measure, since that is how the comp draws it.
  *
  * Each row is a two-column grid, both columns equal width. The monogram
  * alternates sides via `order` rather than `flex-row-reverse`, so the DOM
@@ -48,37 +49,45 @@ export function AboutFoundation() {
             const reversed = index % 2 === 1;
 
             return (
-              <Reveal
-                key={row.id}
-                delay={index === 0 ? 0 : STAGGER_MS}
-                className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16"
-              >
-                <SectionHeading
-                  eyebrow={row.eyebrow}
-                  heading={row.heading}
-                  body={row.body}
-                  as="h3"
-                  eyebrowClassName="text-accent-deep"
-                  accentClassName="text-brand"
-                  className={cn('order-1', reversed && 'lg:order-2')}
-                />
-
-                <div
-                  className={cn(
-                    'order-2 flex w-full justify-center',
-                    reversed && 'lg:order-1',
-                  )}
-                >
-                  <Image
-                    src="/brand/services-monogram.png"
-                    alt=""
+              <div key={row.id} className="relative">
+                {reversed ? (
+                  <div
                     aria-hidden="true"
-                    width={240}
-                    height={258}
-                    className="h-auto w-[150px] object-contain opacity-80 sm:w-[190px] lg:w-[240px]"
+                    className="pointer-events-none absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 bg-[linear-gradient(180deg,#FFFFFF_0%,#FDFBEE_50.06%,#FFFFFF_100%)]"
                   />
-                </div>
-              </Reveal>
+                ) : null}
+
+                <Reveal
+                  delay={index === 0 ? 0 : STAGGER_MS}
+                  className="relative grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16"
+                >
+                  <SectionHeading
+                    eyebrow={row.eyebrow}
+                    heading={row.heading}
+                    body={row.body}
+                    as="h3"
+                    eyebrowClassName="text-accent-deep"
+                    accentClassName="text-brand"
+                    className={cn('order-1', reversed && 'lg:order-2')}
+                  />
+
+                  <div
+                    className={cn(
+                      'order-2 flex w-full justify-center',
+                      reversed && 'lg:order-1',
+                    )}
+                  >
+                    <Image
+                      src="/brand/services-monogram.png"
+                      alt=""
+                      aria-hidden="true"
+                      width={240}
+                      height={258}
+                      className="h-auto w-[150px] object-contain opacity-80 sm:w-[190px] lg:w-[240px]"
+                    />
+                  </div>
+                </Reveal>
+              </div>
             );
           })}
         </div>
