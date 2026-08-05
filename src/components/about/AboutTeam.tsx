@@ -37,7 +37,7 @@ export function AboutTeam() {
       spacing="default"
       tone="raised"
       aria-label="Our team"
-      className="bg-gradient-to-b from-[#FDFBEE] to-white"
+      className="overflow-hidden bg-gradient-to-b from-[#FDFBEE] to-white lg:pt-[106px]"
     >
       <Container width="wide">
         <SectionHeading
@@ -47,9 +47,21 @@ export function AboutTeam() {
           align="center"
           eyebrowClassName="text-accent-deep"
           accentClassName="text-brand"
+          className="relative z-[2]"
         />
 
-        <ul className="mt-8 grid grid-cols-1 justify-items-center gap-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        {/*
+          Fixed-width tracks (`grid-cols-[273px]`, not `1fr`/`justify-items-
+          center`), centred as a block via `justify-center` — never
+          `justify-between`, which would spread the row edge-to-edge on a
+          wide viewport instead of holding the comp's own 94px column gap.
+          The column count and gaps are breakpoint-exact, not a fluid scale:
+          1 col / 48px rows under 640px, 2 cols / 56×64px 640–1023px, 3 cols
+          / 94×80px from 1024px up — including on screens wider than the
+          1280px comp itself, which is why the grid caps at `lg:max-w-
+          [1007px]` (3×273 + 2×94) rather than growing with the page.
+        */}
+        <ul className="mx-auto mt-8 grid max-w-[273px] grid-cols-[273px] justify-center gap-y-[48px] sm:mt-10 sm:max-w-[602px] sm:grid-cols-[repeat(2,273px)] sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:max-w-[1007px] lg:grid-cols-[repeat(3,273px)] lg:gap-x-[94px] lg:gap-y-[80px]">
           {ABOUT_PAGE.team.members.map((member, index) => (
             <Reveal
               as="li"
@@ -75,14 +87,14 @@ export function AboutTeam() {
  *    comp's own conic gradient, its teal-tinted inset shadow restored (an
  *    earlier pass dropped it; this is the authoritative spec).
  * 2. **Portrait** (`.team-member-image-wrapper`, Frame 65) — 258×258,
- *    absolutely positioned flush to the mat's top-right corner (not
- *    centred), grayscale, 20px radius.
+ *    grayscale, 20px radius, offset `top: -18px; left: 20px` from the mat —
+ *    tuned by hand against the rendered comp, which is why it floats a
+ *    little above the mat's own top edge rather than sitting flush inside
+ *    it. `overflow-visible` on the mat is what lets that top sliver show
+ *    instead of being clipped.
  * 3. **Info panel** (`.team-member-info`, Frame 66) — 198×49, absolutely
- *    positioned flush to the mat's bottom-left corner. Because the mat is
- *    exactly 307 tall and the portrait exactly 258, the panel's 49px lands
- *    precisely in the leftover strip below the portrait — no overlap, no
- *    gap, no straddle needed. The LinkedIn link sits inside this same panel,
- *    at its right edge via `justify-between`.
+ *    positioned flush to the mat's bottom-left corner. The LinkedIn link
+ *    sits inside this same panel, at its right edge via `justify-between`.
  *
  * Fixed-width cards inside a grid mean the row won't shrink below 273px on
  * a viewport narrower than that plus its gutters — a real, if narrow, edge
@@ -90,8 +102,8 @@ export function AboutTeam() {
  */
 function TeamCard({ member }: { member: TeamMember }) {
   return (
-    <article className="relative h-[307px] w-[273px] shrink-0 overflow-visible rounded-[20px] border-0 bg-[conic-gradient(#FDFBEE_0%,#FFFFFF_49.74%,#FDFBEE_100%)] shadow-[4px_-4px_4px_0_rgba(3,85,81,0.25)_inset]">
-      <div className="absolute top-0 right-0 aspect-square h-[258px] w-[258px] shrink-0 overflow-hidden rounded-[20px]">
+    <article className="relative h-[310px] w-[280px] shrink-0 overflow-visible rounded-[20px] border-0 bg-[conic-gradient(#FDFBEE_0%,#FFFFFF_49.74%,#FDFBEE_100%)] shadow-[4px_-4px_4px_0_rgba(3,85,81,0.25)_inset]">
+      <div className="absolute -top-[20px] left-[26px] aspect-square h-[270px] w-[270px] shrink-0 overflow-hidden rounded-[20px]">
         <Image
           src={member.image}
           alt={`${member.name} – ${member.role}`}
