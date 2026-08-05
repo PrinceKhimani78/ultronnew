@@ -213,15 +213,6 @@
       inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
   }
 
-  /* Timeline cards drop shadow matching Figma inspect panel specs */
-  .timeline-card-left {
-    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .timeline-card-right {
-    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.2);
-  }
-
   @media (min-width: 640px) {
     .card-shadow-left,
     .card-shadow-right,
@@ -245,6 +236,64 @@
     width: 100%;
     max-width: var(--page-max);
     padding-inline: var(--page-gutter);
+  }
+
+  /**
+   * "How ULTRON Works" timeline step card, transcribed verbatim from the
+   * comp's own supplied CSS. Scoped to this one card by name — nothing else
+   * on the site uses `.how-ultron-card` — because the gradient ring below is
+   * a `::before` mask trick, not something that translates cleanly into a
+   * one-line Tailwind arbitrary-value utility without risking an escaping
+   * mistake in the `mask` shorthand.
+   *
+   * The ring: `::before` paints the gradient across a box inset -5px from
+   * the card (so it sits exactly under the card's own 5px transparent
+   * border), then two masks — one clipped to `content-box`, one to the full
+   * box — are composited with `exclude`/`xor`, which keeps only the pixels
+   * that are in the full box but *not* in the content-box, i.e. a 5px ring.
+   * That is what makes the gradient read as a border instead of a filled
+   * gradient panel behind the white card.
+   */
+  .how-ultron-card {
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: 30px 27px 32px 30px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 19px;
+    border: 5px solid transparent;
+    border-radius: 20px;
+    background-color: #ffffff;
+    box-shadow:
+      0 20px 40px 0 rgba(0, 0, 0, 0.2),
+      0 1px 2px 0 rgba(255, 255, 255, 0.2) inset;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    position: relative;
+    isolation: isolate;
+  }
+
+  .how-ultron-card::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    padding: 5px;
+    border-radius: inherit;
+    background: linear-gradient(
+      270deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      #dccb8e 100%
+    );
+    pointer-events: none;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
   }
 }
 

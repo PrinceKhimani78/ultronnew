@@ -13,37 +13,40 @@ import { HeadingText } from '@/components/ui/SectionHeading';
 import { PROCESS_INTRO, PROCESS_STEPS } from '@/content/process';
 import { cn } from '@/lib/utils';
 
-const BASE_CARD_PLATE =
-  'relative mx-auto flex w-full max-w-[360px] flex-col rounded-[20px] bg-white ' +
-  'border-0 outline-none ring-0 ' +
-  'lg:mx-0 lg:min-h-[287px] lg:max-w-[360px]';
-
-const LEFT_CARD_PLATE = cn(
-  BASE_CARD_PLATE,
-  'shadow-[-4px_0px_0px_4px_#DCCB8E]',
+/**
+ * `.how-ultron-card` (defined in `globals.css`) supplies the plate itself —
+ * padding, gap, background, radius, shadow and the gradient-ring `::before`
+ * — identically for every card regardless of which side of the timeline it
+ * sits on, which is why there is no more `LEFT_CARD_PLATE`/`RIGHT_CARD_PLATE`
+ * split here. What's left as Tailwind utilities is purely layout: the width
+ * cap and the desktop min-height, neither of which the card CSS itself
+ * knows or should know about.
+ */
+const CARD_PLATE = cn(
+  'how-ultron-card mx-auto w-full max-w-[360px]',
+  'lg:mx-0 lg:min-h-[287px] lg:max-w-[360px]',
 );
 
-const RIGHT_CARD_PLATE = cn(
-  BASE_CARD_PLATE,
-  'shadow-[4px_0px_0px_4px_#DCCB8E]',
-);
-
-const CARD_FILL =
-  'flex flex-1 flex-col rounded-[20px] bg-white ' +
-  'border-0 outline-none ring-0 shadow-none ' +
-  'pt-[42px] pr-[34px] pb-[34px] pl-[34px]';
-
+/**
+ * A fragment, not a wrapping `<div>`. `.how-ultron-card` lays its children
+ * out itself — `flex-direction: column` and `gap: 19px` — and a `gap` only
+ * spaces *direct* children; an intermediate div here would need its own
+ * `display: contents` to stay invisible to that layout, which is more
+ * indirection than just not having the div. The heading no longer carries
+ * its own `mb-[28px]` for the same reason: the card's `gap` is what spaces
+ * title from body now, not a margin on the title.
+ */
 function StepCardContent({ title, body }: { title: string; body: string }) {
   return (
-    <div className={CARD_FILL}>
-      <h3 className="font-display mb-[28px] text-[18px] leading-[1.3] font-bold text-[#035551]">
+    <>
+      <h3 className="font-display text-[18px] leading-[1.3] font-bold text-[#035551]">
         {title}
       </h3>
 
       <p className="text-[18px] leading-[1.5] font-normal tracking-[0] text-[rgba(35,35,35,0.82)]">
         {body}
       </p>
-    </div>
+    </>
   );
 }
 
@@ -175,10 +178,7 @@ export function HowUltronWorks() {
                           : 'lg:col-start-1 lg:flex lg:justify-end lg:pr-4'
                       }
                     >
-                      <Reveal
-                        className={isRight ? RIGHT_CARD_PLATE : LEFT_CARD_PLATE}
-                        amount={0.25}
-                      >
+                      <Reveal className={CARD_PLATE} amount={0.25}>
                         <StepCardContent title={step.title} body={step.body} />
                       </Reveal>
                     </div>
