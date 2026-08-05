@@ -51,25 +51,30 @@ export function AboutTeam() {
         />
 
         {/*
-          Fixed-width tracks (`grid-cols-[273px]`, not `1fr`/`justify-items-
-          center`), centred within a *full-width* grid box via `justify-
-          center` — never `justify-between`, which would spread the row
-          edge-to-edge on a wide viewport instead of holding the comp's own
-          94px column gap. Deliberately `w-full`, not `max-w-[1007px] mx-
-          auto`: a narrower box centred with `mx-auto` puts a real computed
-          `margin-left`/`margin-right` on the grid that every other band on
-          this page carries as zero, so the grid's own edges sat inset from
-          the page measure everything else aligns to. `justify-center`
-          centres the fixed tracks inside the full-width box instead, which
-          lands the cards at the same on-screen position but leaves the grid
-          element itself flush with the page like its siblings. The column
-          count and gaps are breakpoint-exact, not a fluid scale: 1 col /
-          48px rows under 640px, 2 cols / 56×64px 640–1023px, 3 cols /
-          94×80px from 1024px up — including on screens wider than the
-          1280px comp itself, since the tracks stay fixed-width regardless
-          of how wide the (now full-width) grid box is.
+          Fixed-width tracks (`grid-cols-[280px]`, not `1fr`/`justify-items-
+          center`) inside a *full-width* grid box — never `max-w-[1007px]
+          mx-auto`, which puts a real computed `margin-left`/`margin-right`
+          on the grid that every other band on this page carries as zero,
+          leaving the grid's own edges inset from the measure everything
+          else aligns to.
+
+          280px, not the comp's 273px: `TeamCard` below is `w-[280px]`, a
+          size dialled in by hand against the rendered comp in an earlier
+          pass. A grid track narrower than the card it holds doesn't shrink
+          the card — the card overflows its own track by the difference —
+          which is exactly what put the third card 7px past the container's
+          right edge here before this matched the two numbers up.
+
+          Below `lg`, the tracks are centred as a block via `justify-center`
+          with an explicit column gap (56px at 2 cols, none needed at 1).
+          At `lg` and up the row switches to `justify-between` with *no*
+          explicit column gap: three fixed-width cards distributed edge-to-
+          edge across the full container spread the leftover width evenly
+          between them instead of as outer margin, which is what puts card
+          one's left edge and card three's right edge on the same line as
+          "Our Vision" / "Our Story" above.
         */}
-        <ul className="mt-8 grid w-full grid-cols-[273px] justify-center gap-y-[48px] sm:mt-10 sm:grid-cols-[repeat(2,273px)] sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:grid-cols-[repeat(3,273px)] lg:gap-x-[94px] lg:gap-y-[80px]">
+        <ul className="mt-8 grid w-full grid-cols-[280px] justify-center gap-y-[48px] sm:mt-10 sm:grid-cols-[repeat(2,280px)] sm:justify-center sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:grid-cols-[repeat(3,280px)] lg:justify-between lg:gap-y-[80px]">
           {ABOUT_PAGE.team.members.map((member, index) => (
             <Reveal
               as="li"
@@ -87,26 +92,29 @@ export function AboutTeam() {
 }
 
 /**
- * One card, at the comp's own literal pixel values throughout — width,
- * height and every child's position and size are fixed (`shrink-0`), not
- * proportional, per the exact CSS supplied against these three frames:
+ * One card, sized as fixed pixel values throughout — width, height and
+ * every child's position and size are fixed (`shrink-0`), not proportional:
  *
- * 1. **Mat** (`.team-member-card`, Frame 31) — 273×307, 20px radius, the
- *    comp's own conic gradient, its teal-tinted inset shadow restored (an
- *    earlier pass dropped it; this is the authoritative spec).
- * 2. **Portrait** (`.team-member-image-wrapper`, Frame 65) — 258×258,
- *    grayscale, 20px radius, offset `top: -18px; left: 20px` from the mat —
- *    tuned by hand against the rendered comp, which is why it floats a
- *    little above the mat's own top edge rather than sitting flush inside
- *    it. `overflow-visible` on the mat is what lets that top sliver show
- *    instead of being clipped.
+ * 1. **Mat** (`.team-member-card`, Frame 31 in the comp) — 280×310, 20px
+ *    radius, the comp's own conic gradient, its teal-tinted inset shadow
+ *    restored (an earlier pass dropped it; this is the authoritative spec).
+ *    The comp's own frame reads 273×307; this card runs 7px larger on each
+ *    axis, dialled in by hand against the rendered comp in a later pass.
+ * 2. **Portrait** (`.team-member-image-wrapper`, Frame 65) — 270×270,
+ *    grayscale, 20px radius, offset `top: -20px; left: 26px` from the mat —
+ *    likewise tuned by hand, which is why it floats above the mat's own top
+ *    edge rather than sitting flush inside it. `overflow-visible` on the mat
+ *    is what lets that top sliver show instead of being clipped.
  * 3. **Info panel** (`.team-member-info`, Frame 66) — 198×49, absolutely
  *    positioned flush to the mat's bottom-left corner. The LinkedIn link
  *    sits inside this same panel, at its right edge via `justify-between`.
  *
- * Fixed-width cards inside a grid mean the row won't shrink below 273px on
+ * Fixed-width cards inside a grid mean the row won't shrink below 280px on
  * a viewport narrower than that plus its gutters — a real, if narrow, edge
- * case the fluid version from the previous pass didn't have.
+ * case a fully fluid card wouldn't have. The grid's own track width (in
+ * `AboutTeam` above) has to track this card's actual width, not the comp's
+ * — a mismatch there is what put the third card past the container's own
+ * right edge in an earlier pass.
  */
 function TeamCard({ member }: { member: TeamMember }) {
   return (
