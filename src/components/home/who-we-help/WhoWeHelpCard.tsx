@@ -22,18 +22,35 @@ const BASE_CARD_CLASS =
 
 type WhoWeHelpCardProps = {
   item: WhoWeHelpItem;
-  /** Position in the bento, 0-based. Drives the stagger delay. */
+  /** Position in the bento, 0-based. Drives default stagger delay if delay is not explicitly passed. */
   index: number;
   /** Position of the card in the layout for directional shadow. */
   position?: CardPosition;
   /** Grid placement for this card's slot. Applied to the wrapper. */
   className?: string;
+  /** Animate.css entrance animation class string. */
+  animationClass?: string;
+  /** Stagger delay in milliseconds. */
+  delay?: number;
+  /** Animation duration (defaults to 0.7s). */
+  duration?: number | string;
 };
 
-export function WhoWeHelpCard({ item, index, className }: WhoWeHelpCardProps) {
+export function WhoWeHelpCard({
+  item,
+  index,
+  className,
+  animationClass,
+  delay,
+  duration = '0.7s',
+}: WhoWeHelpCardProps) {
+  const computedDelay = delay !== undefined ? delay : index * STAGGER_MS;
+
   return (
     <Reveal
-      delay={index * STAGGER_MS}
+      delay={computedDelay}
+      animationClass={animationClass}
+      duration={duration}
       className={cn('flex', className)}
       // The wrapper IS the grid cell, so it is often much taller than it is
       // wide and the default 20% threshold can leave the last card in a tall

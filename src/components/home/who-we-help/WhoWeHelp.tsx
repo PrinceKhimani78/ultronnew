@@ -100,14 +100,30 @@ export function WhoWeHelpSection() {
           <WhoWeHelpCard
             item={card1}
             index={0}
+            delay={0}
+            animationClass="animate__animated animate__fadeInDown"
             position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
-          <WhoWeHelpCard item={card2} index={1} position="left" />
-          <WhoWeHelpCard item={card3} index={2} position="center" />
+          <WhoWeHelpCard
+            item={card2}
+            index={1}
+            delay={150}
+            animationClass="animate__animated animate__fadeInLeft"
+            position="left"
+          />
+          <WhoWeHelpCard
+            item={card3}
+            index={2}
+            delay={300}
+            animationClass="animate__animated animate__fadeInLeft"
+            position="center"
+          />
           <WhoWeHelpCard
             item={card4}
             index={3}
+            delay={450}
+            animationClass="animate__animated animate__fadeInUp"
             position="left"
             className="sm:col-span-2 lg:col-span-2"
           />
@@ -121,12 +137,16 @@ export function WhoWeHelpSection() {
             <WhoWeHelpCard
               item={card5}
               index={4}
+              delay={600}
+              animationClass="animate__animated animate__fadeInRight"
               position="right"
               className="sm:flex-1"
             />
             <WhoWeHelpCard
               item={card6}
               index={5}
+              delay={750}
+              animationClass="animate__animated animate__fadeInRight"
               position="right"
               className="sm:flex-1 lg:flex-1"
             />

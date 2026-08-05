@@ -42,7 +42,7 @@ export function ServicesGrid() {
           must never animate together, so the pair in each row is offset from
           each other rather than sharing a row delay.
         */}
-        <ul className="mt-10 grid grid-cols-1 gap-6 sm:mt-12 sm:gap-8 lg:grid-cols-2 lg:gap-8">
+        <ul className="mt-10 grid grid-cols-1 gap-6 pl-[40px] sm:mt-12 sm:gap-8 lg:grid-cols-2 lg:gap-8">
           {SERVICES.map((service, index) => (
             <Reveal
               as="li"

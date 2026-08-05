@@ -54,6 +54,14 @@ type RevealProps = {
    * so anything the original node styled inline has to be able to come with it.
    */
   style?: CSSProperties;
+  /**
+   * Custom Animate.css class string. Defaults to `REVEAL_CLASS` (`animate__animated animate__fadeInUp`).
+   */
+  animationClass?: string;
+  /**
+   * Custom animation duration, e.g. '0.7s' or 700.
+   */
+  duration?: number | string;
 };
 
 export function Reveal({
@@ -65,6 +73,8 @@ export function Reveal({
   id,
   suppressHydrationWarning,
   style,
+  animationClass = REVEAL_CLASS,
+  duration,
 }: RevealProps) {
   const { ref, revealed } = useReveal<HTMLElement>(amount);
   const [finished, setFinished] = useState(false);
@@ -86,6 +96,21 @@ export function Reveal({
     }
   }, [revealed, finished, delay]);
 
+  const durationStyle: CSSProperties | undefined = duration
+    ? {
+        animationDuration:
+          typeof duration === 'number' ? `${duration}ms` : duration,
+      }
+    : undefined;
+
+  const animationStyle = animating
+    ? {
+        ...style,
+        ...(delay ? { animationDelay: `${delay}ms` } : {}),
+        ...durationStyle,
+      }
+    : style;
+
   return (
     <Component
       id={id}
@@ -96,10 +121,8 @@ export function Reveal({
       // stay hidden.
       data-revealed={finished ? '' : undefined}
       suppressHydrationWarning={suppressHydrationWarning}
-      className={cn(className, animating && REVEAL_CLASS)}
-      style={
-        animating && delay ? { ...style, animationDelay: `${delay}ms` } : style
-      }
+      className={cn(className, animating && animationClass)}
+      style={animationStyle}
       // `animationend` bubbles, so a child's own animation would otherwise mark
       // this element finished while it is still mid-flight.
       onAnimationEnd={(event: AnimationEvent<HTMLElement>) => {

@@ -53,17 +53,17 @@ export type NavItem = {
 /**
  * Primary navigation, matching the design's five entries.
  *
- * Home is a route; the rest are in-page anchors until those pages exist, since
- * a nav entry pointing at an unbuilt route is a 404 in the header. `globals.css`
- * reserves `scroll-padding-top` so the fixed header never covers an anchor
- * target. When About, Services and Blogs ship these become real hrefs and the
- * Header does not change — it renders whatever this array contains.
+ * Home, Services and About are routes; Blogs and Contact remain in-page
+ * anchors until those exist, since a nav entry pointing at an unbuilt route
+ * is a 404 in the header. `globals.css` reserves `scroll-padding-top` so the
+ * fixed header never covers an anchor target. When Blogs ships this becomes a
+ * real href too and the Header does not change — it renders whatever this
+ * array contains.
  */
 export const PRIMARY_NAV: readonly NavItem[] = [
   { label: 'Home', href: '/' },
-  // A real route as of this phase; the rest remain home-page anchors.
   { label: 'Services', href: '/services' },
-  { label: 'About', href: '/#about' },
+  { label: 'About', href: '/about' },
   { label: 'Blogs', href: '/#blogs' },
   { label: 'Contact', href: '/#contact' },
 ] as const;
@@ -101,7 +101,7 @@ export const FOOTER_NAV: readonly {
     items: [
       { label: 'Home', href: '/' },
       { label: 'Services', href: '/services' },
-      { label: 'About Us', href: '/#about' },
+      { label: 'About Us', href: '/about' },
       { label: 'Contact Us', href: '/#contact' },
       // The header sends Blogs to the same in-page anchor. `/blog` does not
       // exist yet, and two footers ago this was a `pending` non-link; pointing
@@ -142,6 +142,7 @@ export const FOOTER_NAV: readonly {
 export const STATIC_ROUTES = [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
+  { path: '/about', priority: 0.8 },
 ] as const;
 
 export const FOOTER_DISCLAIMER = `${SITE.name} provides corporate advisory and administrative services. We are not a bank, law firm or licensed tax agent. Banking introductions are made to licensed UAE institutions, which retain sole discretion over account approval. Nothing on this site constitutes legal, tax or financial advice.`;

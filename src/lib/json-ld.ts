@@ -132,6 +132,34 @@ export function breadcrumbSchema(
 }
 
 /**
+ * Every node for the About route.
+ *
+ * An `AboutPage`, not a second `Organization` — the firm's own entity node is
+ * `organizationSchema()`, referenced here by `@id` rather than re-described,
+ * for the same reason the Services route's `CollectionPage` does.
+ */
+export function aboutPageGraph() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      organizationSchema(),
+      {
+        '@type': 'AboutPage',
+        '@id': absoluteUrl('/about'),
+        name: 'About',
+        url: absoluteUrl('/about'),
+        isPartOf: { '@id': WEBSITE_ID },
+        about: { '@id': ORGANIZATION_ID },
+      },
+      breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'About', path: '/about' },
+      ]),
+    ],
+  };
+}
+
+/**
  * Every node for the Services route.
  *
  * The `Service` nodes keep the same `@id`s they carry on the home page. That is

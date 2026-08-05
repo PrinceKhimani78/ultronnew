@@ -31,6 +31,10 @@ type SectionHeadingProps = {
   align?: 'left' | 'center';
   /** Inverted palette, for use inside a brand-toned band. */
   inverted?: boolean;
+  /** Overrides the eyebrow's default teal/cream colour. */
+  eyebrowClassName?: string;
+  /** Forwarded to `HeadingText` — overrides the accent segment's default `brand-bright`. */
+  accentClassName?: string;
   className?: string;
   children?: React.ReactNode;
 };
@@ -59,10 +63,13 @@ export function Eyebrow({
   children,
   inverted = false,
   align = 'left',
+  className,
 }: {
   children: React.ReactNode;
   inverted?: boolean;
   align?: 'left' | 'center';
+  /** Overrides the default teal/cream colour — e.g. the muted gold a comp calls for. */
+  className?: string;
 }) {
   return (
     <p
@@ -70,6 +77,7 @@ export function Eyebrow({
         'flex items-center gap-2 text-[16px] leading-none font-normal tracking-[0.08em] uppercase',
         align === 'center' && 'justify-center',
         inverted ? 'text-surface/70' : 'text-brand-bright',
+        className,
       )}
     >
       <EyebrowRule />
@@ -127,6 +135,8 @@ export function SectionHeading({
   as: Heading = 'h2',
   align = 'left',
   inverted = false,
+  eyebrowClassName,
+  accentClassName,
   className,
   children,
 }: SectionHeadingProps) {
@@ -138,7 +148,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <Eyebrow inverted={inverted} align={align}>
+        <Eyebrow inverted={inverted} align={align} className={eyebrowClassName}>
           {eyebrow}
         </Eyebrow>
       ) : null}
@@ -149,7 +159,11 @@ export function SectionHeading({
           inverted ? 'text-surface' : 'text-ink',
         )}
       >
-        <HeadingText segments={heading} inverted={inverted} />
+        <HeadingText
+          segments={heading}
+          inverted={inverted}
+          accentClassName={accentClassName}
+        />
       </Heading>
 
       {body ? (
