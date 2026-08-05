@@ -535,8 +535,153 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this, a delayed animation (e.g. the Core Services
+       illustration/benefits below, staggered up to ~1.85s after their
+       card scrolls into view) still sits at its `from` keyframe —
+       invisible, for content whose `from` is `opacity: 0` — for the
+       full delay before the now-near-instant animation plays. Zeroing
+       the delay is what makes "near-zero duration" actually mean
+       "displays immediately" rather than merely "resolves quickly". */
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   "Our Core Services" entrance & tab-change motion
+
+   Scoped to `.core-services-*` classnames only, and used nowhere but
+   `home/CoreServices.tsx` and `home/ServiceTabs.tsx`. The site's one shared
+   reveal (`fadeInUp` via `Reveal`, above) stays the entrance everywhere
+   else; this section gets its own directional choreography — heading drops
+   in, the tab list slides from the left, the card slides from the right —
+   which is why it needs its own keyframes rather than reusing Animate.css's
+   own `fadeInDown`/`fadeInLeft`/`fadeInRight` directly: those, like stock
+   `fadeInUp` before it was redefined above, travel 100% of the element's
+   own box, which for a 450px-tall card is exactly the "dramatic slide" this
+   file's own reveal system exists to avoid. New keyframe names, not a
+   redefinition of Animate.css's, so `WhoWeHelp.tsx`'s own unrelated use of
+   stock `fadeInDown`/`fadeInLeft`/`fadeInRight` is untouched.
+
+   No separate reduced-motion rule is needed here: the catch-all `*` block
+   directly above already forces every animation and transition on the page
+   to 0.01ms, this section included.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes coreServicesFadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes coreServicesFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-28px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes coreServicesFadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(28px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes coreServicesIllustrationIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes coreServicesBenefitIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes coreServicesContentEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.core-services-heading-animation {
+  animation-name: coreServicesFadeInDown;
+  animation-duration: 600ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.core-services-tabs-animation {
+  animation-name: coreServicesFadeInLeft;
+  animation-duration: 700ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.core-services-card-animation {
+  animation-name: coreServicesFadeInRight;
+  animation-duration: 700ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+/* Item 4 — the active tab's illustration, once on first paint only. */
+.core-services-illustration {
+  animation: coreServicesIllustrationIn 500ms ease-out both;
+}
+
+/* Item 5 — each benefit `<li>`, staggered via an inline `animationDelay`
+   (`${1450 + index * 80}ms`) set where the list is rendered. `both` is
+   redundant with the inline `opacity`/`transform` below but kept for
+   parity with every other rule in this block. */
+.core-services-benefit {
+  opacity: 0;
+  transform: translate3d(0, 6px, 0);
+  animation: coreServicesBenefitIn 350ms ease-out both;
+}
+
+/* Tab-change crossfade: the incoming panel's heading, description,
+   illustration and benefits, animated together as one block via a `key`
+   change on their shared wrapper (see `ServiceTabs.tsx`) rather than
+   per-element, so switching tabs never replays the slower entrance above. */
+.core-services-content-enter {
+  animation: coreServicesContentEnter 300ms ease-out both;
 }

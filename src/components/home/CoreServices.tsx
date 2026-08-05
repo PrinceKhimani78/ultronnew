@@ -75,7 +75,16 @@ export function CoreServices() {
       </div>
 
       <Container width="wide" className="relative z-10 flex flex-col">
-        <Reveal className="text-center">
+        {/* Item 1 of the section's entrance choreography: eyebrow and
+            heading animate together as one unit, dropping in rather than
+            rising — `core-services-heading-animation`, not the site's
+            shared `fadeInUp`, is what makes that direction different here
+            and nowhere else (see `globals.css`). */}
+        <Reveal
+          className="text-center"
+          animationClass="core-services-heading-animation"
+          amount={0.22}
+        >
           <p
             className="font-display flex items-center justify-center gap-2.5 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
             style={{ color: '#C9B37E' }}
@@ -91,10 +100,17 @@ export function CoreServices() {
         </Reveal>
 
         {/* Heading, then the tab panel, then the CTA — the section's three
-            beats, matching every other band on the site. */}
-        <Reveal delay={STAGGER_MS} amount={0.1} className="mt-10 lg:mt-12">
+            beats, matching every other band on the site.
+
+            No `Reveal` wrapping `ServiceTabs` itself: items 2 and 3 of the
+            entrance (the tab list, the content card) animate independently
+            — different directions, different delays — and `ServiceTabs`
+            owns both triggers itself so it can also gate the illustration/
+            benefit choreography and the tab-switch crossfade off the same
+            two observers. See `ServiceTabs.tsx`. */}
+        <div className="mt-10 lg:mt-12">
           <ServiceTabs />
-        </Reveal>
+        </div>
 
         <Reveal
           delay={STAGGER_MS * 2}
