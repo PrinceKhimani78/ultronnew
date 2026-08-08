@@ -200,3 +200,51 @@ export function servicesPageGraph() {
     ],
   };
 }
+
+/**
+ * Every node for the Partner route.
+ */
+export function partnerPageGraph() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      organizationSchema(),
+      {
+        '@type': 'WebPage',
+        '@id': absoluteUrl('/partner'),
+        name: 'Partner with Ultron',
+        url: absoluteUrl('/partner'),
+        isPartOf: { '@id': WEBSITE_ID },
+        about: { '@id': ORGANIZATION_ID },
+      },
+      breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Partner', path: '/partner' },
+      ]),
+    ],
+  };
+}
+
+/**
+ * Every node for the Blog route.
+ */
+export function blogPageGraph() {
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      organizationSchema(),
+      {
+        '@type': 'Blog',
+        '@id': absoluteUrl('/blogs'),
+        name: 'Ultron Insights',
+        url: absoluteUrl('/blogs'),
+        isPartOf: { '@id': WEBSITE_ID },
+        publisher: { '@id': ORGANIZATION_ID },
+      },
+      breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Blogs', path: '/blogs' },
+      ]),
+    ],
+  };
+}

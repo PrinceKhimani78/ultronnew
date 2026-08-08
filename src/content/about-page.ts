@@ -25,7 +25,7 @@ export const ABOUT_PAGE = {
       { text: 'About ' },
       { text: 'Us', accent: true },
     ] as readonly HeadingSegment[],
-    body: 'A corporate advisory firm built around the part of UAE market entry other agents step back from — banking, compliance and the structures that need to hold up under real scrutiny, not just on paper.',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   },
 
   foundation: {

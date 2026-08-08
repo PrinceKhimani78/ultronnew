@@ -42,6 +42,12 @@ const nextConfig: NextConfig = {
   images: {
     // AVIF first — roughly 20% smaller than WebP at equal quality.
     formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
     /**
      * One day, not one year. `/_next/image` caches against the *source path*,
      * not a content hash — replacing `/brand/logo.svg` in place reuses the URL

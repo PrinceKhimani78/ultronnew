@@ -74,7 +74,7 @@ export function AboutTeam() {
           one's left edge and card three's right edge on the same line as
           "Our Vision" / "Our Story" above.
         */}
-        <ul className="mt-8 grid w-full grid-cols-[280px] justify-center gap-y-[48px] sm:mt-10 sm:grid-cols-[repeat(2,280px)] sm:justify-center sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:grid-cols-[repeat(3,280px)] lg:justify-between lg:gap-y-[80px]">
+        <ul className="mt-14 grid w-full grid-cols-[280px] justify-center gap-y-[48px] sm:mt-12 sm:grid-cols-[repeat(2,280px)] sm:justify-center sm:gap-x-[56px] sm:gap-y-[64px] lg:mt-14 lg:grid-cols-[repeat(3,280px)] lg:justify-between lg:gap-y-[80px]">
           {ABOUT_PAGE.team.members.map((member, index) => (
             <Reveal
               as="li"

@@ -4,6 +4,7 @@ import { Container } from '@/components/layout/Container';
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { HeadingText } from '@/components/ui/SectionHeading';
+import { cn } from '@/lib/utils';
 import type { HeadingSegment } from '@/types/content';
 
 /** Cream ground matching Home page. */
@@ -15,28 +16,24 @@ export type PageHeroProps = {
   /** `id` on the `<h1>`, referenced by the section's `aria-labelledby`. */
   headingId: string;
   heading: readonly HeadingSegment[];
-  body: string;
+  body?: string;
+  eyebrow?: string;
+  align?: 'left' | 'center';
 };
 
 /**
  * Shared secondary-page hero, matching the Figma frame (1280×453).
- *
- * Originally `ServicesHero`. The About page needed this exact hero — same
- * height, background, typography, monogram and motion — with only the
- * heading and body text differing, and the brief that added About was
- * explicit that copying the markup a second time was not an option. Both
- * `ServicesHero` and `AboutHero` are now thin wrappers that supply their own
- * copy to this component, so a future change to the shared geometry has one
- * place to land rather than two that can drift apart.
- *
- * Features:
- * - 60px desktop title (weight 800, leading 100%, tracking -0.02em) with the
- *   accent segment in brand green (#035551)
- * - 16px description (weight 400, leading 170%, tracking -0.017em, #5A5A5A)
- * - Translucent 3D UF monogram icon on the right side
- * - Exact navbar clearance and 453px height balance matching Figma
  */
-export function PageHero({ id, headingId, heading, body }: PageHeroProps) {
+export function PageHero({
+  id,
+  headingId,
+  heading,
+  body,
+  eyebrow,
+  align = 'center',
+}: PageHeroProps) {
+  const isLeft = align === 'left';
+
   return (
     <section
       id={id}
@@ -48,15 +45,29 @@ export function PageHero({ id, headingId, heading, body }: PageHeroProps) {
         width="wide"
         className="relative flex flex-col justify-center pt-[210px] pb-10 sm:pt-[230px] sm:pb-12 lg:pt-[250px] lg:pb-14"
       >
-        <div className="relative flex w-full items-center justify-center">
-          {/* Centered Hero Heading & Description */}
-          <div className="relative z-10 mx-auto w-full max-w-[580px] text-center">
-            {/* Heading, body, monogram — the same 100ms sequence the home
-                hero uses, so every landing page opens the same way. */}
+        <div className="relative flex w-full items-center justify-between">
+          {/* Hero Heading & Description */}
+          <div
+            className={cn(
+              'relative z-10 w-full max-w-[580px]',
+              isLeft ? 'ml-0 text-left' : 'mx-auto text-center',
+            )}
+          >
+            {eyebrow && (
+              <Reveal>
+                <span className="font-display mb-3 block text-[13px] font-bold tracking-[0.15em] text-[#C9B37E] uppercase">
+                  {eyebrow}
+                </span>
+              </Reveal>
+            )}
+
             <Reveal>
               <h1
                 id={headingId}
-                className="font-display text-center text-[36px] leading-[100%] font-extrabold tracking-[-0.02em] text-black uppercase sm:text-[48px] lg:text-[60px]"
+                className={cn(
+                  'font-display text-[36px] leading-[100%] font-extrabold tracking-[-0.02em] text-black uppercase sm:text-[48px] lg:text-[60px]',
+                  isLeft ? 'text-left' : 'text-center',
+                )}
               >
                 <HeadingText
                   segments={heading}
@@ -65,14 +76,19 @@ export function PageHero({ id, headingId, heading, body }: PageHeroProps) {
               </h1>
             </Reveal>
 
-            <Reveal delay={STAGGER_MS} className="mt-4 sm:mt-5">
-              <p
-                className="mx-auto max-w-[500px] text-center text-[15px] leading-[170%] font-normal tracking-[-0.017em] sm:text-[16px]"
-                style={{ color: '#5A5A5A' }}
-              >
-                {body}
-              </p>
-            </Reveal>
+            {body && (
+              <Reveal delay={STAGGER_MS} className="mt-4 sm:mt-5">
+                <p
+                  className={cn(
+                    'max-w-[500px] text-[15px] leading-[170%] font-normal tracking-[-0.017em] sm:text-[16px]',
+                    isLeft ? 'ml-0 text-left' : 'mx-auto text-center',
+                  )}
+                  style={{ color: '#5A5A5A' }}
+                >
+                  {body}
+                </p>
+              </Reveal>
+            )}
           </div>
 
           {/* Translucent 3D UF Logo / Monogram on the Right */}

@@ -233,7 +233,7 @@ export function Header() {
         override is safe without `!important` because the shell is declared in
         the `components` layer and this is a utility.
       */}
-      <div className="page-shell px-[var(--pill-gutter)]">
+      <div className="page-shell max-[480px]:px-3 max-[340px]:px-2.5 sm:px-[var(--pill-gutter)]">
         <div
           className={cn(
             'bg-brand-panel text-surface rounded-[100px] transition-all duration-300 ease-in-out',
@@ -259,7 +259,7 @@ export function Header() {
             at one breakpoint and quietly drift at the other three, which is the
             bug this replaced.
           */}
-          <div className="flex h-[66px] items-center justify-between px-[calc(var(--page-gutter)-var(--pill-gutter))]">
+          <div className="flex h-[66px] items-center justify-between px-4 max-[340px]:px-4 min-[341px]:px-[18px] lg:px-[calc(var(--page-gutter)-var(--pill-gutter))]">
             <Link
               href="/"
               className="shrink-0 rounded-sm"
@@ -271,7 +271,10 @@ export function Header() {
                 to give. Pinning width keeps the logo's right edge — and the nav
                 and CTA that follow it — on the comp's x-coordinates.
               */}
-              <Logo tone="cream" className="h-auto w-[128px] lg:w-[167px]" />
+              <Logo
+                tone="cream"
+                className="h-auto w-[150px] min-[341px]:w-[175px] lg:w-[167px]"
+              />
             </Link>
 
             <nav

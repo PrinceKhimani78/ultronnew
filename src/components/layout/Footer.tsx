@@ -161,15 +161,12 @@ export function Footer() {
           style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.2)' }}
         />
 
-        {/* Bottom Bar: Left & Right Copyright text strictly matching Figma */}
+        {/* Bottom Bar: Left-aligned Copyright text */}
         <Reveal
           delay={BEAT.closing}
-          className="flex flex-col items-center justify-between gap-3 text-center text-[12px] leading-tight font-medium tracking-[0.06em] uppercase sm:flex-row sm:text-left sm:text-[13px]"
+          className="text-left text-[12px] leading-tight font-medium tracking-[0.06em] uppercase sm:text-[13px]"
           style={{ color: BODY_COLOR }}
         >
-          <span className="text-white/80">
-            ALL RIGHTS RESERVED BY ULTRON FINANCIALS
-          </span>
           <span className="text-white/80">
             &copy; 2026 Ultron Financials. All rights reserved.
           </span>

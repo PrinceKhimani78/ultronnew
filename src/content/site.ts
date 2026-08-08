@@ -64,7 +64,8 @@ export const PRIMARY_NAV: readonly NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'About', href: '/about' },
-  { label: 'Blogs', href: '/#blogs' },
+  { label: 'Partner', href: '/partner' },
+  { label: 'Blogs', href: '/blogs' },
   { label: 'Contact', href: '/#contact' },
 ] as const;
 
@@ -102,11 +103,9 @@ export const FOOTER_NAV: readonly {
       { label: 'Home', href: '/' },
       { label: 'Services', href: '/services' },
       { label: 'About Us', href: '/about' },
+      { label: 'Partner With Us', href: '/partner' },
       { label: 'Contact Us', href: '/#contact' },
-      // The header sends Blogs to the same in-page anchor. `/blog` does not
-      // exist yet, and two footers ago this was a `pending` non-link; pointing
-      // both navs at one destination is what stops them contradicting.
-      { label: 'Blogs', href: '/#blogs' },
+      { label: 'Blogs', href: '/blogs' },
     ],
   },
   {
@@ -143,6 +142,8 @@ export const STATIC_ROUTES = [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
   { path: '/about', priority: 0.8 },
+  { path: '/partner', priority: 0.8 },
+  { path: '/blogs', priority: 0.8 },
 ] as const;
 
 export const FOOTER_DISCLAIMER = `${SITE.name} provides corporate advisory and administrative services. We are not a bank, law firm or licensed tax agent. Banking introductions are made to licensed UAE institutions, which retain sole discretion over account approval. Nothing on this site constitutes legal, tax or financial advice.`;

@@ -29,7 +29,6 @@ import { HOME_HERO } from '@/content/home';
 const CREAM = '#FDFBEE';
 const STRIP = '#FEFDF2';
 const SAND = '#DCCB8E';
-const BRAND = '#035551';
 
 /**
  * The hero's entrance order, as beats of `STAGGER_MS`.
@@ -113,19 +112,7 @@ export function Hero() {
             <Reveal
               as="ul"
               delay={BEAT.stats}
-              /*
-                `lg:-ml-[30px]` cancels this strip's own `px-[30px]`, so the
-                stat icons land on the same vertical line as the h1 above them
-                while the cream plate still overhangs to the left — which is
-                exactly how the comp draws it.
-
-                Only from `lg`, where the gutter is 48px and can absorb a 30px
-                pull. At mobile the gutter is 20px and the plate would breach
-                the viewport edge.
-              */
-              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-[30px] py-6 sm:flex-row sm:items-stretch sm:gap-0 sm:py-0 lg:-ml-[30px]"
-              // The strip's own ground and its 156px floor. Both are layout, not
-              // motion — they stay on the element that `Reveal` renders.
+              className="mt-[34px] flex w-full max-w-[646px] flex-col gap-6 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:px-6 sm:py-0 lg:-ml-[30px]"
               style={{ backgroundColor: STRIP, minHeight: 156 }}
             >
               {HOME_HERO.stats.map((stat, index) => {
@@ -133,25 +120,26 @@ export function Hero() {
                 return (
                   <li
                     key={stat.label}
-                    className="flex flex-1 items-center sm:py-[28px]"
+                    className="flex flex-1 items-center gap-3.5 sm:justify-center sm:py-[32px]"
                   >
                     {index > 0 ? (
                       <span
                         aria-hidden="true"
-                        className="mr-6 hidden h-[100px] w-px shrink-0 self-center sm:block"
-                        style={{ backgroundColor: SAND }}
+                        className="mr-3.5 hidden h-[64px] w-px shrink-0 self-center bg-[#035551]/20 sm:block lg:mr-5"
                       />
                     ) : null}
-                    <div className="flex flex-col gap-2">
-                      <span
-                        aria-hidden="true"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-                        style={{ backgroundColor: BRAND, color: CREAM }}
-                      >
-                        <Icon className="h-[22px] w-[22px]" />
+                    <span
+                      aria-hidden="true"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#035551] text-[#FDFBEE]"
+                    >
+                      <Icon className="h-5 w-5 stroke-[2]" />
+                    </span>
+                    <div className="flex flex-col justify-center">
+                      <span className="font-display text-[22px] leading-[110%] font-bold text-black sm:text-[24px]">
+                        {stat.value}
                       </span>
-                      <span className="text-[16px] leading-[135%] font-bold text-black">
-                        {stat.value} {stat.label}
+                      <span className="mt-0.5 max-w-[140px] text-[12px] leading-[125%] font-medium text-[#035551] sm:text-[13px]">
+                        {stat.label}
                       </span>
                     </div>
                   </li>
