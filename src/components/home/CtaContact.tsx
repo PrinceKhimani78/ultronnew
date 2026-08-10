@@ -21,7 +21,25 @@ import { CTA_CONTACT } from '@/content/home';
 
 const CREAM = '#FDFBEE';
 
-export function CtaContact() {
+type CtaContactProps = {
+  eyebrow?: string;
+  heading?: readonly import('@/types/content').HeadingSegment[];
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  defaultService?: string;
+  formTitle?: string;
+};
+
+export function CtaContact({
+  eyebrow = CTA_CONTACT.eyebrow,
+  heading = CTA_CONTACT.heading,
+  body = CTA_CONTACT.body,
+  ctaLabel = CTA_CONTACT.cta.label,
+  ctaHref = CTA_CONTACT.cta.href,
+  defaultService,
+  formTitle,
+}: CtaContactProps) {
   return (
     <section
       id="contact"
@@ -33,12 +51,12 @@ export function CtaContact() {
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-[62px]">
           {/* Proposition first, then the form it argues for. */}
           <Reveal className="lg:w-[394px] lg:shrink-0">
-            <BandEyebrow>{CTA_CONTACT.eyebrow}</BandEyebrow>
+            <BandEyebrow>{eyebrow}</BandEyebrow>
             <h2
               id="contact-heading"
               className="font-display mt-3 text-[clamp(2rem,4.6vw,48px)] leading-[100%] font-semibold tracking-[-0.017em] text-black"
             >
-              {CTA_CONTACT.heading.map((segment, index) => (
+              {heading.map((segment, index) => (
                 <span
                   key={index}
                   className={segment.accent ? 'text-[#035551]' : undefined}
@@ -48,16 +66,14 @@ export function CtaContact() {
               ))}
             </h2>
             <p className="mt-8 text-[16px] leading-[150%] font-normal text-[#5A5A5A] lg:mt-[50px]">
-              {CTA_CONTACT.body}
+              {body}
             </p>
             {/* Button last, after the copy it belongs to has landed. */}
             <Reveal
               delay={STAGGER_MS * 2}
               className="mt-8 inline-block lg:mt-[40px]"
             >
-              <ActionButton href={CTA_CONTACT.cta.href}>
-                {CTA_CONTACT.cta.label}
-              </ActionButton>
+              <ActionButton href={ctaHref}>{ctaLabel}</ActionButton>
             </Reveal>
           </Reveal>
 
@@ -72,7 +88,10 @@ export function CtaContact() {
             amount={0.1}
             className="w-full lg:w-[630px] lg:shrink-0"
           >
-            <ConsultationForm />
+            <ConsultationForm
+              defaultService={defaultService}
+              formTitle={formTitle}
+            />
           </Reveal>
         </div>
       </Container>

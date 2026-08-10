@@ -10,7 +10,11 @@ import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { useMotionScale } from '@/components/motion/useMotionScale';
 import { HeadingText } from '@/components/ui/SectionHeading';
-import { PROCESS_INTRO, PROCESS_STEPS } from '@/content/process';
+import {
+  PROCESS_INTRO,
+  PROCESS_STEPS,
+  type ProcessStep,
+} from '@/content/process';
 import { cn } from '@/lib/utils';
 
 /**
@@ -50,7 +54,18 @@ function StepCardContent({ title, body }: { title: string; body: string }) {
   );
 }
 
-export function HowUltronWorks() {
+type HowUltronWorksProps = {
+  intro?: {
+    eyebrow: string;
+    heading: readonly import('@/types/content').HeadingSegment[];
+  };
+  steps?: readonly ProcessStep[];
+};
+
+export function HowUltronWorks({
+  intro = PROCESS_INTRO,
+  steps = PROCESS_STEPS,
+}: HowUltronWorksProps) {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [activeStep, setActiveStep] = useState(0);
@@ -111,12 +126,12 @@ export function HowUltronWorks() {
               --
             </span>
 
-            {PROCESS_INTRO.eyebrow}
+            {intro.eyebrow}
           </p>
 
           <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-white sm:text-[40px] lg:text-[48px]">
             <HeadingText
-              segments={PROCESS_INTRO.heading}
+              segments={intro.heading}
               accentClassName="text-white"
             />
           </h2>
@@ -142,7 +157,7 @@ export function HowUltronWorks() {
           )}
 
           <ol className="relative z-10 space-y-10 sm:space-y-12 lg:space-y-16">
-            {PROCESS_STEPS.map((step, index) => {
+            {steps.map((step, index) => {
               const isRight = index % 2 === 1;
               const isActive = index === activeStep;
 

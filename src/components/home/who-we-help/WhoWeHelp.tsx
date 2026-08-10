@@ -40,7 +40,7 @@ export function WhoWeHelpSection() {
   return (
     <section
       id="who-we-help"
-      className="overflow-hidden py-[52px] lg:pt-20 lg:pb-[90px]"
+      className="relative h-auto min-h-0 w-full overflow-visible py-[56px] lg:pt-20 lg:pb-[112px]"
       style={{ backgroundColor: CREAM }}
       aria-labelledby="who-we-help-heading"
     >
@@ -96,7 +96,7 @@ export function WhoWeHelpSection() {
           positional sequence. An explicit index is deterministic at any depth,
           and it keeps reveal order welded to reading order.
         */}
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-[72px] lg:grid-cols-[1.6fr_1.6fr_1.8fr] lg:gap-6">
+        <div className="relative mt-10 grid h-auto grid-cols-1 items-stretch gap-5 overflow-visible sm:grid-cols-2 lg:mt-[72px] lg:grid-cols-[1.6fr_1.6fr_1.8fr] lg:gap-6">
           <WhoWeHelpCard
             item={card1}
             index={0}

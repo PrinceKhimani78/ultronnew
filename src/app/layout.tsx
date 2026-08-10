@@ -3,6 +3,7 @@ import { Funnel_Display } from 'next/font/google';
 
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { UltronLoader } from '@/components/ui/UltronLoader';
 import { SITE } from '@/content/site';
 import { env } from '@/lib/env';
 import './globals.css';
@@ -73,6 +74,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
+        <UltronLoader />
         {/*
           First thing in the tab order, visible only once focused. A keyboard
           user should not have to walk the entire header to reach the content.

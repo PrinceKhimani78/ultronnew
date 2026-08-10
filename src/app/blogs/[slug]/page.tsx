@@ -3,11 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { BlogCard } from '@/components/blog/BlogCard';
 import { CtaContact } from '@/components/home/CtaContact';
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { Reveal } from '@/components/motion/Reveal';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { BandEyebrow } from '@/components/ui/BandEyebrow';
 import { BLOG_POSTS } from '@/content/blogs';
 import { breadcrumbSchema, organizationSchema } from '@/lib/json-ld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
@@ -46,6 +48,8 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const otherPosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+
   const jsonLdGraph = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -72,10 +76,11 @@ export default async function BlogPostPage({
       <JsonLd schema={jsonLdGraph} />
 
       <main id="content" className="flex-1">
-        <Section className="bg-[#FDFBEE] pt-[200px] pb-16 sm:pt-[220px] sm:pb-20 lg:pt-[240px]">
+        {/* Hero & Centered Article Header */}
+        <Section className="bg-[#FDFBEE] pt-[180px] pb-16 sm:pt-[200px] sm:pb-20 lg:pt-[220px]">
           <Container width="wide">
-            {/* Back link */}
-            <Reveal>
+            {/* Back link - Centered */}
+            <Reveal className="flex justify-center">
               <Link
                 href="/blogs"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-[#035551] transition-colors hover:text-[#023F3D]"
@@ -85,10 +90,10 @@ export default async function BlogPostPage({
               </Link>
             </Reveal>
 
-            {/* Header info */}
-            <Reveal className="mt-6 max-w-4xl">
-              <div className="flex items-center gap-3 text-xs font-semibold tracking-wider text-[#035551] uppercase">
-                <span className="rounded-full bg-[#035551]/10 px-3 py-1">
+            {/* Header info - Centered */}
+            <Reveal className="mx-auto mt-6 max-w-4xl text-center">
+              <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold tracking-wider text-[#035551] uppercase">
+                <span className="rounded-full bg-[#035551]/10 px-3.5 py-1">
                   {post.category}
                 </span>
                 <span>{post.date}</span>
@@ -96,18 +101,18 @@ export default async function BlogPostPage({
                 <span>{post.readTime}</span>
               </div>
 
-              <h1 className="font-display mt-4 text-[32px] leading-[115%] font-extrabold text-[#1A1A1A] sm:text-[44px] lg:text-[52px]">
+              <h1 className="font-display mt-4 text-center text-[32px] leading-[115%] font-extrabold text-[#1A1A1A] sm:text-[44px] lg:text-[52px]">
                 {post.title}
               </h1>
 
-              <p className="mt-6 text-[18px] leading-[170%] text-[#5A5A5A]">
+              <p className="mx-auto mt-6 max-w-3xl text-center text-[18px] leading-[170%] text-[#5A5A5A] sm:text-[20px]">
                 {post.excerpt}
               </p>
             </Reveal>
 
-            {/* Featured Image */}
-            <Reveal className="mt-10 max-w-5xl">
-              <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#023F3D]/10 shadow-lg">
+            {/* Featured Image - Centered & Full Width */}
+            <Reveal className="mx-auto mt-12 max-w-5xl">
+              <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#023F3D]/10 shadow-xl">
                 <Image
                   src={post.imageUrl}
                   alt={post.imageAlt}
@@ -121,10 +126,10 @@ export default async function BlogPostPage({
         </Section>
 
         {/* Article Body Content */}
-        <Section className="bg-white pt-12 pb-20">
+        <Section className="bg-white py-16 sm:py-20">
           <Container width="wide" className="max-w-4xl">
             <article className="prose prose-lg max-w-none text-[#333333]">
-              <p className="text-[17px] leading-[180%] text-[#5A5A5A]">
+              <p className="text-[18px] leading-[180%] text-[#404040] sm:text-[19px]">
                 Navigating the financial and regulatory landscape in the United
                 Arab Emirates requires strict adherence to institutional
                 standards, comprehensive documentation, and proactive risk
@@ -178,6 +183,35 @@ export default async function BlogPostPage({
           </Container>
         </Section>
 
+        {/* Related Articles Section (Grid Layout) */}
+        {otherPosts.length > 0 ? (
+          <Section className="border-t border-[#035551]/10 bg-[#FDFBEE] py-16 sm:py-20 lg:py-24">
+            <Container width="wide">
+              <Reveal className="mx-auto mb-12 max-w-3xl text-center">
+                <BandEyebrow className="justify-center">
+                  EXPLORE MORE ARTICLES
+                </BandEyebrow>
+                <h2 className="font-display mt-3 text-[clamp(1.75rem,3.8vw,40px)] font-bold text-[#023F3D]">
+                  Related Insights & Articles
+                </h2>
+                <p className="mt-3 text-[16px] text-[#5A5A5A]">
+                  Stay informed on UAE business setup, banking strategies, and
+                  compliance frameworks.
+                </p>
+              </Reveal>
+
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {otherPosts.map((otherPost, idx) => (
+                  <Reveal key={otherPost.id} delay={idx * 100}>
+                    <BlogCard post={otherPost} />
+                  </Reveal>
+                ))}
+              </div>
+            </Container>
+          </Section>
+        ) : null}
+
+        {/* Final CTA */}
         <CtaContact />
       </main>
     </>

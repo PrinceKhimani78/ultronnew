@@ -1,3 +1,5 @@
+'use client';
+
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
@@ -7,20 +9,8 @@ import { cn } from '@/lib/utils';
 
 /**
  * The consultation form, drawn from the comp's contact frame.
- *
- * The panel carries a conic gradient sweeping teal → bright teal → teal from
- * -46.16°, which is what gives it the sheen across the diagonal. Kept as a conic
- * gradient rather than flattened to a linear one: the highlight would land in
- * the wrong place and the panel would read flat.
- *
- * The comp draws every field with its label above and no placeholder, so each
- * control gets a real `<label>` tied by id. Two things here are NOT in the comp
- * and are kept deliberately — the honeypot, and the reassurance line under the
- * submit. The design is the authority on layout, not on what a lead form owes
- * the person filling it in.
  */
 
-/** The comp's cream, used for the type, the field rings and the submit fill. */
 const CREAM = '#FDFBEE';
 
 const FIELD_CLASS =
@@ -35,31 +25,12 @@ const FIELD_STYLE = {
 
 /**
  * Opts every field out of password-manager autofill decoration.
- *
- * LastPass injects `<div data-lastpass-icon-root>` next to any field it adopts,
- * and it does so before React hydrates — which is a hydration mismatch React
- * cannot be told to ignore. `suppressHydrationWarning` does not cover it:
- * react-dom only consults that flag for prop, attribute and text differences,
- * never for an element the extension inserted. The fix has to be upstream of
- * the injection, so we decline the adoption instead.
- *
- * `data-lpignore` is LastPass, `data-1p-ignore` is 1Password and
- * `data-form-type="other"` is Dashlane. None of these are credential fields, so
- * declining is also the behaviour a visitor would want.
- */
-/**
- * How many `StaggerItem` field rows the grid below holds.
- *
- * Only the submit button's delay reads this — everything inside the `Stagger`
- * derives its own beat from its position. Keep it in step with the JSX; if it
- * drifts low the button lands on top of the last field, and if it drifts high
- * there is a visible gap before it.
  */
 const FIELD_COUNT = 6;
 
 const NO_AUTOFILL_UI = {
   'data-lpignore': 'true',
-  'data-1p-ignore': true,
+  'data-1p-ignore': 'true',
   'data-form-type': 'other',
 } as const;
 
@@ -90,11 +61,26 @@ function FieldLabel({
   );
 }
 
-export function ConsultationForm() {
+type ConsultationFormProps = {
+  defaultService?: string;
+  formTitle?: string;
+  submitLabel?: string;
+  className?: string;
+};
+
+export function ConsultationForm({
+  defaultService,
+  formTitle = CTA_CONTACT.form.title,
+  submitLabel = CTA_CONTACT.form.submitLabel,
+  className,
+}: ConsultationFormProps) {
   return (
     <form
       suppressHydrationWarning
-      className="card-shadow-right relative w-full rounded-[20px] px-6 py-7 sm:px-8 sm:py-8 lg:w-[630px] lg:shrink-0"
+      className={cn(
+        'card-shadow-right relative w-full rounded-[20px] px-6 py-7 sm:px-8 sm:py-8 lg:w-[630px] lg:shrink-0',
+        className,
+      )}
       style={{
         backgroundImage:
           'conic-gradient(from -46.16deg at 50% 50%, #035551 0deg, #058881 178.8deg, #035551 360deg)',
@@ -102,13 +88,13 @@ export function ConsultationForm() {
           '4px 4px 16px 5px rgba(3, 85, 81, 0.25), 0 20px 40px rgba(0, 0, 0, 0.2)',
       }}
     >
-      {/* Header section with horizontal divider line as in Figma comp */}
+      {/* Header section with horizontal divider line */}
       <Reveal className="mb-6">
         <h3
           className="font-display text-[20px] leading-tight font-bold tracking-[0.02em] uppercase sm:text-[22px]"
           style={{ color: CREAM }}
         >
-          {CTA_CONTACT.form.title}
+          {formTitle}
         </h3>
         <div className="mt-4 h-[1px] w-full bg-white/20" />
       </Reveal>
@@ -198,7 +184,7 @@ export function ConsultationForm() {
             id="contact-service"
             name="service"
             required
-            defaultValue=""
+            defaultValue={defaultService || ''}
             suppressHydrationWarning
             {...NO_AUTOFILL_UI}
             className={cn(FIELD_CLASS, 'appearance-none rounded-[10px]')}
@@ -237,7 +223,7 @@ export function ConsultationForm() {
       </Stagger>
 
       {/* Honeypot for spam protection */}
-      <div aria-hidden="true" className="hidden">
+      <div aria-hidden="true" className="hidden" suppressHydrationWarning>
         <label htmlFor="contact-website">Website</label>
         <input
           id="contact-website"
@@ -245,11 +231,12 @@ export function ConsultationForm() {
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          suppressHydrationWarning
           {...NO_AUTOFILL_UI}
         />
       </div>
 
-      {/* Form Submit Button matching Figma comp precisely */}
+      {/* Form Submit Button */}
       <Reveal delay={(FIELD_COUNT + 1) * STAGGER_MS} className="mt-6 block">
         <button
           type="submit"
@@ -260,7 +247,7 @@ export function ConsultationForm() {
           }}
         >
           <span className="font-display text-[16px] leading-none font-bold tracking-[0.03em] text-[#035551] uppercase transition-colors group-hover:text-[#023c39] sm:text-[18px]">
-            {CTA_CONTACT.form.submitLabel}
+            {submitLabel}
           </span>
         </button>
       </Reveal>
