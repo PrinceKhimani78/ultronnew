@@ -49,8 +49,6 @@ export default async function ServiceDetailPage({ params }: Props) {
     notFound();
   }
 
-  const isBusinessSetup = service.slug === 'business-setup';
-
   return (
     <>
       <main id="content" className="flex-1">
@@ -79,19 +77,9 @@ export default async function ServiceDetailPage({ params }: Props) {
             </nav>
 
             <div className="max-w-3xl">
-              {!isBusinessSetup && (
-                <span className="bg-brand/10 text-brand-bright mb-4 inline-block rounded-full px-3.5 py-1 text-xs font-semibold tracking-widest uppercase">
-                  Service 0{service.number}
-                </span>
-              )}
               <h1 className="font-display text-ink text-[clamp(2.25rem,4.8vw,3.75rem)] leading-[1.08] font-bold tracking-[-0.02em] uppercase">
                 {service.headline}
               </h1>
-              {!isBusinessSetup && service.tagline && (
-                <p className="text-ink-muted mt-5 text-base leading-relaxed font-medium sm:text-lg lg:text-xl">
-                  {service.tagline}
-                </p>
-              )}
               <p className="text-ink-muted/90 mt-5 text-sm leading-relaxed sm:text-base">
                 {service.description}
               </p>
