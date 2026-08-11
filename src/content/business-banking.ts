@@ -43,8 +43,8 @@ export type SolutionDeskItem = {
 export const ULTRON_SOLUTION_DESK = {
   eyebrow: 'OUR BUSINESS BANKING SUPPORT',
   heading: [
-    { text: 'How ' },
-    { text: 'Ultron Works', accent: true },
+    { text: 'Ultron Banking ' },
+    { text: 'Solution Desk', accent: true },
   ] as readonly HeadingSegment[],
   description:
     'Every banking case has a different obstacle. Ultron identifies what is preventing progress, builds the right strategy and provides focused support for the situation at hand.',

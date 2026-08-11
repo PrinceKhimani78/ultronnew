@@ -10,6 +10,8 @@ import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
 import { SERVICES } from '@/content/services';
 import { buildMetadata } from '@/lib/seo';
 
+import { ServiceProcessStructure } from '@/components/services/ServiceProcessStructure';
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -47,6 +49,8 @@ export default async function ServiceDetailPage({ params }: Props) {
     notFound();
   }
 
+  const isBusinessSetup = service.slug === 'business-setup';
+
   return (
     <>
       <main id="content" className="flex-1">
@@ -56,7 +60,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             {/* Breadcrumb */}
             <nav
               aria-label="Breadcrumb"
-              className="text-ink-muted mb-6 flex items-center gap-2 text-xs font-medium tracking-wider uppercase"
+              className="text-ink-muted mt-4 mb-6 flex items-center gap-2 text-xs font-medium tracking-wider uppercase sm:mt-6 lg:mt-8"
             >
               <Link href="/" className="hover:text-brand transition-colors">
                 Home
@@ -75,16 +79,20 @@ export default async function ServiceDetailPage({ params }: Props) {
             </nav>
 
             <div className="max-w-3xl">
-              <span className="bg-brand/10 text-brand-bright mb-4 inline-block rounded-full px-3.5 py-1 text-xs font-semibold tracking-widest uppercase">
-                Service 0{service.number}
-              </span>
+              {!isBusinessSetup && (
+                <span className="bg-brand/10 text-brand-bright mb-4 inline-block rounded-full px-3.5 py-1 text-xs font-semibold tracking-widest uppercase">
+                  Service 0{service.number}
+                </span>
+              )}
               <h1 className="font-display text-ink text-[clamp(2.25rem,4.8vw,3.75rem)] leading-[1.08] font-bold tracking-[-0.02em] uppercase">
                 {service.headline}
               </h1>
-              <p className="text-ink-muted mt-5 text-base leading-relaxed font-medium sm:text-lg lg:text-xl">
-                {service.tagline}
-              </p>
-              <p className="text-ink-muted/90 mt-4 text-sm leading-relaxed sm:text-base">
+              {!isBusinessSetup && service.tagline && (
+                <p className="text-ink-muted mt-5 text-base leading-relaxed font-medium sm:text-lg lg:text-xl">
+                  {service.tagline}
+                </p>
+              )}
+              <p className="text-ink-muted/90 mt-5 text-sm leading-relaxed sm:text-base">
                 {service.description}
               </p>
             </div>
@@ -92,7 +100,11 @@ export default async function ServiceDetailPage({ params }: Props) {
         </div>
 
         {/* Benefits Breakdown */}
-        <Section tone="raised" spacing="spacious">
+        <Section
+          tone="raised"
+          spacing="spacious"
+          className="relative overflow-hidden"
+        >
           <Container width="wide">
             <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
               <div className="lg:col-span-5">
@@ -137,7 +149,19 @@ export default async function ServiceDetailPage({ params }: Props) {
               </div>
             </div>
           </Container>
+          {/* Bottom gradient wash matching home page hero section */}
+          <div
+            className="pointer-events-none absolute right-0 bottom-0 left-0 h-[100px] w-full sm:h-[132px]"
+            style={{
+              backgroundImage:
+                'linear-gradient(180deg, rgba(253, 251, 238, 0) 0%, #DCCB8E 740.91%)',
+            }}
+            aria-hidden="true"
+          />
         </Section>
+
+        {/* Service Process Structure Capsules */}
+        <ServiceProcessStructure service={service} />
 
         {/* Direct Consultation Band */}
         <CtaContact />

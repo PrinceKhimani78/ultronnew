@@ -18,6 +18,9 @@ import {
   type DifferentiatorItem,
 } from '@/content/business-banking';
 
+const CREAM = '#FDFBEE';
+const SAND = '#DCCB8E';
+
 const ICON_MAP = [
   Search,
   Layers,
@@ -33,7 +36,8 @@ export function WhyChooseUltron() {
       id="why-choose"
       spacing="default"
       tone="surface"
-      className="bg-[#FDFBEE] py-16 sm:py-20 lg:py-24"
+      className="relative overflow-hidden bg-[#FDFBEE] pt-16 !pb-0 sm:pt-20 lg:pt-24"
+      style={{ paddingBottom: 0 }}
     >
       <Container width="wide">
         {/* Section Header */}
@@ -90,6 +94,14 @@ export function WhyChooseUltron() {
           )}
         </div>
       </Container>
+
+      {/* Bottom Gradient Band Matching Homepage Hero */}
+      <div
+        className="relative mt-10 h-[132px] w-full lg:mt-[67px]"
+        style={{
+          backgroundImage: `linear-gradient(180deg, ${CREAM} 0%, ${SAND} 740.91%)`,
+        }}
+      />
     </Section>
   );
 }
