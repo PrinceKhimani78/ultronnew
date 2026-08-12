@@ -49,8 +49,8 @@ function ArrowUpRightIcon({ className }: { className?: string }) {
 }
 
 const BASE_SURFACE = [
-  'group inline-flex items-center justify-between rounded-[999px] gap-4 border-0',
-  'text-[18px] leading-none font-bold tracking-[0.02em] uppercase',
+  'group inline-flex items-center justify-between rounded-[999px] gap-3 sm:gap-4 border-0 whitespace-nowrap',
+  'text-[15px] sm:text-[16px] lg:text-[17px] leading-none font-bold tracking-[0.02em] uppercase',
   'transition-[background-color,transform] duration-500 ease-[ease]',
   'active:scale-[0.98]',
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E]',
