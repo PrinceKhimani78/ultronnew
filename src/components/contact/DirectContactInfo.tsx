@@ -1,10 +1,29 @@
-import { Clock, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { BandEyebrow } from '@/components/ui/BandEyebrow';
 import { SITE, WHATSAPP_URL } from '@/content/site';
+
+function LinkedinIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
 
 const CONTACT_METHODS = [
   {
@@ -26,7 +45,7 @@ const CONTACT_METHODS = [
     href: undefined,
   },
   {
-    icon: Linkedin,
+    icon: LinkedinIcon,
     label: 'LINKEDIN',
     value: 'Ultron Financials',
     href: SITE.social.linkedin,

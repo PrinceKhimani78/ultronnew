@@ -19,7 +19,7 @@ export function ContactReassuranceStrip() {
   };
 
   return (
-    <Section tone="dark" className="py-16 lg:py-20 text-center">
+    <Section tone="brand" className="py-16 lg:py-20 text-center">
       <Container width="wide">
         <Reveal className="flex flex-col items-center">
           <BandEyebrow className="text-[#DCCB8E]">

@@ -26,7 +26,7 @@ const PROCESS_STEPS = [
 
 export function ContactProcess() {
   return (
-    <Section tone="cream" className="py-16 lg:py-24">
+    <Section tone="surface" className="py-16 lg:py-24">
       <Container width="wide">
         <div className="flex flex-col items-center text-center">
           <BandEyebrow>WHAT HAPPENS NEXT</BandEyebrow>
