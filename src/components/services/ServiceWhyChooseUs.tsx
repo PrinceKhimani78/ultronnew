@@ -9,8 +9,6 @@ type Props = {
 };
 
 export function ServiceWhyChooseUs({ serviceName }: Props) {
-  const titleText = serviceName ? `Why Choose Us for ${serviceName}` : 'Why Choose Ultron Financials';
-
   const reasons = [
     {
       title: 'Direct Access to Senior Advisors',
