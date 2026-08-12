@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
@@ -78,12 +76,6 @@ export function ConsultationForm({
   submitLabel = CTA_CONTACT.form.submitLabel,
   className,
 }: ConsultationFormProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
     <form
       suppressHydrationWarning
