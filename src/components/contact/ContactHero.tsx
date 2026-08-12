@@ -16,7 +16,6 @@ export function ContactHero() {
         { text: 'Right Way Forward', accent: true },
         { text: '.' },
       ]}
-      body="Tell us what you are trying to achieve, where the process has become difficult, or what has already been declined. Our team will review your situation and give you a clear feasibility direction."
     />
   );
 }
