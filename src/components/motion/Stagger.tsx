@@ -150,7 +150,7 @@ export function StaggerItem({
     <Component
       data-reveal=""
       data-revealed={finished ? '' : undefined}
-      suppressHydrationWarning={suppressHydrationWarning}
+      suppressHydrationWarning={suppressHydrationWarning ?? true}
       className={cn(className, animating && REVEAL_CLASS)}
       style={
         animating && delay ? { ...style, animationDelay: `${delay}ms` } : style

@@ -1,13 +1,11 @@
-import Image from 'next/image';
-
 import { Container } from '@/components/layout/Container';
 import { STAGGER_MS } from '@/components/motion/config';
-import { Parallax } from '@/components/motion/Parallax';
 import { Reveal } from '@/components/motion/Reveal';
 import { ActionButton } from '@/components/ui/ActionButton';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
 import { HOME_HERO } from '@/content/home';
+import { HeroUFParticleLogoWrapper } from './HeroUFParticleLogoWrapper';
 
 /**
  * Hero, rebuilt from the comp's 1280×832 "Hero" frame, with the
@@ -57,13 +55,36 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative overflow-hidden"
+      className="homepage-hero relative w-full max-w-none m-0 p-0 overflow-hidden isolate"
       style={{ backgroundColor: CREAM }}
       aria-labelledby="home-hero-heading"
     >
+      {/* Absolute background layer for UF Particle Logo */}
+      <div
+        className="hero-uf-background absolute inset-0 z-0 pointer-events-none overflow-hidden"
+        style={{
+          maskImage:
+            'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.4) 50%, #000 70%, #000 100%)',
+          WebkitMaskImage:
+            'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.4) 50%, #000 70%, #000 100%)',
+        }}
+      >
+        <div className="page-shell relative h-full w-full pointer-events-none">
+          <div
+            className="hero-uf-logo absolute pointer-events-none right-[var(--page-gutter)] w-[clamp(280px,58vw,360px)] h-[clamp(280px,58vw,360px)] md:w-[clamp(360px,42vw,460px)] md:h-[clamp(360px,42vw,460px)] lg:w-[clamp(440px,36vw,560px)] lg:h-[clamp(440px,36vw,560px)] xl:w-[clamp(520px,38vw,680px)] xl:h-[clamp(520px,38vw,680px)]"
+            style={{
+              top: '50%',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <HeroUFParticleLogoWrapper />
+          </div>
+        </div>
+      </div>
+
       <Container
         width="wide"
-        className="pt-[130px] pb-0 sm:pt-[146px] lg:pt-[217px]"
+        className="relative z-10 pt-[130px] pb-0 sm:pt-[146px] lg:pt-[217px]"
       >
         <div className="flex flex-col gap-8 sm:gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-16 xl:gap-[160px] 2xl:gap-[240px]">
           <div className="w-full lg:max-w-[654px] lg:shrink">
@@ -155,36 +176,6 @@ export function Hero() {
               </p>
             </Reveal>
           </div>
-
-          {/*
-            The comp's 3D monogram, 441×473 at x=792.
-
-            Two layers, and they have to be separate elements: `Parallax` writes
-            a scroll-linked `transform` on every frame, while the reveal's
-            keyframes animate a `transform` of their own. Both on one node and
-            the last writer wins — the reveal would be dragged back by the
-            parallax mid-flight. Outer drifts, inner arrives.
-
-            The parallax div carries the layout classes so no box is added to the
-            flex row; the reveal is inside it and wraps only the image.
-          */}
-          <Parallax
-            distance={24}
-            className="flex justify-center lg:mt-[-54px] lg:block lg:w-[441px] lg:shrink-0"
-          >
-            <Reveal delay={BEAT.image}>
-              <Image
-                src="/brand/hero-monogram.webp"
-                alt=""
-                aria-hidden="true"
-                width={441}
-                height={473}
-                priority
-                sizes="(min-width: 1024px) 441px, 80vw"
-                className="h-auto w-[min(441px,80vw)] lg:w-[441px]"
-              />
-            </Reveal>
-          </Parallax>
         </div>
       </Container>
 
@@ -196,7 +187,7 @@ export function Hero() {
         call to action sits inside it, on the page measure.
       */}
       <div
-        className="relative mt-10 h-[132px] w-full lg:mt-[67px]"
+        className="relative z-10 mt-10 h-[132px] w-full lg:mt-[67px]"
         style={{
           backgroundImage: `linear-gradient(180deg, ${CREAM} 0%, ${SAND} 740.91%)`,
         }}

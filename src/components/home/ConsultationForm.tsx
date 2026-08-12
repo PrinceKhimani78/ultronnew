@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
@@ -31,7 +33,9 @@ const FIELD_COUNT = 6;
 const NO_AUTOFILL_UI = {
   'data-lpignore': 'true',
   'data-1p-ignore': 'true',
+  'data-bwignore': 'true',
   'data-form-type': 'other',
+  'data-private': 'true',
 } as const;
 
 /** `required` is mirrored visually; the asterisk alone is not an accessible cue. */
@@ -74,6 +78,12 @@ export function ConsultationForm({
   submitLabel = CTA_CONTACT.form.submitLabel,
   className,
 }: ConsultationFormProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <form
       suppressHydrationWarning

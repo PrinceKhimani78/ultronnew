@@ -29,6 +29,7 @@ const FIELD_STYLE = {
 const NO_AUTOFILL_UI = {
   'data-lpignore': 'true',
   'data-1p-ignore': 'true',
+  'data-bwignore': 'true',
   'data-form-type': 'other',
   'data-private': 'true',
 } as const;
