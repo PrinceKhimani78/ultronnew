@@ -43,7 +43,7 @@ export function ServiceFaq({ serviceName }: Props) {
       <Container width="wide">
         <Reveal>
           <SectionHeading
-            align="center"
+            align="left"
             eyebrow="FREQUENTLY ASKED QUESTIONS"
             heading={[
               { text: 'Frequently Asked ' },
