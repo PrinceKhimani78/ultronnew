@@ -10,7 +10,9 @@ import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
 import { SERVICES } from '@/content/services';
 import { buildMetadata } from '@/lib/seo';
 
+import { ServiceFaq } from '@/components/services/ServiceFaq';
 import { ServiceProcessStructure } from '@/components/services/ServiceProcessStructure';
+import { ServiceWhyChooseUs } from '@/components/services/ServiceWhyChooseUs';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -150,6 +152,12 @@ export default async function ServiceDetailPage({ params }: Props) {
 
         {/* Service Process Structure Capsules */}
         <ServiceProcessStructure service={service} />
+
+        {/* Why Choose Us */}
+        <ServiceWhyChooseUs serviceName={service.title} />
+
+        {/* FAQ Section */}
+        <ServiceFaq serviceName={service.title} />
 
         {/* Direct Consultation Band */}
         <CtaContact />
