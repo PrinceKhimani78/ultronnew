@@ -8,7 +8,9 @@ import { CtaContact } from '@/components/home/CtaContact';
 import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
 import { SERVICES } from '@/content/services';
 import { buildMetadata } from '@/lib/seo';
+import { ServiceFaq } from '@/components/services/ServiceFaq';
 import { ServiceProcessStructure } from '@/components/services/ServiceProcessStructure';
+import { ServiceWhyChooseUs } from '@/components/services/ServiceWhyChooseUs';
 
 const service = SERVICES.find((s) => s.slug === 'business-banking')!;
 
@@ -120,6 +122,12 @@ export default function BusinessBankingPage() {
 
         {/* Service Process Structure Capsules */}
         <ServiceProcessStructure service={service} />
+
+        {/* Why Choose Us */}
+        <ServiceWhyChooseUs serviceName={service.title} />
+
+        {/* FAQ Section */}
+        <ServiceFaq serviceName={service.title} />
 
         {/* Direct Consultation Band */}
         <CtaContact />
