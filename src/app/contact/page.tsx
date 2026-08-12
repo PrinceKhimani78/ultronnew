@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { ContactFormSection } from '@/components/contact/ContactFormSection';
 import { ContactHero } from '@/components/contact/ContactHero';
 import { ContactProcess } from '@/components/contact/ContactProcess';
-import { ContactReassuranceStrip } from '@/components/contact/ContactReassuranceStrip';
 import { DirectContactInfo } from '@/components/contact/DirectContactInfo';
 
 export const metadata: Metadata = {
@@ -22,7 +21,6 @@ export default function ContactPage() {
       <ContactFormSection />
       <DirectContactInfo />
       <ContactProcess />
-      <ContactReassuranceStrip />
     </main>
   );
 }
