@@ -70,6 +70,15 @@ export function ServiceFaq({ serviceName }: Props) {
           </Accordion>
         </div>
       </Container>
+      {/* Bottom gradient wash matching home page hero section */}
+      <div
+        className="pointer-events-none absolute right-0 bottom-0 left-0 h-[100px] w-full sm:h-[132px]"
+        style={{
+          backgroundImage:
+            'linear-gradient(180deg, rgba(253, 251, 238, 0) 0%, #DCCB8E 740.91%)',
+        }}
+        aria-hidden="true"
+      />
     </Section>
   );
 }
