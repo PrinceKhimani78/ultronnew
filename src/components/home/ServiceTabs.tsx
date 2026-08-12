@@ -16,8 +16,8 @@ import { cn } from '@/lib/utils';
 const SERVICE_ILLUSTRATIONS: Record<string, string> = {
   'business-banking': '/brand/process-consultation.webp',
   'business-setup': '/brand/process-execution.webp',
-  'financial-advisory': '/brand/audience-entrepreneurs.webp',
-  'tax-structuring-advisory': '/brand/audience-startups.webp',
+  'trade-finance': '/brand/audience-entrepreneurs.webp',
+  'compliance-regulatory-advisory': '/brand/audience-startups.webp',
   'business-finance': '/brand/process-strategy.webp',
   'real-estate-mortgages': '/brand/process-support.webp',
 };

@@ -95,6 +95,18 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1).optional(),
   CONTACT_TO_EMAIL: z.string().email().optional(),
   CONTACT_FROM_EMAIL: z.string().email().optional(),
+
+  // Supabase Lead Management & Admin Panel Environment Variables
+  NEXT_PUBLIC_SUPABASE_URL: z
+    .string()
+    .optional()
+    .default('https://placeholder.supabase.co'),
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z
+    .string()
+    .optional()
+    .default('placeholder-anon-key'),
+  SUPABASE_SECRET_KEY: z.string().optional().default('placeholder-secret-key'),
+  NOTIFICATION_EMAIL: z.string().email().optional(),
 });
 
 const parsed = envSchema.safeParse({
@@ -102,6 +114,15 @@ const parsed = envSchema.safeParse({
   RESEND_API_KEY: optional(process.env.RESEND_API_KEY),
   CONTACT_TO_EMAIL: optional(process.env.CONTACT_TO_EMAIL),
   CONTACT_FROM_EMAIL: optional(process.env.CONTACT_FROM_EMAIL),
+  NEXT_PUBLIC_SUPABASE_URL: optional(process.env.NEXT_PUBLIC_SUPABASE_URL),
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: optional(
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  ),
+  SUPABASE_SECRET_KEY: optional(
+    process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY,
+  ),
+  NOTIFICATION_EMAIL: optional(process.env.NOTIFICATION_EMAIL),
 });
 
 if (!parsed.success) {

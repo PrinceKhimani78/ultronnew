@@ -89,7 +89,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Container>
         </div>
 
-        {/* Benefits Breakdown */}
+        {/* Benefits / Core Advantages Breakdown */}
         <Section
           tone="raised"
           spacing="spacious"
@@ -101,17 +101,11 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <Eyebrow>CORE ADVANTAGES</Eyebrow>
                 <h2 className="font-display mt-4 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em]">
                   <HeadingText
-                    segments={[
-                      { text: 'Key ' },
-                      { text: 'Benefits', accent: true },
-                      { text: ' & Deliverables' },
-                    ]}
+                    segments={[{ text: service.advantages.headline }]}
                   />
                 </h2>
                 <p className="text-ink-muted mt-5 leading-relaxed">
-                  Every engagement is led by a dedicated senior advisor. We
-                  structure your solution to pass risk, compliance, and
-                  regulatory screening on the first attempt.
+                  {service.advantages.subtext}
                 </p>
               </div>
 
@@ -154,13 +148,22 @@ export default async function ServiceDetailPage({ params }: Props) {
         <ServiceProcessStructure service={service} />
 
         {/* Why Choose Us */}
-        <ServiceWhyChooseUs serviceName={service.title} />
+        <ServiceWhyChooseUs service={service} />
 
         {/* FAQ Section */}
-        <ServiceFaq serviceName={service.title} />
+        <ServiceFaq service={service} />
 
         {/* Direct Consultation Band */}
-        <CtaContact />
+        <CtaContact
+          eyebrow="DIRECT CONSULTATION"
+          heading={[
+            { text: 'Start With a Structure ' },
+            { text: 'That Works', accent: true },
+          ]}
+          body={service.cta.subtext}
+          ctaLabel={service.cta.buttonLabel}
+          defaultService={service.title}
+        />
       </main>
     </>
   );

@@ -221,6 +221,10 @@ export function Header() {
    * belong with it.
    */
 
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <header className="fixed inset-x-0 top-0 z-40 pt-6 lg:pt-[49px]">
       {/*

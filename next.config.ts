@@ -60,6 +60,21 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/services/financial-advisory',
+        destination: '/services/trade-finance',
+        permanent: true,
+      },
+      {
+        source: '/services/tax-structuring-advisory',
+        destination: '/services/compliance-regulatory-advisory',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,15 +1,14 @@
 'use client';
 
+import { CheckCircle2, Loader2 } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { CTA_CONTACT } from '@/content/home';
 import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
-
-/**
- * The consultation form, drawn from the comp's contact frame.
- */
 
 const CREAM = '#FDFBEE';
 
@@ -23,9 +22,6 @@ const FIELD_STYLE = {
   color: CREAM,
 } as const;
 
-/**
- * Opts every field out of password-manager autofill decoration.
- */
 const FIELD_COUNT = 6;
 
 const NO_AUTOFILL_UI = {
@@ -36,7 +32,6 @@ const NO_AUTOFILL_UI = {
   'data-private': 'true',
 } as const;
 
-/** `required` is mirrored visually; the asterisk alone is not an accessible cue. */
 function FieldLabel({
   htmlFor,
   children,
@@ -76,8 +71,89 @@ export function ConsultationForm({
   submitLabel = CTA_CONTACT.form.submitLabel,
   className,
 }: ConsultationFormProps) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    service: defaultService || '',
+    message: '',
+    website: '', // Honeypot
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (submitError) setSubmitError(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          businessType: formData.company,
+          service: formData.service,
+          message: formData.message,
+          website: formData.website,
+          sourcePage:
+            typeof window !== 'undefined'
+              ? window.location.pathname
+              : '/contact',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || 'Submission failed. Please try again.',
+        );
+      }
+
+      setIsSubmitted(true);
+      setReferenceNumber(result.referenceNumber);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        service: defaultService || '',
+        message: '',
+        website: '',
+      });
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : 'An error occurred. Please try again.';
+      setSubmitError(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <form
+      onSubmit={handleSubmit}
       suppressHydrationWarning
       className={cn(
         'card-shadow-right relative w-full rounded-[20px] px-6 py-7 sm:px-8 sm:py-8 lg:w-[630px] lg:shrink-0',
@@ -101,158 +177,230 @@ export function ConsultationForm({
         <div className="mt-4 h-[1px] w-full bg-white/20" />
       </Reveal>
 
-      {/* Grid of fields */}
-      <Stagger
-        delay={STAGGER_MS}
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-        suppressHydrationWarning
-      >
-        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
-          <FieldLabel htmlFor="contact-name" required>
-            Full Name
-          </FieldLabel>
-          <input
-            id="contact-name"
-            name="name"
-            type="text"
-            autoComplete="name"
-            required
-            suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className={FIELD_CLASS}
-            style={FIELD_STYLE}
-          />
-        </StaggerItem>
+      {/* Success Feedback State */}
+      {isSubmitted ? (
+        <Reveal className="my-6 rounded-[14px] border border-white/20 bg-white/10 p-6 text-center text-white backdrop-blur-xs">
+          <div className="flex flex-col items-center gap-3">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FDFBEE] text-[#035551]">
+              <CheckCircle2 className="h-7 w-7 stroke-[2]" />
+            </span>
+            <h4 className="font-display text-[20px] font-bold text-[#FDFBEE] uppercase">
+              Enquiry Submitted Successfully
+            </h4>
+            <p className="text-[15px] leading-relaxed text-white/90">
+              Thank you for contacting Ultron Financials. Our advisory team will
+              review your case and reach out shortly.
+            </p>
+            {referenceNumber && (
+              <div className="mt-2 rounded-[8px] border border-[#FDFBEE]/30 bg-black/20 px-4 py-2 font-mono text-sm text-[#FDFBEE]">
+                Reference: <span className="font-bold">{referenceNumber}</span>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setIsSubmitted(false)}
+              className="mt-4 text-xs font-bold tracking-wider text-[#FDFBEE] uppercase underline hover:opacity-80"
+            >
+              Submit Another Enquiry
+            </button>
+          </div>
+        </Reveal>
+      ) : (
+        <>
+          {/* Error Banner */}
+          {submitError && (
+            <div className="mb-4 rounded-[10px] border border-red-300/40 bg-red-900/30 p-3.5 text-sm text-red-100">
+              {submitError}
+            </div>
+          )}
 
-        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
-          <FieldLabel htmlFor="contact-email" required>
-            Email Address
-          </FieldLabel>
-          <input
-            id="contact-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
+          {/* Grid of fields */}
+          <Stagger
+            delay={STAGGER_MS}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
             suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className={FIELD_CLASS}
-            style={FIELD_STYLE}
-          />
-        </StaggerItem>
-
-        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
-          <FieldLabel htmlFor="contact-phone" required>
-            Phone Number
-          </FieldLabel>
-          <input
-            id="contact-phone"
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            required
-            suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className={FIELD_CLASS}
-            style={FIELD_STYLE}
-          />
-        </StaggerItem>
-
-        <StaggerItem className="flex flex-col gap-1.5" suppressHydrationWarning>
-          <FieldLabel htmlFor="contact-business" required>
-            Business Type
-          </FieldLabel>
-          <input
-            id="contact-business"
-            name="company"
-            type="text"
-            autoComplete="organization"
-            required
-            suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className={FIELD_CLASS}
-            style={FIELD_STYLE}
-          />
-        </StaggerItem>
-
-        <StaggerItem
-          className="flex flex-col gap-1.5 sm:col-span-2"
-          suppressHydrationWarning
-        >
-          <FieldLabel htmlFor="contact-service" required>
-            Service Interested In
-          </FieldLabel>
-          <select
-            id="contact-service"
-            name="service"
-            required
-            defaultValue={defaultService || ''}
-            suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className={cn(FIELD_CLASS, 'appearance-none rounded-[10px]')}
-            style={FIELD_STYLE}
           >
-            <option value="" disabled>
-              Select a service
-            </option>
-            {SERVICES.map((service) => (
-              <option
-                key={service.slug}
-                value={service.title}
-                className="text-ink"
+            <StaggerItem
+              className="flex flex-col gap-1.5"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-name" required>
+                Full Name
+              </FieldLabel>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                autoComplete="name"
+                required
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
+              />
+            </StaggerItem>
+
+            <StaggerItem
+              className="flex flex-col gap-1.5"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-email" required>
+                Email Address
+              </FieldLabel>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                autoComplete="email"
+                required
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
+              />
+            </StaggerItem>
+
+            <StaggerItem
+              className="flex flex-col gap-1.5"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-phone" required>
+                Phone Number
+              </FieldLabel>
+              <input
+                id="contact-phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                autoComplete="tel"
+                required
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
+              />
+            </StaggerItem>
+
+            <StaggerItem
+              className="flex flex-col gap-1.5"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-business" required>
+                Business Type
+              </FieldLabel>
+              <input
+                id="contact-business"
+                name="company"
+                type="text"
+                value={formData.company}
+                onChange={handleChange}
+                autoComplete="organization"
+                required
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className={FIELD_CLASS}
+                style={FIELD_STYLE}
+              />
+            </StaggerItem>
+
+            <StaggerItem
+              className="flex flex-col gap-1.5 sm:col-span-2"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-service" required>
+                Service Interested In
+              </FieldLabel>
+              <select
+                id="contact-service"
+                name="service"
+                required
+                value={formData.service}
+                onChange={handleChange}
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className={cn(FIELD_CLASS, 'appearance-none rounded-[10px]')}
+                style={FIELD_STYLE}
               >
-                {service.title}
-              </option>
-            ))}
-          </select>
-        </StaggerItem>
+                <option value="" disabled>
+                  Select a service
+                </option>
+                {SERVICES.map((service) => (
+                  <option
+                    key={service.slug}
+                    value={service.title}
+                    className="text-ink"
+                  >
+                    {service.title}
+                  </option>
+                ))}
+              </select>
+            </StaggerItem>
 
-        <StaggerItem
-          className="flex flex-col gap-1.5 sm:col-span-2"
-          suppressHydrationWarning
-        >
-          <FieldLabel htmlFor="contact-message">Message</FieldLabel>
-          <textarea
-            id="contact-message"
-            name="message"
-            rows={4}
-            suppressHydrationWarning
-            {...NO_AUTOFILL_UI}
-            className="ease-house h-[97px] w-full resize-none rounded-[10px] border-none px-3 py-2 text-[16px] transition-shadow outline-none focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
-            style={FIELD_STYLE}
-          />
-        </StaggerItem>
-      </Stagger>
+            <StaggerItem
+              className="flex flex-col gap-1.5 sm:col-span-2"
+              suppressHydrationWarning
+            >
+              <FieldLabel htmlFor="contact-message">Message</FieldLabel>
+              <textarea
+                id="contact-message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={4}
+                suppressHydrationWarning
+                {...NO_AUTOFILL_UI}
+                className="ease-house h-[97px] w-full resize-none rounded-[10px] border-none px-3 py-2 text-[16px] transition-shadow outline-none focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
+                style={FIELD_STYLE}
+              />
+            </StaggerItem>
+          </Stagger>
 
-      {/* Honeypot for spam protection */}
-      <div aria-hidden="true" className="hidden" suppressHydrationWarning>
-        <label htmlFor="contact-website">Website</label>
-        <input
-          id="contact-website"
-          name="website"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-          suppressHydrationWarning
-          {...NO_AUTOFILL_UI}
-        />
-      </div>
+          {/* Honeypot for spam protection */}
+          <div aria-hidden="true" className="hidden" suppressHydrationWarning>
+            <label htmlFor="contact-website">Website</label>
+            <input
+              id="contact-website"
+              name="website"
+              type="text"
+              value={formData.website}
+              onChange={handleChange}
+              tabIndex={-1}
+              autoComplete="off"
+              suppressHydrationWarning
+              {...NO_AUTOFILL_UI}
+            />
+          </div>
 
-      {/* Form Submit Button */}
-      <Reveal delay={(FIELD_COUNT + 1) * STAGGER_MS} className="mt-6 block">
-        <button
-          type="submit"
-          className="group relative flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[12px] border-none px-6 text-center transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E] active:scale-[0.99]"
-          style={{
-            backgroundColor: CREAM,
-            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
-          }}
-        >
-          <span className="font-display text-[16px] leading-none font-bold tracking-[0.03em] text-[#035551] uppercase transition-colors group-hover:text-[#023c39] sm:text-[18px]">
-            {submitLabel}
-          </span>
-        </button>
-      </Reveal>
+          {/* Form Submit Button */}
+          <Reveal delay={(FIELD_COUNT + 1) * STAGGER_MS} className="mt-6 block">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="group relative flex h-[52px] w-full cursor-pointer items-center justify-center rounded-[12px] border-none px-6 text-center transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{
+                backgroundColor: CREAM,
+                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+              }}
+            >
+              {isSubmitting ? (
+                <span className="font-display flex items-center gap-2 text-[16px] font-bold text-[#035551]">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  SUBMITTING...
+                </span>
+              ) : (
+                <span className="font-display text-[16px] leading-none font-bold tracking-[0.03em] text-[#035551] uppercase transition-colors group-hover:text-[#023c39] sm:text-[18px]">
+                  {submitLabel}
+                </span>
+              )}
+            </button>
+          </Reveal>
+        </>
+      )}
     </form>
   );
 }

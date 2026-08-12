@@ -113,15 +113,15 @@ export const FOOTER_NAV: readonly {
     items: [
       { label: 'Business Banking', href: '/services/business-banking' },
       { label: 'Business Setup', href: '/services/business-setup' },
-      { label: 'Financial Advisory', href: '/services/financial-advisory' },
-      {
-        label: 'Tax Structuring Advisory',
-        href: '/services/tax-structuring-advisory',
-      },
       { label: 'Business Finance', href: '/services/business-finance' },
       {
         label: 'Real Estate Mortgages',
         href: '/services/real-estate-mortgages',
+      },
+      { label: 'Trade Finance', href: '/services/trade-finance' },
+      {
+        label: 'Compliance & Regulatory Advisory',
+        href: '/services/compliance-regulatory-advisory',
       },
     ],
   },
@@ -141,6 +141,12 @@ export const FOOTER_NAV: readonly {
 export const STATIC_ROUTES = [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
+  { path: '/services/business-banking', priority: 0.8 },
+  { path: '/services/business-setup', priority: 0.8 },
+  { path: '/services/business-finance', priority: 0.8 },
+  { path: '/services/real-estate-mortgages', priority: 0.8 },
+  { path: '/services/trade-finance', priority: 0.8 },
+  { path: '/services/compliance-regulatory-advisory', priority: 0.8 },
   { path: '/about', priority: 0.8 },
   { path: '/partner', priority: 0.8 },
   { path: '/blogs', priority: 0.8 },

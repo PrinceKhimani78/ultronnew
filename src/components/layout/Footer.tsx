@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { FooterNavColumn } from '@/components/layout/FooterNav';
 import { Logo } from '@/components/layout/Logo';
@@ -70,6 +73,12 @@ const BEAT = {
 } as const;
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer
       data-header-tone="dark"

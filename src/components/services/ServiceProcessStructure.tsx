@@ -7,275 +7,10 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
 import type { Service } from '@/content/services';
 
-type ProcessStep = {
-  step: string;
-  title: string;
-  description: string;
-  buttonText: string;
-  href: string;
-  imageSrc: string;
-  imageAlt: string;
-  imageOnLeftDesktop: boolean;
-  gradientDesktop: string;
-};
-
-const LOREM_STEPS_BY_SLUG: Record<string, ProcessStep[]> = {
-  'business-setup': [
-    {
-      step: 'STEP 01',
-      title: 'Understand Your Business Activity',
-      description:
-        'We review what your business will do, where it will operate and how you plan to generate revenue before recommending a jurisdiction or licence.',
-      buttonText: 'Discuss Your Setup',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Understand Your Business Activity',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Choose the Right Jurisdiction',
-      description:
-        'Mainland, free zone or offshore—we compare the options based on ownership, operating flexibility, costs and future banking requirements.',
-      buttonText: 'Compare Your Options',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Choose the Right Jurisdiction',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Prepare for Setup and Banking',
-      description:
-        'We organise the company structure and required documentation with licensing, compliance and account-opening readiness in mind.',
-      buttonText: 'Start Your Business Setup',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Prepare for Setup and Banking',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-  'business-banking': [
-    {
-      step: 'STEP 01',
-      title: 'Banking Profile & Root Cause Review',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
-      buttonText: 'Request Banking Review',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Banking Profile Review',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Dossier & Compliance Restructuring',
-      description:
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.',
-      buttonText: 'Compare Bank Options',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Compliance Restructuring',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Bank Submission & Account Activation',
-      description:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.',
-      buttonText: 'Start Banking Application',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Account Activation',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-  'financial-advisory': [
-    {
-      step: 'STEP 01',
-      title: 'Initial Feasibility & Assessment',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
-      buttonText: 'Discuss Financial Advisory',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Feasibility & Assessment',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Strategic Structuring & Financial Planning',
-      description:
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.',
-      buttonText: 'Compare Advisory Options',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Strategic Planning',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Execution & Ongoing Governance',
-      description:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.',
-      buttonText: 'Start Advisory Plan',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Ongoing Governance',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-  'tax-structuring-advisory': [
-    {
-      step: 'STEP 01',
-      title: 'Tax Exposure & VAT Assessment',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
-      buttonText: 'Discuss Tax Structuring',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Tax Assessment',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Corporate Tax & Compliance Strategy',
-      description:
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.',
-      buttonText: 'Compare Tax Models',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Corporate Tax Strategy',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Implementation & Filing Support',
-      description:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.',
-      buttonText: 'Start Tax Structuring',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Filing Support',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-  'business-finance': [
-    {
-      step: 'STEP 01',
-      title: 'Financial Profile & Needs Analysis',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
-      buttonText: 'Discuss Business Finance',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Needs Analysis',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Lender Matching & Application Structuring',
-      description:
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.',
-      buttonText: 'Compare Financing Options',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Application Structuring',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Facility Approval & Capital Disbursement',
-      description:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.',
-      buttonText: 'Start Finance Application',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Capital Disbursement',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-  'real-estate-mortgages': [
-    {
-      step: 'STEP 01',
-      title: 'Property & Borrower Qualification',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim.',
-      buttonText: 'Discuss Mortgage Options',
-      href: '#contact',
-      imageSrc: '/brand/process-consultation.webp',
-      imageAlt: 'Borrower Qualification',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 02',
-      title: 'Mortgage Repositioning & Underwriting',
-      description:
-        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.',
-      buttonText: 'Compare Lender Rates',
-      href: '#contact',
-      imageSrc: '/brand/process-strategy.webp',
-      imageAlt: 'Mortgage Underwriting',
-      imageOnLeftDesktop: false,
-      gradientDesktop:
-        'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-    {
-      step: 'STEP 03',
-      title: 'Final Bank Approval & Valuation Settlement',
-      description:
-        'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.',
-      buttonText: 'Start Mortgage Application',
-      href: '#contact',
-      imageSrc: '/brand/process-execution.webp',
-      imageAlt: 'Valuation Settlement',
-      imageOnLeftDesktop: true,
-      gradientDesktop:
-        'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)',
-    },
-  ],
-};
-
-const DEFAULT_LOREM_STEPS: ProcessStep[] =
-  LOREM_STEPS_BY_SLUG['business-banking'];
-
 const EASE_HOUSE = [0.22, 1, 0.36, 1] as const;
 
 export function ServiceProcessStructure({ service }: { service: Service }) {
   const shouldReduceMotion = useReducedMotion();
-  const steps = LOREM_STEPS_BY_SLUG[service.slug] || DEFAULT_LOREM_STEPS;
 
   return (
     <section className="relative overflow-hidden bg-white py-14 text-[#121a18] sm:py-18 lg:py-24">
@@ -288,28 +23,22 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
           transition={{ duration: 0.75, ease: EASE_HOUSE }}
           className="mb-16 max-w-3xl text-left lg:mb-20"
         >
-          <Eyebrow align="left">
-            HOW WE BUILD THE RIGHT {service.title.toUpperCase()} STRUCTURE
-          </Eyebrow>
+          <Eyebrow align="left">OUR PROCESS</Eyebrow>
           <h2 className="font-display mt-3.5 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-[#121a18]">
-            <HeadingText
-              segments={[
-                { text: `${service.title} Built Around ` },
-                { text: 'What Comes Next', accent: true },
-              ]}
-            />
+            <HeadingText segments={[{ text: `${service.process.headline}` }]} />
           </h2>
           <p className="mt-4 max-w-[680px] text-base leading-relaxed font-medium text-[#4b5563] sm:text-lg">
-            {service.slug === 'business-setup'
-              ? 'Company formation is only the beginning. We consider your activity, ownership, banking requirements and long-term plans before recommending the right setup.'
-              : `${service.description} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`}
+            {service.process.subtext}
           </p>
         </motion.div>
 
-        {/* 3 Open-Sided Capsule Cards */}
+        {/* 4 Open-Sided Capsule Cards */}
         <div className="space-y-12 sm:space-y-14 lg:space-y-16">
-          {steps.map((step) => {
-            const isImageLeft = step.imageOnLeftDesktop;
+          {service.process.steps.map((step, index) => {
+            const isImageLeft = index % 2 === 0;
+            const gradientDesktop = isImageLeft
+              ? 'linear-gradient(90deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)'
+              : 'linear-gradient(270deg, rgb(253, 251, 238) 0%, rgba(253, 251, 238, 0.78) 36%, rgba(253, 251, 238, 0.28) 66%, rgba(255, 255, 255, 0) 100%)';
 
             return (
               <motion.div
@@ -331,7 +60,7 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                     : 'rounded-[28px] sm:rounded-l-none sm:rounded-r-[60px] lg:rounded-l-none lg:rounded-r-[999px]'
                 }`}
                 style={{
-                  background: step.gradientDesktop,
+                  background: gradientDesktop,
                 }}
               >
                 <div
@@ -383,8 +112,8 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                         {step.description}
                       </p>
                       <div className="mt-5 sm:mt-6">
-                        <ActionButton href={step.href} variant="teal">
-                          {step.buttonText}
+                        <ActionButton href="#contact" variant="teal">
+                          Talk to Us
                         </ActionButton>
                       </div>
                     </div>
