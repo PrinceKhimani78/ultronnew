@@ -41,36 +41,33 @@ export function ServiceFaq({ serviceName }: Props) {
   return (
     <Section id="service-faq" spacing="spacious" tone="surface">
       <Container width="wide">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <Reveal className="lg:col-span-4">
-            <div className="lg:sticky lg:top-32">
-              <SectionHeading
-                eyebrow="FREQUENTLY ASKED QUESTIONS"
-                heading={[
-                  { text: 'Frequently Asked ' },
-                  { text: 'Questions', accent: true },
-                ]}
-                body={`Find answers to common questions about ${serviceName || 'our services'}, requirements, timelines, and case management.`}
-              />
-            </div>
-          </Reveal>
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow="FREQUENTLY ASKED QUESTIONS"
+            heading={[
+              { text: 'Frequently Asked ' },
+              { text: 'Questions', accent: true },
+            ]}
+            body={`Find answers to common questions about ${serviceName || 'our services'}, requirements, timelines, and case management.`}
+          />
+        </Reveal>
 
-          <div className="lg:col-span-8">
-            <Accordion type="multiple">
-              {faqs.map((item, index) => (
-                <Reveal
-                  key={item.question}
-                  delay={index * STAGGER_MS}
-                  amount={0.1}
-                >
-                  <AccordionItem value={item.question}>
-                    <AccordionTrigger>{item.question}</AccordionTrigger>
-                    <AccordionContent>{item.answer}</AccordionContent>
-                  </AccordionItem>
-                </Reveal>
-              ))}
-            </Accordion>
-          </div>
+        <div className="mt-10 sm:mt-12 lg:mt-14 w-full">
+          <Accordion type="multiple">
+            {faqs.map((item, index) => (
+              <Reveal
+                key={item.question}
+                delay={index * STAGGER_MS}
+                amount={0.1}
+              >
+                <AccordionItem value={item.question}>
+                  <AccordionTrigger>{item.question}</AccordionTrigger>
+                  <AccordionContent>{item.answer}</AccordionContent>
+                </AccordionItem>
+              </Reveal>
+            ))}
+          </Accordion>
         </div>
       </Container>
     </Section>
