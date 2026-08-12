@@ -1,7 +1,9 @@
+'use client';
+
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
+import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 type Props = {
@@ -42,9 +44,9 @@ export function ServiceWhyChooseUs({ serviceName }: Props) {
           />
         </Reveal>
 
-        <dl className="mt-14 grid gap-x-12 gap-y-10 md:grid-cols-2">
-          {reasons.map((reason, index) => (
-            <Reveal key={reason.title} delay={index * STAGGER_MS} amount={0.1}>
+        <Stagger as="dl" className="mt-14 grid gap-x-12 gap-y-10 md:grid-cols-2">
+          {reasons.map((reason) => (
+            <StaggerItem key={reason.title}>
               <div className="h-full rounded-2xl border border-line bg-surface p-6 shadow-xs transition-shadow duration-300 hover:shadow-md">
                 <dt className="font-display border-l-3 border-[#035551] pl-4 text-xl font-bold tracking-tight text-ink">
                   {reason.title}
@@ -53,9 +55,9 @@ export function ServiceWhyChooseUs({ serviceName }: Props) {
                   {reason.body}
                 </dd>
               </div>
-            </Reveal>
+            </StaggerItem>
           ))}
-        </dl>
+        </Stagger>
       </Container>
     </Section>
   );
