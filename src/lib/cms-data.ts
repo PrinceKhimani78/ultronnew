@@ -229,6 +229,7 @@ export const INITIAL_STATIC_SERVICES: ServiceRecord[] = SERVICES.map(
         whyUltron: s.whyUltron,
         faqs: s.faqs,
         cta: s.cta,
+        highlights: s.highlights ?? {},
       }),
     ),
     created_at: new Date().toISOString(),
@@ -475,6 +476,10 @@ function formatServiceRecord(dbService: ServiceRecord, index: number): Service {
   const content = (dbService.content_blocks || {}) as Record<string, unknown>;
   const staticMatch = SERVICES.find((s) => s.slug === dbService.slug);
 
+  // Pull highlights from CMS content_blocks, fall back to static data
+  const dbHighlights = content.highlights as
+    import('@/content/services').ServiceHighlights | undefined;
+
   return {
     slug: dbService.slug,
     number: (dbService.display_order || index + 1).toString(),
@@ -522,6 +527,11 @@ function formatServiceRecord(dbService: ServiceRecord, index: number): Service {
         'Tell us about your business',
       buttonLabel: dbService.cta_label || 'Talk to Us',
     },
+    // CMS highlights override static defaults; only use static when CMS has no entry
+    highlights:
+      dbHighlights && Object.keys(dbHighlights).length > 0
+        ? dbHighlights
+        : staticMatch?.highlights,
   } as unknown as Service;
 }
 

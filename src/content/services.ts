@@ -15,6 +15,21 @@ export type ServiceFaqItem = {
   answer: string;
 };
 
+/**
+ * Per-section teal highlight phrases.
+ * Each value is the exact phrase (case-insensitive substring) inside the
+ * associated heading that should render in Ultron teal (#035551).
+ * Leave a field undefined to render that heading entirely in near-black.
+ */
+export type ServiceHighlights = {
+  hero?: string;
+  advantages?: string;
+  process?: string;
+  whyUltron?: string;
+  faqs?: string;
+  cta?: string;
+};
+
 export type Service = {
   slug: string;
   number: string;
@@ -42,6 +57,8 @@ export type Service = {
     subtext: string;
     buttonLabel: string;
   };
+  /** Teal highlight phrases for each section heading. Optional — absent = plain black. */
+  highlights?: ServiceHighlights;
 };
 
 export const SERVICES: readonly Service[] = [
@@ -138,6 +155,13 @@ export const SERVICES: readonly Service[] = [
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
     },
+    highlights: {
+      hero: 'Around Your',
+      advantages: 'for Banking',
+      process: 'Approved',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
+    },
   },
   {
     slug: 'business-setup',
@@ -232,6 +256,13 @@ export const SERVICES: readonly Service[] = [
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
     },
+    highlights: {
+      hero: 'Built to Actually Operate',
+      advantages: 'Setup Process Apart',
+      process: 'Operational Business',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
+    },
   },
   {
     slug: 'business-finance',
@@ -325,6 +356,13 @@ export const SERVICES: readonly Service[] = [
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
     },
+    highlights: {
+      hero: 'Lenders Who Actually Say Yes',
+      advantages: 'Business Financing',
+      process: 'Facility Approved',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
+    },
   },
   {
     slug: 'real-estate-mortgages',
@@ -417,6 +455,13 @@ export const SERVICES: readonly Service[] = [
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
     },
+    highlights: {
+      hero: "Don't Fit a Standard Checklist",
+      advantages: 'Mortgage Cases',
+      process: 'Mortgage Case Forward',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
+    },
   },
   {
     slug: 'trade-finance',
@@ -508,6 +553,13 @@ export const SERVICES: readonly Service[] = [
       headline: 'Start With a Structure That Works',
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
+    },
+    highlights: {
+      hero: 'Keeps Cash Flow Moving',
+      advantages: 'Trade Finance Covers',
+      process: 'Trade Finance Facility',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
     },
   },
   {
@@ -602,6 +654,13 @@ export const SERVICES: readonly Service[] = [
       headline: 'Start With a Structure That Works',
       subtext: 'Tell us about your business and we will map out the setup.',
       buttonLabel: 'Talk to Us',
+    },
+    highlights: {
+      hero: 'Holds Up Under Scrutiny',
+      advantages: 'Compliance Advisory Covers',
+      process: 'Compliance Position',
+      whyUltron: 'Choose Us',
+      faqs: 'Questions',
     },
   },
 ] as const;

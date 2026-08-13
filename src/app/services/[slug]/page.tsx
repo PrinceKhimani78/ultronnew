@@ -7,6 +7,7 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { CtaContact } from '@/components/home/CtaContact';
 import { Eyebrow } from '@/components/ui/SectionHeading';
+import { ServiceHeading } from '@/components/services/ServiceHeading';
 import { getPublishedServices, getServiceBySlug } from '@/lib/cms-data';
 import { buildMetadata } from '@/lib/seo';
 
@@ -17,70 +18,6 @@ import { ServiceWhyChooseUs } from '@/components/services/ServiceWhyChooseUs';
 type Props = {
   params: Promise<{ slug: string }>;
 };
-
-const HERO_HIGHLIGHTS: Record<string, string> = {
-  'business-banking': 'Around Your',
-  'business-setup': 'Freezone and Offshore',
-  'business-finance': 'Working Capital',
-  'real-estate-mortgages': 'Mortgage Advisory',
-  'trade-finance': 'Letters of Credit',
-  'compliance-regulatory-advisory': 'AML & Regulatory',
-};
-
-const ADVANTAGE_HIGHLIGHTS: Record<string, string> = {
-  'business-banking': 'Banking',
-  'business-setup': 'UAE Business Setup',
-  'business-finance': 'Scale & Operations',
-  'real-estate-mortgages': 'Property Acquisitions',
-  'trade-finance': 'Global Trade',
-  'compliance-regulatory-advisory': 'AML & Regulatory Safeguards',
-};
-
-function renderHighlightedText(text: string, highlightPhrase?: string) {
-  if (!text) return null;
-
-  // Support markdown asterisks for CMS edited headlines e.g. "Banking Built *Around Your* Profile"
-  if (text.includes('*')) {
-    const parts = text.split('*');
-    return (
-      <>
-        {parts.map((part, i) =>
-          i % 2 === 1 ? (
-            <span key={i} className="text-brand-bright">
-              {part}
-            </span>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  }
-
-  // Phrase matching fallback
-  if (
-    highlightPhrase &&
-    text.toLowerCase().includes(highlightPhrase.toLowerCase())
-  ) {
-    const regex = new RegExp(`(${highlightPhrase})`, 'gi');
-    const parts = text.split(regex);
-    return (
-      <>
-        {parts.map((part, i) =>
-          part.toLowerCase() === highlightPhrase.toLowerCase() ? (
-            <span key={i} className="text-brand-bright">
-              {part}
-            </span>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  }
-
-  return text;
-}
 
 export async function generateStaticParams() {
   const services = await getPublishedServices();
@@ -119,7 +56,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   return (
     <>
       <main id="content" className="flex-1">
-        {/* Service Hero */}
+        {/* ── Service Hero ──────────────────────────────────────────────── */}
         <div className="bg-surface text-ink relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12 lg:pt-32">
           <Container width="wide">
             {/* Breadcrumb */}
@@ -144,12 +81,20 @@ export default async function ServiceDetailPage({ params }: Props) {
             </nav>
 
             <div className="max-w-3xl">
-              <h1 className="font-display text-ink text-[clamp(2.25rem,4.8vw,3.75rem)] leading-[1.08] font-bold tracking-[-0.02em] uppercase">
-                {renderHighlightedText(
-                  service.headline,
-                  HERO_HIGHLIGHTS[service.slug],
-                )}
-              </h1>
+              {/*
+               * H1 typography system:
+               *   size:           clamp(2.4rem, 5vw, 5.25rem)
+               *   weight:         600  (font-semibold)
+               *   line-height:    0.98
+               *   letter-spacing: -0.045em
+               *   colour:         #111111 (near-black) + teal highlight via ServiceHeading
+               */}
+              <ServiceHeading
+                as="h1"
+                text={service.headline}
+                highlightedText={service.highlights?.hero}
+                className="text-[clamp(2.4rem,5vw,5.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] uppercase"
+              />
               <p className="text-ink-muted/90 mt-5 text-sm leading-relaxed sm:text-base">
                 {service.description}
               </p>
@@ -157,7 +102,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Container>
         </div>
 
-        {/* Benefits / Core Advantages Breakdown */}
+        {/* ── Core Advantages Breakdown ──────────────────────────────────── */}
         <Section
           tone="raised"
           spacing="spacious"
@@ -167,12 +112,19 @@ export default async function ServiceDetailPage({ params }: Props) {
             <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
               <div className="lg:col-span-5">
                 <Eyebrow>CORE ADVANTAGES</Eyebrow>
-                <h2 className="font-display mt-4 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em]">
-                  {renderHighlightedText(
-                    service.advantages.headline,
-                    ADVANTAGE_HIGHLIGHTS[service.slug],
-                  )}
-                </h2>
+                {/*
+                 * H2 typography system:
+                 *   size:           clamp(2rem, 3.2vw, 3.5rem)
+                 *   weight:         600
+                 *   line-height:    1.05
+                 *   letter-spacing: -0.035em
+                 */}
+                <ServiceHeading
+                  as="h2"
+                  text={service.advantages.headline}
+                  highlightedText={service.highlights?.advantages}
+                  className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
+                />
                 <p className="text-ink-muted mt-5 leading-relaxed">
                   {service.advantages.subtext}
                 </p>
@@ -202,7 +154,8 @@ export default async function ServiceDetailPage({ params }: Props) {
               </div>
             </div>
           </Container>
-          {/* Bottom gradient wash matching home page hero section */}
+
+          {/* Bottom gradient wash */}
           <div
             className="pointer-events-none absolute right-0 bottom-0 left-0 h-[100px] w-full sm:h-[132px]"
             style={{
@@ -213,16 +166,16 @@ export default async function ServiceDetailPage({ params }: Props) {
           />
         </Section>
 
-        {/* Service Process Structure Capsules */}
+        {/* ── Process Steps ──────────────────────────────────────────────── */}
         <ServiceProcessStructure service={service} />
 
-        {/* Why Choose Us */}
+        {/* ── Why Choose Us ─────────────────────────────────────────────── */}
         <ServiceWhyChooseUs service={service} />
 
-        {/* FAQ Section */}
+        {/* ── FAQ ───────────────────────────────────────────────────────── */}
         <ServiceFaq service={service} />
 
-        {/* Direct Consultation Band */}
+        {/* ── Final CTA Band ────────────────────────────────────────────── */}
         <CtaContact
           eyebrow="DIRECT CONSULTATION"
           heading={[

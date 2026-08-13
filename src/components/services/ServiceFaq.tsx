@@ -8,7 +8,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/Accordion';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { Eyebrow } from '@/components/ui/SectionHeading';
+import { ServiceHeading } from '@/components/services/ServiceHeading';
 import type { Service } from '@/content/services';
 
 type Props = {
@@ -18,19 +19,29 @@ type Props = {
 export function ServiceFaq({ service }: Props) {
   const faqs = service.faqs;
 
+  const faqHeading = `Frequently Asked Questions`;
+
   return (
     <Section id="service-faq" spacing="spacious" tone="surface">
       <Container width="wide">
         <Reveal>
-          <SectionHeading
-            align="left"
-            eyebrow="FREQUENTLY ASKED QUESTIONS"
-            heading={[
-              { text: 'Frequently Asked ' },
-              { text: 'Questions', accent: true },
-            ]}
-            body={`Find answers to common questions about ${service.title}, requirements, timelines, and case management.`}
+          <Eyebrow align="left">FREQUENTLY ASKED QUESTIONS</Eyebrow>
+          {/*
+           * FAQ section H2 typography:
+           *   size:           clamp(2rem, 3.2vw, 3.5rem)
+           *   weight:         600
+           *   line-height:    1.05
+           *   letter-spacing: -0.035em
+           */}
+          <ServiceHeading
+            as="h2"
+            text={faqHeading}
+            highlightedText={service.highlights?.faqs}
+            className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
           />
+          <p className="text-ink-muted mt-5 max-w-2xl leading-relaxed">
+            {`Find answers to common questions about ${service.title}, requirements, timelines, and case management.`}
+          </p>
         </Reveal>
 
         <div className="mt-10 w-full sm:mt-12 lg:mt-14">
@@ -50,7 +61,8 @@ export function ServiceFaq({ service }: Props) {
           </Accordion>
         </div>
       </Container>
-      {/* Bottom gradient wash matching home page hero section */}
+
+      {/* Bottom gradient wash */}
       <div
         className="pointer-events-none absolute right-0 bottom-0 left-0 h-[100px] w-full sm:h-[132px]"
         style={{

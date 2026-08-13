@@ -79,6 +79,14 @@ export default function EditServicePage() {
   const [ctaHeadline, setCtaHeadline] = useState('');
   const [ctaSubtext, setCtaSubtext] = useState('');
 
+  // Teal highlight phrases — stored in content_blocks.highlights
+  const [heroHighlight, setHeroHighlight] = useState('');
+  const [advantagesHighlight, setAdvantagesHighlight] = useState('');
+  const [processHighlight, setProcessHighlight] = useState('');
+  const [whyUltronHighlight, setWhyUltronHighlight] = useState('');
+  const [faqsHighlight, setFaqsHighlight] = useState('');
+  const [ctaHighlight, setCtaHighlight] = useState('');
+
   useEffect(() => {
     let ignore = false;
     async function fetchService() {
@@ -149,6 +157,16 @@ export default function EditServicePage() {
             const ctaObj = cb.cta as Record<string, string>;
             setCtaHeadline(ctaObj.headline || '');
             setCtaSubtext(ctaObj.subtext || '');
+          }
+          // Load highlight phrases
+          if (cb.highlights && typeof cb.highlights === 'object') {
+            const hl = cb.highlights as Record<string, string>;
+            setHeroHighlight(hl.hero || '');
+            setAdvantagesHighlight(hl.advantages || '');
+            setProcessHighlight(hl.process || '');
+            setWhyUltronHighlight(hl.whyUltron || '');
+            setFaqsHighlight(hl.faqs || '');
+            setCtaHighlight(hl.cta || '');
           }
         }
       } catch {
@@ -305,6 +323,14 @@ export default function EditServicePage() {
         headline: ctaHeadline,
         subtext: ctaSubtext,
         buttonLabel: ctaLabel,
+      },
+      highlights: {
+        hero: heroHighlight.trim(),
+        advantages: advantagesHighlight.trim(),
+        process: processHighlight.trim(),
+        whyUltron: whyUltronHighlight.trim(),
+        faqs: faqsHighlight.trim(),
+        cta: ctaHighlight.trim(),
       },
     };
 
@@ -521,6 +547,33 @@ export default function EditServicePage() {
 
                 <div>
                   <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    Teal Highlighted Words — Hero
+                  </label>
+                  <input
+                    type="text"
+                    value={heroHighlight}
+                    onChange={(e) => setHeroHighlight(e.target.value)}
+                    placeholder="Enter exact phrase from Hero Headline..."
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
+                  />
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    Enter an exact word or phrase from the Hero Headline. This
+                    phrase will appear in Ultron teal on the public page.
+                  </p>
+                  {heroHighlight.trim() &&
+                    heroTitle &&
+                    !heroTitle
+                      .toLowerCase()
+                      .includes(heroHighlight.trim().toLowerCase()) && (
+                      <p className="mt-1 text-[11px] font-semibold text-amber-600">
+                        ⚠ This phrase was not found inside the Hero Headline. It
+                        will be ignored when the page renders.
+                      </p>
+                    )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
                     Hero Tagline
                   </label>
                   <input
@@ -602,6 +655,33 @@ export default function EditServicePage() {
                     className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Teal Highlighted Words — Advantages
+                </label>
+                <input
+                  type="text"
+                  value={advantagesHighlight}
+                  onChange={(e) => setAdvantagesHighlight(e.target.value)}
+                  placeholder="Enter exact phrase from Advantages Headline..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
+                />
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Enter an exact word or phrase from the Advantages Headline.
+                  This phrase will appear in Ultron teal on the public page.
+                </p>
+                {advantagesHighlight.trim() &&
+                  advantagesHeadline &&
+                  !advantagesHeadline
+                    .toLowerCase()
+                    .includes(advantagesHighlight.trim().toLowerCase()) && (
+                    <p className="mt-1 text-[11px] font-semibold text-amber-600">
+                      ⚠ This phrase was not found inside the Advantages
+                      Headline. It will be ignored when the page renders.
+                    </p>
+                  )}
               </div>
 
               {/* Repeatable Deliverable Benefits List */}
@@ -723,6 +803,34 @@ export default function EditServicePage() {
                     className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Teal Highlighted Words — Process
+                </label>
+                <input
+                  type="text"
+                  value={processHighlight}
+                  onChange={(e) => setProcessHighlight(e.target.value)}
+                  placeholder="Enter exact phrase from Process Headline..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
+                />
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Enter an exact word or phrase from the Process Section
+                  Headline. This phrase will appear in Ultron teal on the public
+                  page.
+                </p>
+                {processHighlight.trim() &&
+                  processHeadline &&
+                  !processHeadline
+                    .toLowerCase()
+                    .includes(processHighlight.trim().toLowerCase()) && (
+                    <p className="mt-1 text-[11px] font-semibold text-amber-600">
+                      ⚠ This phrase was not found inside the Process Headline.
+                      It will be ignored when the page renders.
+                    </p>
+                  )}
               </div>
 
               {/* Repeatable Process Steps */}
@@ -871,6 +979,24 @@ export default function EditServicePage() {
                   onChange={(e) => setWhyUltronIntro(e.target.value)}
                   className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Teal Highlighted Words — Why Choose Us
+                </label>
+                <input
+                  type="text"
+                  value={whyUltronHighlight}
+                  onChange={(e) => setWhyUltronHighlight(e.target.value)}
+                  placeholder="e.g. Choose Us"
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
+                />
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Enter an exact phrase that will appear teal in the &quot;Why
+                  Choose Us&quot; heading. Recommended:{' '}
+                  <strong>Choose Us</strong>.
+                </p>
               </div>
 
               {/* Repeatable Value Points */}
@@ -1093,6 +1219,24 @@ export default function EditServicePage() {
                     className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Teal Highlighted Words — FAQ Section
+                </label>
+                <input
+                  type="text"
+                  value={faqsHighlight}
+                  onChange={(e) => setFaqsHighlight(e.target.value)}
+                  placeholder="e.g. Questions"
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
+                />
+                <p className="mt-1 text-[11px] text-slate-500">
+                  Enter an exact phrase from &quot;Frequently Asked
+                  Questions&quot; to highlight in teal. Recommended:{' '}
+                  <strong>Questions</strong>.
+                </p>
               </div>
 
               <div className="flex flex-wrap gap-6 border-t border-slate-200 pt-2">

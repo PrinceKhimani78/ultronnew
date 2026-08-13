@@ -5,62 +5,10 @@ import Image from 'next/image';
 
 import { ActionButton } from '@/components/ui/ActionButton';
 import { Eyebrow } from '@/components/ui/SectionHeading';
+import { ServiceHeading } from '@/components/services/ServiceHeading';
 import type { Service } from '@/content/services';
 
 const EASE_HOUSE = [0.22, 1, 0.36, 1] as const;
-
-const PROCESS_HIGHLIGHTS: Record<string, string> = {
-  'business-banking': 'Approved',
-  'business-setup': 'Setup',
-  'business-finance': 'Financing',
-  'real-estate-mortgages': 'Mortgage',
-  'trade-finance': 'Facilities',
-  'compliance-regulatory-advisory': 'Compliance',
-};
-
-function renderHighlightedText(text: string, highlightPhrase?: string) {
-  if (!text) return null;
-
-  if (text.includes('*')) {
-    const parts = text.split('*');
-    return (
-      <>
-        {parts.map((part, i) =>
-          i % 2 === 1 ? (
-            <span key={i} className="text-[#035551]">
-              {part}
-            </span>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  }
-
-  if (
-    highlightPhrase &&
-    text.toLowerCase().includes(highlightPhrase.toLowerCase())
-  ) {
-    const regex = new RegExp(`(${highlightPhrase})`, 'gi');
-    const parts = text.split(regex);
-    return (
-      <>
-        {parts.map((part, i) =>
-          part.toLowerCase() === highlightPhrase.toLowerCase() ? (
-            <span key={i} className="text-[#035551]">
-              {part}
-            </span>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  }
-
-  return text;
-}
 
 export function ServiceProcessStructure({ service }: { service: Service }) {
   const shouldReduceMotion = useReducedMotion();
@@ -77,18 +25,25 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
           className="mb-16 max-w-3xl text-left lg:mb-20"
         >
           <Eyebrow align="left">OUR PROCESS</Eyebrow>
-          <h2 className="font-display mt-3.5 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-[#121a18]">
-            {renderHighlightedText(
-              service.process.headline,
-              PROCESS_HIGHLIGHTS[service.slug],
-            )}
-          </h2>
+          {/*
+           * Process section H2 typography:
+           *   size:           clamp(2rem, 3.2vw, 3.5rem)
+           *   weight:         600
+           *   line-height:    1.05
+           *   letter-spacing: -0.035em
+           */}
+          <ServiceHeading
+            as="h2"
+            text={service.process.headline}
+            highlightedText={service.highlights?.process}
+            className="mt-3.5 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
+          />
           <p className="mt-4 max-w-[680px] text-base leading-relaxed font-medium text-[#4b5563] sm:text-lg">
             {service.process.subtext}
           </p>
         </motion.div>
 
-        {/* 4 Open-Sided Capsule Cards */}
+        {/* Process Step Cards */}
         <div className="space-y-12 sm:space-y-14 lg:space-y-16">
           {service.process.steps.map((step, index) => {
             const isImageLeft = index % 2 === 0;
@@ -99,14 +54,7 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
             return (
               <motion.div
                 key={step.step}
-                initial={
-                  shouldReduceMotion
-                    ? false
-                    : {
-                        opacity: 0,
-                        y: 25,
-                      }
-                }
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.8, ease: EASE_HOUSE }}
@@ -115,9 +63,7 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                     ? 'rounded-[28px] sm:rounded-l-[60px] sm:rounded-r-none lg:rounded-l-[999px] lg:rounded-r-none'
                     : 'rounded-[28px] sm:rounded-l-none sm:rounded-r-[60px] lg:rounded-l-none lg:rounded-r-[999px]'
                 }`}
-                style={{
-                  background: gradientDesktop,
-                }}
+                style={{ background: gradientDesktop }}
               >
                 <div
                   className={`flex w-full flex-col items-center justify-between gap-7 p-6 sm:gap-8 sm:p-7 lg:flex-row lg:gap-[90px] lg:py-6 xl:gap-[110px] ${
@@ -158,10 +104,21 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                           : 'lg:mr-auto lg:ml-0'
                       }`}
                     >
+                      {/*
+                       * Process step label — small, teal, uppercase, letter-spaced.
+                       * Must NOT use H1/H2/H3 heading sizes.
+                       */}
                       <span className="font-display mb-2 inline-block text-xs font-bold tracking-[0.2em] text-[#057b75] uppercase sm:text-sm">
                         {step.step}
                       </span>
-                      <h3 className="font-display text-2xl font-bold tracking-[-0.01em] text-[#121a18] sm:text-3xl lg:text-[30px] lg:leading-[1.2]">
+                      {/*
+                       * Step title H3 typography:
+                       *   size:           clamp(1.25rem, 1.7vw, 1.75rem)
+                       *   weight:         600
+                       *   line-height:    1.15
+                       *   letter-spacing: -0.02em
+                       */}
+                      <h3 className="font-display text-[clamp(1.25rem,1.7vw,1.75rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-[#111111]">
                         {step.title}
                       </h3>
                       <p className="mt-3.5 text-base leading-[1.6] text-[#4b5563] sm:text-lg">
