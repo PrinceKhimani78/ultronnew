@@ -11,7 +11,7 @@ export const BLOG_PAGE = {
       { text: 'Ultron ' },
       { text: 'Blogs', accent: true },
     ] as readonly HeadingSegment[],
-    body: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    body: 'Real-world guidance on UAE banking, business setup, tax structuring and compliance, written from the cases we handle, not from the rulebook.',
   },
 
   listing: {

@@ -25,7 +25,7 @@ export const ABOUT_PAGE = {
       { text: 'About ' },
       { text: 'Us', accent: true },
     ] as readonly HeadingSegment[],
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    body: 'We built Ultron around the part of UAE business setup where most advisers step back, the banking, the structuring, the compliance that has to hold up under real scrutiny.',
   },
 
   foundation: {

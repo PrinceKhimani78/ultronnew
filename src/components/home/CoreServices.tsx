@@ -94,8 +94,8 @@ export function CoreServices() {
           </p>
           {/* 48px flat at `lg` — the comp's size — rather than the clamp's
               52px ceiling. The clamp still governs every smaller viewport. */}
-          <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-[#121a18] sm:text-[40px] lg:text-[48px]">
-            Our Core <span className="text-[#035551]">Services</span>
+          <h2 className="heading-h2 mt-3.5 text-[#121a18]">
+            Our Core <span className="heading-highlight">Services</span>
           </h2>
         </Reveal>
 

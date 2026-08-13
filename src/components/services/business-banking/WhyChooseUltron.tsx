@@ -44,7 +44,7 @@ export function WhyChooseUltron() {
         <Reveal className="max-w-3xl">
           <BandEyebrow>{WHY_CHOOSE_ULTRON.eyebrow}</BandEyebrow>
 
-          <h2 className="font-display mt-3 text-[clamp(1.875rem,4vw,44px)] leading-[110%] font-bold tracking-[-0.017em] text-black">
+          <h2 className="heading-h2 mt-3 text-black">
             <HeadingText
               segments={WHY_CHOOSE_ULTRON.heading}
               accentClassName="text-[#035551]"
@@ -71,7 +71,7 @@ export function WhyChooseUltron() {
                         <Icon className="h-5 w-5 stroke-[2]" />
                       </div>
 
-                      <h3 className="font-display mt-6 text-[20px] leading-snug font-bold text-[#023F3D]">
+                      <h3 className="heading-h3--compact mt-6 text-[#023F3D]">
                         {item.title}
                       </h3>
 

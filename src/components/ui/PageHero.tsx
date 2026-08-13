@@ -65,7 +65,7 @@ export function PageHero({
               <h1
                 id={headingId}
                 className={cn(
-                  'font-display text-[36px] leading-[100%] font-extrabold tracking-[-0.02em] text-black uppercase sm:text-[48px] lg:text-[60px]',
+                  'heading-h1 text-black uppercase',
                   isLeft ? 'text-left' : 'text-center',
                 )}
               >

@@ -103,7 +103,7 @@ export default async function BlogPostPage({
                 <span>{post.readTime}</span>
               </div>
 
-              <h1 className="font-display mt-4 text-center text-[32px] leading-[115%] font-extrabold text-[#1A1A1A] sm:text-[44px] lg:text-[52px]">
+              <h1 className="heading-h1 mt-4 text-center text-[#1A1A1A]">
                 {post.title}
               </h1>
 
@@ -144,7 +144,7 @@ export default async function BlogPostPage({
                   proactive risk management.
                 </p>
 
-                <h2 className="font-display mt-10 text-[26px] font-bold text-[#1A1A1A]">
+                <h2 className="heading-h2 mt-10 text-[#1A1A1A]">
                   Key Advisory Considerations
                 </h2>
 
@@ -171,7 +171,7 @@ export default async function BlogPostPage({
                 </ul>
 
                 <div className="mt-10 rounded-xl border border-[#035551]/20 bg-[#FDFBEE] p-6 sm:p-8">
-                  <h3 className="font-display text-[20px] font-bold text-[#035551]">
+                  <h3 className="heading-h3--compact text-[#035551]">
                     Need dedicated advisory on this topic?
                   </h3>
                   <p className="mt-2 text-[15px] text-[#5A5A5A]">
@@ -200,7 +200,7 @@ export default async function BlogPostPage({
                 <BandEyebrow className="justify-center">
                   EXPLORE MORE ARTICLES
                 </BandEyebrow>
-                <h2 className="font-display mt-3 text-[clamp(1.75rem,3.8vw,40px)] font-bold text-[#023F3D]">
+                <h2 className="heading-h2 mt-3 text-[#023F3D]">
                   Related Insights & Articles
                 </h2>
                 <p className="mt-3 text-[16px] text-[#5A5A5A]">

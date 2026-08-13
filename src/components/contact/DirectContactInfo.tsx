@@ -60,12 +60,15 @@ const CONTACT_METHODS = [
 
 export function DirectContactInfo() {
   return (
-    <Section tone="raised" className="border-y border-[#035551]/10 py-16 lg:py-24">
+    <Section
+      tone="raised"
+      className="border-y border-[#035551]/10 py-16 lg:py-24"
+    >
       <Container width="wide">
         <div className="flex flex-col items-center text-center">
           <BandEyebrow>DIRECT CONTACT</BandEyebrow>
 
-          <h2 className="font-display mt-3 text-[clamp(1.75rem,3.8vw,40px)] leading-tight font-bold tracking-[-0.017em] text-black">
+          <h2 className="heading-h2 mt-3 text-black">
             Prefer to Speak With Us Directly?
           </h2>
         </div>
@@ -81,7 +84,7 @@ export function DirectContactInfo() {
                 <span className="mt-4 text-[12px] font-bold tracking-wider text-[#035551] uppercase">
                   {item.label}
                 </span>
-                <span className="mt-1 text-[15px] font-semibold text-black break-words">
+                <span className="mt-1 text-[15px] font-semibold break-words text-black">
                   {item.value}
                 </span>
               </div>
@@ -93,7 +96,11 @@ export function DirectContactInfo() {
                   <a
                     href={item.href}
                     target={item.href.startsWith('http') ? '_blank' : undefined}
-                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    rel={
+                      item.href.startsWith('http')
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
                     className="block h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E]"
                   >
                     {content}

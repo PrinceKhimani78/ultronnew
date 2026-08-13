@@ -214,7 +214,7 @@ export function ServiceTabs() {
               {isActive && (
                 <div className="space-y-5 bg-white p-5">
                   <div>
-                    <h3 className="font-display text-[22px] font-bold text-[#035551]">
+                    <h3 className="heading-h3 text-[#035551]">
                       {formattedNumber}. {service.title}
                     </h3>
                     <h4 className="font-display mt-2 text-[16px] font-bold text-black">
@@ -331,7 +331,7 @@ export function ServiceTabs() {
               >
                 {/* Header Section */}
                 <div className="shrink-0 pb-4">
-                  <h3 className="font-display text-[22px] leading-tight font-bold text-[#035551]">
+                  <h3 className="heading-h3 text-[#035551]">
                     <span>{formattedNumber}. </span>
                     <span>{service.title}</span>
                   </h3>

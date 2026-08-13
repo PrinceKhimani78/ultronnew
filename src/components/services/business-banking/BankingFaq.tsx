@@ -32,7 +32,7 @@ export function BankingFaq() {
               BUSINESS BANKING QUESTIONS
             </BandEyebrow>
 
-            <h2 className="font-display mt-3 text-[clamp(1.875rem,4vw,44px)] leading-[110%] font-bold tracking-[-0.017em] text-black">
+            <h2 className="heading-h2 mt-3 text-black">
               <HeadingText
                 segments={[
                   { text: 'Frequently Asked ' },

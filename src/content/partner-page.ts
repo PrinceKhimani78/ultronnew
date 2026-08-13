@@ -11,7 +11,7 @@ export const PARTNER_PAGE = {
       { text: 'Partner With ' },
       { text: 'Ultron', accent: true },
     ] as readonly HeadingSegment[],
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    body: 'For law firms, wealth managers and corporate service providers who need a UAE execution partner they can put their name behind.',
   },
 
   formSection: {

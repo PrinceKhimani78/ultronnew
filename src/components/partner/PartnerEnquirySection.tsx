@@ -179,7 +179,7 @@ export function PartnerEnquirySection() {
             {PARTNER_PAGE.formSection.eyebrow}
           </BandEyebrow>
 
-          <h2 className="font-display mt-3 text-[32px] leading-[105%] font-extrabold tracking-[-0.02em] text-black sm:text-[40px] lg:text-[48px]">
+          <h2 className="heading-h2 mt-3 text-black">
             <HeadingText
               segments={PARTNER_PAGE.formSection.heading}
               accentClassName="text-[#035551]"
@@ -204,10 +204,7 @@ export function PartnerEnquirySection() {
                 style={{ color: CREAM }}
               >
                 <CheckCircle2 className="h-16 w-16 text-[#DCCB8E]" />
-                <h3
-                  className="font-display mt-6 text-[24px] font-bold sm:text-[28px]"
-                  style={{ color: CREAM }}
-                >
+                <h3 className="heading-h3 mt-6" style={{ color: CREAM }}>
                   Enquiry Received
                 </h3>
                 <p className="mt-3 max-w-md text-[16px] leading-[160%] opacity-90">

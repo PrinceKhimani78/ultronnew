@@ -69,7 +69,7 @@ export function ServiceHeading({
         <>
           {parts[0]}
           <span
-            className="text-brand"
+            className="service-heading-highlight text-brand"
             style={{
               fontWeight: 'inherit',
               fontStyle: 'inherit',

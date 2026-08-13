@@ -245,7 +245,7 @@ export function BankingSolutionDesk() {
           </Reveal>
 
           <Reveal delay={100} className="mt-3">
-            <h2 className="font-display text-[clamp(1.875rem,4.4vw,48px)] leading-[110%] font-bold tracking-[-0.017em] text-black">
+            <h2 className="heading-h2 text-black">
               <HeadingText
                 segments={ULTRON_SOLUTION_DESK.heading}
                 accentClassName="text-[#035551]"
@@ -293,7 +293,7 @@ export function BankingSolutionDesk() {
                         </span>
                       </div>
 
-                      <h3 className="font-display mt-4 text-[24px] leading-tight font-bold text-[#023F3D] sm:text-[28px] lg:text-[32px]">
+                      <h3 className="heading-h3 mt-4 text-[#023F3D]">
                         {item.heading}
                       </h3>
 

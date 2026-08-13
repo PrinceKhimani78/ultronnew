@@ -127,6 +127,16 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* Public Heading Typography Tokens */
+  --heading-h1-size: 64px;
+  --heading-h1-weight: 700;
+
+  --heading-h2-size: 48px;
+  --heading-h2-weight: 600;
+
+  --heading-h3-size: 24px;
+  --heading-h3-weight: 600;
+
   /* The measure itself. Content sits inside this, never wider. */
   --page-max: 1348px;
 
@@ -335,6 +345,67 @@
   textarea,
   label {
     font-family: var(--font-brand);
+  }
+
+  /* Public Page Heading System (H1: 64px/700, H2: 48px/600, H3: 24px/600) */
+  h1:not(.admin-scope *):not(footer *),
+  .heading-h1 {
+    font-family: var(--font-brand);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: var(--heading-h1-weight);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  h2:not(.admin-scope *):not(footer *),
+  .heading-h2 {
+    font-family: var(--font-brand);
+    font-size: clamp(30px, 3.75vw, 48px);
+    font-weight: var(--heading-h2-weight);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  h3:not(.admin-scope *):not(footer *):not(.heading-h3--compact),
+  .heading-h3 {
+    font-family: var(--font-brand);
+    font-size: clamp(21px, 2vw, 24px);
+    font-weight: var(--heading-h3-weight);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .heading-h3--compact {
+    font-family: var(--font-brand);
+    font-size: 20px;
+    font-weight: var(--heading-h3-weight);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  @media (min-width: 1200px) {
+    h1:not(.admin-scope *):not(footer *),
+    .heading-h1 {
+      font-size: var(--heading-h1-size);
+    }
+    h2:not(.admin-scope *):not(footer *),
+    .heading-h2 {
+      font-size: var(--heading-h2-size);
+    }
+    h3:not(.admin-scope *):not(footer *):not(.heading-h3--compact),
+    .heading-h3 {
+      font-size: var(--heading-h3-size);
+    }
+  }
+
+  .heading-highlight,
+  .service-heading-highlight {
+    color: #035551;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
   }
 
   button,

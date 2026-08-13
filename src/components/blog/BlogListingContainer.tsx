@@ -57,7 +57,7 @@ export function BlogListingContainer({ posts }: Props) {
         <BandEyebrow style={{ color: '#C9B37E' }}>
           {BLOG_PAGE.listing.eyebrow}
         </BandEyebrow>
-        <h2 className="font-display mt-3.5 text-[32px] leading-[105%] font-extrabold tracking-[-0.02em] text-black sm:text-[40px] lg:text-[48px]">
+        <h2 className="heading-h2 mt-3.5 text-black">
           <HeadingText
             segments={BLOG_PAGE.listing.heading}
             accentClassName="text-[#035551]"

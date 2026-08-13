@@ -43,9 +43,7 @@ const CARD_PLATE = cn(
 function StepCardContent({ title, body }: { title: string; body: string }) {
   return (
     <>
-      <h3 className="font-display text-[18px] leading-[1.3] font-bold text-[#035551]">
-        {title}
-      </h3>
+      <h3 className="heading-h3--compact text-[#035551]">{title}</h3>
 
       <p className="text-[18px] leading-[1.5] font-normal tracking-[0] text-[rgba(35,35,35,0.82)]">
         {body}
@@ -129,7 +127,7 @@ export function HowUltronWorks({
             {intro.eyebrow}
           </p>
 
-          <h2 className="font-display mt-3.5 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] text-white sm:text-[40px] lg:text-[48px]">
+          <h2 className="heading-h2 mt-3.5 text-white">
             <HeadingText
               segments={intro.heading}
               accentClassName="text-white"

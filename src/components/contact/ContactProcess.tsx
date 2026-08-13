@@ -31,7 +31,7 @@ export function ContactProcess() {
         <div className="flex flex-col items-center text-center">
           <BandEyebrow>WHAT HAPPENS NEXT</BandEyebrow>
 
-          <h2 className="font-display mt-3 text-[clamp(1.75rem,3.8vw,40px)] leading-tight font-bold tracking-[-0.017em] text-black">
+          <h2 className="heading-h2 mt-3 text-black">
             A Clear Process From the First Conversation
           </h2>
         </div>
@@ -44,7 +44,7 @@ export function ContactProcess() {
                   {step.number}
                 </span>
 
-                <h3 className="font-display mt-4 text-[20px] font-bold text-black">
+                <h3 className="heading-h3--compact mt-4 text-black">
                   {step.title}
                 </h3>
 

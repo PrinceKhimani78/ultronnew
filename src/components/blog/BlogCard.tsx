@@ -42,7 +42,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="font-display mt-3 text-[20px] leading-[130%] font-bold text-[#1A1A1A] transition-colors duration-200 group-hover:text-[#035551]">
+          <h3 className="heading-h3--compact mt-3 text-[#1A1A1A] transition-colors duration-200 group-hover:text-[#035551]">
             <Link
               href={`/blogs/${post.slug}`}
               className="after:absolute after:inset-0 focus:outline-none"

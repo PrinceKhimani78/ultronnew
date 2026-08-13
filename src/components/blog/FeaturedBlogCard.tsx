@@ -55,7 +55,7 @@ export function FeaturedBlogCard({
             </div>
 
             {/* Title */}
-            <h3 className="font-display mt-3 text-[24px] leading-[120%] font-bold text-[#1A1A1A] transition-colors duration-200 group-hover:text-[#035551] sm:text-[28px] lg:text-[32px]">
+            <h3 className="heading-h3 mt-3 text-[#1A1A1A] transition-colors duration-200 group-hover:text-[#035551]">
               <Link
                 href={`/blogs/${post.slug}`}
                 className="after:absolute after:inset-0 focus:outline-none"

@@ -21,7 +21,7 @@ export function BankingProblems() {
           </Reveal>
 
           <Reveal delay={100} className="mt-3">
-            <h2 className="font-display text-[clamp(2rem,4.4vw,48px)] leading-[110%] font-bold tracking-[-0.017em] text-black">
+            <h2 className="heading-h2 text-black">
               <HeadingText
                 segments={BANKING_PROBLEMS.heading}
                 accentClassName="text-[#035551]"

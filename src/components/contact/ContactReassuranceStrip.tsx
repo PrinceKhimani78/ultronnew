@@ -11,7 +11,9 @@ export function ContactReassuranceStrip() {
     const formElem = document.getElementById('contact-form');
     if (formElem) {
       formElem.scrollIntoView({ behavior: 'smooth' });
-      const nameInput = document.getElementById('contact-name') as HTMLInputElement | null;
+      const nameInput = document.getElementById(
+        'contact-name',
+      ) as HTMLInputElement | null;
       if (nameInput) {
         setTimeout(() => nameInput.focus(), 600);
       }
@@ -19,20 +21,20 @@ export function ContactReassuranceStrip() {
   };
 
   return (
-    <Section tone="brand" className="py-16 lg:py-20 text-center">
+    <Section tone="brand" className="py-16 text-center lg:py-20">
       <Container width="wide">
         <Reveal className="flex flex-col items-center">
           <BandEyebrow className="text-[#DCCB8E]">
             START WITH A CONVERSATION
           </BandEyebrow>
 
-          <h2 className="font-display mt-3 text-[clamp(1.75rem,3.8vw,40px)] leading-tight font-bold tracking-[-0.017em] text-white">
+          <h2 className="heading-h2 mt-3 text-white">
             Complex Situation? That’s Usually Where We Begin.
           </h2>
 
           <p className="mt-4 max-w-[640px] text-[16px] leading-[150%] font-normal text-white/80">
-            Share the details with our team and we’ll help you understand what is
-            realistically possible.
+            Share the details with our team and we’ll help you understand what
+            is realistically possible.
           </p>
 
           <div className="mt-8">
@@ -41,7 +43,10 @@ export function ContactReassuranceStrip() {
               variant="cream"
               className="cursor-pointer"
             >
-              <span onClick={handleScrollToForm} className="block w-full h-full">
+              <span
+                onClick={handleScrollToForm}
+                className="block h-full w-full"
+              >
                 DISCUSS YOUR SITUATION
               </span>
             </ActionButton>

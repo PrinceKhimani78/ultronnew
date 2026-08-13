@@ -20,7 +20,7 @@ export function ContactFormSection() {
   return (
     <section
       id="contact-form-section"
-      className="relative w-full max-w-none m-0 p-0 overflow-hidden isolate pt-4 pb-16 sm:pb-20 lg:pt-8 lg:pb-28"
+      className="relative isolate m-0 w-full max-w-none overflow-hidden p-0 pt-4 pb-16 sm:pb-20 lg:pt-8 lg:pb-28"
       style={{ backgroundColor: CREAM }}
       aria-label="Contact Enquiry Form"
     >
@@ -28,8 +28,8 @@ export function ContactFormSection() {
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[62px]">
           {/* Left-Side Trust Checklist & Reassurance */}
           <Reveal className="w-full lg:max-w-[500px] lg:shrink">
-            <h2 className="font-display text-[clamp(1.5rem,3vw,32px)] leading-[120%] font-bold tracking-[-0.017em] text-black">
-              Why Speak With <span className="text-[#035551]">Ultron?</span>
+            <h2 className="heading-h2 text-black">
+              Why Speak With <span className="heading-highlight">Ultron?</span>
             </h2>
 
             <p className="mt-4 text-[16px] leading-[150%] font-medium text-[#4B5563]">

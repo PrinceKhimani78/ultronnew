@@ -11,11 +11,8 @@ export function ContactHero() {
       id="contact-hero"
       headingId="contact-hero-heading"
       eyebrow="CONTACT ULTRON FINANCIALS"
-      heading={[
-        { text: 'Contact ' },
-        { text: 'Us', accent: true },
-      ]}
-      body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Share your situation with our advisory team for clear, practical guidance on UAE company setup, corporate banking, and financial structuring."
+      heading={[{ text: 'Contact ' }, { text: 'Us', accent: true }]}
+      body="Share your situation with our advisory team for clear, practical guidance on UAE company setup, corporate banking, and financial structuring."
     />
   );
 }

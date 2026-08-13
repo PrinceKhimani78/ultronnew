@@ -26,7 +26,7 @@ export function ServicesGrid() {
           <BandEyebrow style={{ color: '#C9B37E' }}>
             {SERVICES_PAGE.intro.eyebrow}
           </BandEyebrow>
-          <h2 className="font-display mt-3.5 text-[32px] leading-[105%] font-extrabold tracking-[-0.02em] text-black sm:text-[40px] lg:text-[48px]">
+          <h2 className="heading-h2 mt-3.5 text-black">
             <HeadingText
               segments={SERVICES_PAGE.intro.heading}
               accentClassName="text-[#035551]"

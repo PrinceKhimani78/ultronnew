@@ -155,7 +155,7 @@ export function SectionHeading({
 
       <Heading
         className={cn(
-          'font-display mt-4 text-[32px] leading-[100%] font-semibold tracking-[-0.02em] sm:text-[40px] lg:text-[48px]',
+          Heading === 'h3' ? 'heading-h3 mt-4' : 'heading-h2 mt-4',
           inverted ? 'text-surface' : 'text-ink',
         )}
       >

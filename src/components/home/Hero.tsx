@@ -55,13 +55,13 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="homepage-hero relative w-full max-w-none m-0 p-0 overflow-hidden isolate"
+      className="homepage-hero relative isolate m-0 w-full max-w-none overflow-hidden p-0"
       style={{ backgroundColor: CREAM }}
       aria-labelledby="home-hero-heading"
     >
       {/* Absolute background layer for UF Particle Logo */}
       <div
-        className="hero-uf-background absolute inset-0 z-0 pointer-events-none overflow-hidden"
+        className="hero-uf-background pointer-events-none absolute inset-0 z-0 overflow-hidden"
         style={{
           maskImage:
             'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.4) 50%, #000 70%, #000 100%)',
@@ -69,9 +69,9 @@ export function Hero() {
             'linear-gradient(90deg, transparent 0%, transparent 35%, rgba(0, 0, 0, 0.4) 50%, #000 70%, #000 100%)',
         }}
       >
-        <div className="page-shell relative h-full w-full pointer-events-none">
+        <div className="page-shell pointer-events-none relative h-full w-full">
           <div
-            className="hero-uf-logo absolute pointer-events-none right-[var(--page-gutter)] w-[clamp(280px,58vw,360px)] h-[clamp(280px,58vw,360px)] md:w-[clamp(360px,42vw,460px)] md:h-[clamp(360px,42vw,460px)] lg:w-[clamp(440px,36vw,560px)] lg:h-[clamp(440px,36vw,560px)] xl:w-[clamp(520px,38vw,680px)] xl:h-[clamp(520px,38vw,680px)]"
+            className="hero-uf-logo pointer-events-none absolute right-[var(--page-gutter)] h-[clamp(280px,58vw,360px)] w-[clamp(280px,58vw,360px)] md:h-[clamp(360px,42vw,460px)] md:w-[clamp(360px,42vw,460px)] lg:h-[clamp(440px,36vw,560px)] lg:w-[clamp(440px,36vw,560px)] xl:h-[clamp(520px,38vw,680px)] xl:w-[clamp(520px,38vw,680px)]"
             style={{
               top: '50%',
               transform: 'translateY(-50%)',
@@ -94,10 +94,7 @@ export function Hero() {
               timer and the mutating accessible name it produced.
             */}
             <Reveal delay={BEAT.heading}>
-              <h1
-                id="home-hero-heading"
-                className="font-display m-0 text-[clamp(2.25rem,6.4vw,64px)] leading-[100%] font-bold tracking-[-0.017em] text-black"
-              >
+              <h1 id="home-hero-heading" className="heading-h1 m-0 text-black">
                 {/*
                   `accentClassName` sets the emphasised words in the comp's full
                   brand teal rather than the lighter `brand-bright`; at 64px it
