@@ -4,10 +4,63 @@ import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 
 import { ActionButton } from '@/components/ui/ActionButton';
-import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
+import { Eyebrow } from '@/components/ui/SectionHeading';
 import type { Service } from '@/content/services';
 
 const EASE_HOUSE = [0.22, 1, 0.36, 1] as const;
+
+const PROCESS_HIGHLIGHTS: Record<string, string> = {
+  'business-banking': 'Approved',
+  'business-setup': 'Setup',
+  'business-finance': 'Financing',
+  'real-estate-mortgages': 'Mortgage',
+  'trade-finance': 'Facilities',
+  'compliance-regulatory-advisory': 'Compliance',
+};
+
+function renderHighlightedText(text: string, highlightPhrase?: string) {
+  if (!text) return null;
+
+  if (text.includes('*')) {
+    const parts = text.split('*');
+    return (
+      <>
+        {parts.map((part, i) =>
+          i % 2 === 1 ? (
+            <span key={i} className="text-[#035551]">
+              {part}
+            </span>
+          ) : (
+            part
+          ),
+        )}
+      </>
+    );
+  }
+
+  if (
+    highlightPhrase &&
+    text.toLowerCase().includes(highlightPhrase.toLowerCase())
+  ) {
+    const regex = new RegExp(`(${highlightPhrase})`, 'gi');
+    const parts = text.split(regex);
+    return (
+      <>
+        {parts.map((part, i) =>
+          part.toLowerCase() === highlightPhrase.toLowerCase() ? (
+            <span key={i} className="text-[#035551]">
+              {part}
+            </span>
+          ) : (
+            part
+          ),
+        )}
+      </>
+    );
+  }
+
+  return text;
+}
 
 export function ServiceProcessStructure({ service }: { service: Service }) {
   const shouldReduceMotion = useReducedMotion();
@@ -25,7 +78,10 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
         >
           <Eyebrow align="left">OUR PROCESS</Eyebrow>
           <h2 className="font-display mt-3.5 text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-[#121a18]">
-            <HeadingText segments={[{ text: `${service.process.headline}` }]} />
+            {renderHighlightedText(
+              service.process.headline,
+              PROCESS_HIGHLIGHTS[service.slug],
+            )}
           </h2>
           <p className="mt-4 max-w-[680px] text-base leading-relaxed font-medium text-[#4b5563] sm:text-lg">
             {service.process.subtext}
