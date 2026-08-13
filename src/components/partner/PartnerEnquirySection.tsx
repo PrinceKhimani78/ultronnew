@@ -76,6 +76,7 @@ function FieldLabel({
 }
 
 export function PartnerEnquirySection() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -90,6 +91,10 @@ export function PartnerEnquirySection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};
@@ -242,186 +247,192 @@ export function PartnerEnquirySection() {
                   </div>
                 )}
 
-                <Stagger
-                  delay={STAGGER_MS}
-                  className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6"
-                  suppressHydrationWarning
-                >
-                  {/* Full Name */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-name" required>
-                      Full Name
-                    </FieldLabel>
-                    <input
-                      id="partner-name"
-                      name="name"
-                      type="text"
-                      autoComplete="name"
-                      value={formData.name}
-                      onChange={handleChange}
+                {(() => {
+                  const GridContainer = hasMounted ? Stagger : 'div';
+                  const ItemContainer = hasMounted ? StaggerItem : 'div';
+                  return (
+                    <GridContainer
+                      delay={STAGGER_MS}
+                      className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-6"
                       suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className={FIELD_CLASS}
-                      style={FIELD_STYLE}
-                    />
-                    {errors.name && (
-                      <p className="text-xs font-medium text-[#FF8A8A]">
-                        {errors.name}
-                      </p>
-                    )}
-                  </StaggerItem>
-
-                  {/* Email Address */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-email" required>
-                      Work Email Address
-                    </FieldLabel>
-                    <input
-                      id="partner-email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className={FIELD_CLASS}
-                      style={FIELD_STYLE}
-                    />
-                    {errors.email && (
-                      <p className="text-xs font-medium text-[#FF8A8A]">
-                        {errors.email}
-                      </p>
-                    )}
-                  </StaggerItem>
-
-                  {/* Phone Number */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-phone" required>
-                      Phone Number
-                    </FieldLabel>
-                    <input
-                      id="partner-phone"
-                      name="phone"
-                      type="tel"
-                      autoComplete="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className={FIELD_CLASS}
-                      style={FIELD_STYLE}
-                    />
-                    {errors.phone && (
-                      <p className="text-xs font-medium text-[#FF8A8A]">
-                        {errors.phone}
-                      </p>
-                    )}
-                  </StaggerItem>
-
-                  {/* Business Type / Company */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-company" required>
-                      Business Type / Company
-                    </FieldLabel>
-                    <input
-                      id="partner-company"
-                      name="company"
-                      type="text"
-                      autoComplete="organization"
-                      value={formData.company}
-                      onChange={handleChange}
-                      suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className={FIELD_CLASS}
-                      style={FIELD_STYLE}
-                    />
-                    {errors.company && (
-                      <p className="text-xs font-medium text-[#FF8A8A]">
-                        {errors.company}
-                      </p>
-                    )}
-                  </StaggerItem>
-
-                  {/* Service Interested In */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5 sm:col-span-2"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-service" required>
-                      Services Your Clients Need
-                    </FieldLabel>
-                    <select
-                      id="partner-service"
-                      name="service"
-                      value={formData.service}
-                      onChange={handleChange}
-                      suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className={cn(
-                        FIELD_CLASS,
-                        'cursor-pointer appearance-none',
-                      )}
-                      style={FIELD_STYLE}
                     >
-                      <option
-                        value=""
-                        disabled
-                        className="bg-[#035551] text-white"
+                      {/* Full Name */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5"
+                        suppressHydrationWarning
                       >
-                        Select a service...
-                      </option>
-                      {SERVICES.map((service) => (
-                        <option
-                          key={service.slug}
-                          value={service.title}
-                          className="bg-[#035551] text-white"
-                        >
-                          {service.title}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.service && (
-                      <p className="text-xs font-medium text-[#FF8A8A]">
-                        {errors.service}
-                      </p>
-                    )}
-                  </StaggerItem>
+                        <FieldLabel htmlFor="partner-name" required>
+                          Full Name
+                        </FieldLabel>
+                        <input
+                          id="partner-name"
+                          name="name"
+                          type="text"
+                          autoComplete="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className={FIELD_CLASS}
+                          style={FIELD_STYLE}
+                        />
+                        {errors.name && (
+                          <p className="text-xs font-medium text-[#FF8A8A]">
+                            {errors.name}
+                          </p>
+                        )}
+                      </ItemContainer>
 
-                  {/* Message */}
-                  <StaggerItem
-                    className="flex flex-col gap-1.5 sm:col-span-2"
-                    suppressHydrationWarning
-                  >
-                    <FieldLabel htmlFor="partner-message">
-                      Message / Tell Us About the Opportunity
-                    </FieldLabel>
-                    <textarea
-                      id="partner-message"
-                      name="message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      suppressHydrationWarning
-                      {...NO_AUTOFILL_UI}
-                      className="ease-house h-[110px] w-full resize-none rounded-[10px] border-none px-3.5 py-3 text-[15px] transition-shadow outline-none placeholder:text-[#FDFBEE]/50 focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
-                      style={FIELD_STYLE}
-                      placeholder="Please share details about your practice, client profiles, or partnership objectives..."
-                    />
-                  </StaggerItem>
-                </Stagger>
+                      {/* Email Address */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5"
+                        suppressHydrationWarning
+                      >
+                        <FieldLabel htmlFor="partner-email" required>
+                          Work Email Address
+                        </FieldLabel>
+                        <input
+                          id="partner-email"
+                          name="email"
+                          type="email"
+                          autoComplete="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className={FIELD_CLASS}
+                          style={FIELD_STYLE}
+                        />
+                        {errors.email && (
+                          <p className="text-xs font-medium text-[#FF8A8A]">
+                            {errors.email}
+                          </p>
+                        )}
+                      </ItemContainer>
+
+                      {/* Phone Number */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5"
+                        suppressHydrationWarning
+                      >
+                        <FieldLabel htmlFor="partner-phone" required>
+                          Phone Number
+                        </FieldLabel>
+                        <input
+                          id="partner-phone"
+                          name="phone"
+                          type="tel"
+                          autoComplete="tel"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className={FIELD_CLASS}
+                          style={FIELD_STYLE}
+                        />
+                        {errors.phone && (
+                          <p className="text-xs font-medium text-[#FF8A8A]">
+                            {errors.phone}
+                          </p>
+                        )}
+                      </ItemContainer>
+
+                      {/* Business Type / Company */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5"
+                        suppressHydrationWarning
+                      >
+                        <FieldLabel htmlFor="partner-company" required>
+                          Business Type / Company
+                        </FieldLabel>
+                        <input
+                          id="partner-company"
+                          name="company"
+                          type="text"
+                          autoComplete="organization"
+                          value={formData.company}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className={FIELD_CLASS}
+                          style={FIELD_STYLE}
+                        />
+                        {errors.company && (
+                          <p className="text-xs font-medium text-[#FF8A8A]">
+                            {errors.company}
+                          </p>
+                        )}
+                      </ItemContainer>
+
+                      {/* Service Interested In */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5 sm:col-span-2"
+                        suppressHydrationWarning
+                      >
+                        <FieldLabel htmlFor="partner-service" required>
+                          Services Your Clients Need
+                        </FieldLabel>
+                        <select
+                          id="partner-service"
+                          name="service"
+                          value={formData.service}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className={cn(
+                            FIELD_CLASS,
+                            'cursor-pointer appearance-none',
+                          )}
+                          style={FIELD_STYLE}
+                        >
+                          <option
+                            value=""
+                            disabled
+                            className="bg-[#035551] text-white"
+                          >
+                            Select a service...
+                          </option>
+                          {SERVICES.map((service) => (
+                            <option
+                              key={service.slug}
+                              value={service.title}
+                              className="bg-[#035551] text-white"
+                            >
+                              {service.title}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.service && (
+                          <p className="text-xs font-medium text-[#FF8A8A]">
+                            {errors.service}
+                          </p>
+                        )}
+                      </ItemContainer>
+
+                      {/* Message */}
+                      <ItemContainer
+                        className="flex flex-col gap-1.5 sm:col-span-2"
+                        suppressHydrationWarning
+                      >
+                        <FieldLabel htmlFor="partner-message">
+                          Message / Tell Us About the Opportunity
+                        </FieldLabel>
+                        <textarea
+                          id="partner-message"
+                          name="message"
+                          rows={4}
+                          value={formData.message}
+                          onChange={handleChange}
+                          suppressHydrationWarning
+                          {...NO_AUTOFILL_UI}
+                          className="ease-house h-[110px] w-full resize-none rounded-[10px] border-none px-3.5 py-3 text-[15px] transition-shadow outline-none placeholder:text-[#FDFBEE]/50 focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
+                          style={FIELD_STYLE}
+                          placeholder="Please share details about your practice, client profiles, or partnership objectives..."
+                        />
+                      </ItemContainer>
+                    </GridContainer>
+                  );
+                })()}
 
                 {/* Honeypot for spam protection */}
                 <div aria-hidden="true" className="hidden">
