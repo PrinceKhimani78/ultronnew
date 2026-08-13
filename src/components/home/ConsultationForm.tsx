@@ -124,6 +124,7 @@ export function ConsultationForm({
           service: formData.service,
           message: formData.message,
           website: formData.website,
+          formName: formTitle || 'Consultation Form',
           sourcePage:
             typeof window !== 'undefined'
               ? window.location.pathname

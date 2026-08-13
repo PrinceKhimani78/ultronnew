@@ -108,8 +108,8 @@ export default function WebsiteSettingsPage() {
   const [ctaSettings, setCtaSettings] = useState<CtaSettings>({
     default_cta_label: 'Book a call',
     default_cta_destination: '#contact',
-    consultation_email_recipient: 'lorem@ultronfinancials.com',
-    form_notification_email: 'lorem@ultronfinancials.com',
+    consultation_email_recipient: 'info@ultronfinancials.com',
+    form_notification_email: 'info@ultronfinancials.com',
     whatsapp_cta_number: '9876543210',
   });
 
@@ -180,6 +180,23 @@ export default function WebsiteSettingsPage() {
         group = 'header_footer';
         value = contactDetails;
       } else if (activeTab === 'cta') {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (
+          ctaSettings.form_notification_email &&
+          !emailRegex.test(ctaSettings.form_notification_email.trim())
+        ) {
+          throw new Error(
+            'Please enter a valid notification recipient email address.',
+          );
+        }
+        if (
+          ctaSettings.consultation_email_recipient &&
+          !emailRegex.test(ctaSettings.consultation_email_recipient.trim())
+        ) {
+          throw new Error(
+            'Please enter a valid consultation recipient email address.',
+          );
+        }
         key = 'cta_settings';
         group = 'cta_forms';
         value = ctaSettings;

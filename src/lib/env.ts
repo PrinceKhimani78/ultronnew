@@ -93,8 +93,10 @@ const envSchema = z.object({
   // Email is optional by design: without it the contact form still validates and
   // responds, and delivery is skipped. See src/lib/mailer.ts.
   RESEND_API_KEY: z.string().min(1).optional(),
+  INQUIRY_NOTIFICATION_EMAIL: z.string().email().optional(),
+  INQUIRY_FROM_EMAIL: z.string().optional(),
   CONTACT_TO_EMAIL: z.string().email().optional(),
-  CONTACT_FROM_EMAIL: z.string().email().optional(),
+  CONTACT_FROM_EMAIL: z.string().optional(),
 
   // Supabase Lead Management & Admin Panel Environment Variables
   NEXT_PUBLIC_SUPABASE_URL: z
@@ -112,6 +114,8 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse({
   NEXT_PUBLIC_SITE_URL: resolveSiteUrl(),
   RESEND_API_KEY: optional(process.env.RESEND_API_KEY),
+  INQUIRY_NOTIFICATION_EMAIL: optional(process.env.INQUIRY_NOTIFICATION_EMAIL),
+  INQUIRY_FROM_EMAIL: optional(process.env.INQUIRY_FROM_EMAIL),
   CONTACT_TO_EMAIL: optional(process.env.CONTACT_TO_EMAIL),
   CONTACT_FROM_EMAIL: optional(process.env.CONTACT_FROM_EMAIL),
   NEXT_PUBLIC_SUPABASE_URL: optional(process.env.NEXT_PUBLIC_SUPABASE_URL),

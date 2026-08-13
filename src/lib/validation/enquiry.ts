@@ -30,6 +30,7 @@ export const enquirySchema = z.object({
     .optional()
     .nullable(),
   sourcePage: z.string().trim().max(200).optional().nullable(),
+  formName: z.string().trim().max(150).optional().nullable(),
   utmSource: z.string().trim().max(100).optional().nullable(),
   utmMedium: z.string().trim().max(100).optional().nullable(),
   utmCampaign: z.string().trim().max(100).optional().nullable(),

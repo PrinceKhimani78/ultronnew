@@ -99,6 +99,7 @@ export function PartnerEnquirySection() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = (): boolean => {
@@ -166,12 +167,47 @@ export function PartnerEnquirySection() {
     setIsSubmitting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch('/api/enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          businessType: formData.company,
+          service: formData.service,
+          message: formData.message,
+          sourcePage: '/partner',
+          formName: 'Partner Enquiry Form',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || 'Submission failed. Please try again.',
+        );
+      }
+
       setIsSubmitted(true);
-    } catch {
-      setSubmitError(
-        'An unexpected error occurred. Please try again or contact us directly.',
-      );
+      setReferenceNumber(result.referenceNumber || null);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        service: '',
+        message: '',
+        consent: false,
+      });
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : 'An unexpected error occurred. Please try again or contact us directly.';
+      setSubmitError(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -220,6 +256,12 @@ export function PartnerEnquirySection() {
                 <p className="mt-3 max-w-md text-[16px] leading-[160%] opacity-90">
                   {PARTNER_PAGE.formSection.successMessage}
                 </p>
+                {referenceNumber && (
+                  <div className="mt-4 rounded-[8px] border border-[#FDFBEE]/30 bg-black/20 px-4 py-2 font-mono text-sm text-[#FDFBEE]">
+                    Reference:{' '}
+                    <span className="font-bold">{referenceNumber}</span>
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => {

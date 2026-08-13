@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 import { env } from '@/lib/env';
+import { sendEnquiryNotification } from '@/lib/mailer';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { enquirySchema } from '@/lib/validation/enquiry';
 
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
 
     recentFingerprints.set(fingerprintHash, Date.now());
 
-    // 5. Narrow Server Insertion into Supabase
+    // 5. Database Insertion into Supabase
     const supabaseAdmin = createAdminClient();
 
     const insertPayload = {
@@ -103,6 +104,14 @@ export async function POST(request: Request) {
             single: () => Promise<{ data: unknown; error: unknown }>;
           };
         };
+        select: (cols: string) => {
+          eq: (
+            col: string,
+            val: string,
+          ) => {
+            single: () => Promise<{ data: unknown; error: unknown }>;
+          };
+        };
       };
     };
 
@@ -111,7 +120,9 @@ export async function POST(request: Request) {
     const { data: insertedData, error: dbError } = await dbClient
       .from('enquiries')
       .insert(insertPayload)
-      .select('id, reference_number, full_name, email, service')
+      .select(
+        'id, reference_number, full_name, email, phone, company_name, business_type, service, message, source_page, created_at',
+      )
       .single();
 
     const insertedEnquiry = insertedData as {
@@ -119,7 +130,13 @@ export async function POST(request: Request) {
       reference_number: string;
       full_name: string;
       email: string;
+      phone: string | null;
+      company_name: string | null;
+      business_type: string | null;
       service: string;
+      message: string | null;
+      source_page: string | null;
+      created_at: string;
     } | null;
 
     if (dbError || !insertedEnquiry) {
@@ -133,54 +150,81 @@ export async function POST(request: Request) {
       );
     }
 
-    // 6. Record Integration Delivery Attempt (Resend / CRM)
+    // 6. Resolve Recipient Email from Website Settings or Env Fallback
+    let recipientEmail: string | null = null;
     try {
-      if (env.RESEND_API_KEY) {
-        const resendResponse = await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${env.RESEND_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Ultron Lead <onboarding@resend.dev>',
-            to:
-              env.NOTIFICATION_EMAIL ||
-              env.CONTACT_TO_EMAIL ||
-              'info@ultronfinancials.com',
-            subject: `New Lead: ${insertedEnquiry.reference_number} - ${insertedEnquiry.full_name}`,
-            html: `<p><strong>Reference:</strong> ${insertedEnquiry.reference_number}</p>
-                   <p><strong>Name:</strong> ${insertedEnquiry.full_name}</p>
-                   <p><strong>Email:</strong> ${insertedEnquiry.email}</p>
-                   <p><strong>Service:</strong> ${insertedEnquiry.service}</p>`,
-          }),
-        });
+      const { data: settingRow } = await dbClient
+        .from('website_settings')
+        .select('setting_value')
+        .eq('setting_key', 'cta_settings')
+        .single();
 
-        const resendJson = await resendResponse.json();
-
-        const deliveryDbClient = supabaseAdmin as unknown as {
-          from: (table: string) => {
-            insert: (
-              payload: Record<string, unknown>,
-            ) => Promise<{ error: unknown }>;
-          };
-        };
-
-        await deliveryDbClient.from('integration_deliveries').insert({
-          enquiry_id: insertedEnquiry.id,
-          destination: 'resend_email',
-          status: resendResponse.ok ? 'delivered' : 'failed',
-          attempt_count: 1,
-          external_id: resendJson.id || null,
-          last_error_code: resendResponse.ok
-            ? null
-            : String(resendResponse.status),
-        });
+      if (settingRow) {
+        const val = (settingRow as { setting_value?: Record<string, string> })
+          .setting_value;
+        const candidate =
+          val?.form_notification_email || val?.consultation_email_recipient;
+        if (candidate && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate.trim())) {
+          recipientEmail = candidate.trim();
+        }
       }
-    } catch (crmErr) {
-      console.error('Integration delivery error:', crmErr);
+    } catch {
+      // Fallback silently if settings lookup is unavailable
     }
 
+    if (!recipientEmail) {
+      recipientEmail =
+        env.INQUIRY_NOTIFICATION_EMAIL ||
+        env.NOTIFICATION_EMAIL ||
+        env.CONTACT_TO_EMAIL ||
+        'info@ultronfinancials.com';
+    }
+
+    // 7. Send Notification Email Server-Side
+    const mailerResult = await sendEnquiryNotification({
+      referenceNumber: insertedEnquiry.reference_number,
+      enquiryId: insertedEnquiry.id,
+      fullName: insertedEnquiry.full_name,
+      email: insertedEnquiry.email,
+      phone: insertedEnquiry.phone,
+      companyName: insertedEnquiry.company_name,
+      businessType: insertedEnquiry.business_type,
+      service: insertedEnquiry.service,
+      message: insertedEnquiry.message,
+      sourcePage: insertedEnquiry.source_page || data.sourcePage || '/contact',
+      formName: data.formName || 'Website Enquiry Form',
+      submittedAt: insertedEnquiry.created_at,
+      recipientEmail,
+    });
+
+    // 8. Record Integration Delivery Attempt in Supabase
+    try {
+      const deliveryDbClient = supabaseAdmin as unknown as {
+        from: (table: string) => {
+          insert: (
+            payload: Record<string, unknown>,
+          ) => Promise<{ error: unknown }>;
+        };
+      };
+
+      await deliveryDbClient.from('integration_deliveries').insert({
+        enquiry_id: insertedEnquiry.id,
+        destination: 'resend_email',
+        status: mailerResult.success ? 'delivered' : 'failed',
+        attempt_count: 1,
+        external_id: mailerResult.externalId || null,
+        last_error_code:
+          mailerResult.lastErrorCode ||
+          (mailerResult.skipped ? 'NOT_CONFIGURED' : null),
+      });
+    } catch (deliveryLogErr) {
+      console.error(
+        'Failed to log integration delivery status:',
+        deliveryLogErr,
+      );
+    }
+
+    // 9. Controlled Success Response
     return NextResponse.json({
       success: true,
       referenceNumber: insertedEnquiry.reference_number,
