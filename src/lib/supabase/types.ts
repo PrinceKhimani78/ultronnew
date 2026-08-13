@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export type AdminRole = 'super_admin' | 'admin' | 'viewer';
+export type AdminRole = 'super_admin' | 'admin' | 'editor' | 'viewer';
 export type EnquiryStatus =
   | 'new'
   | 'reviewing'
@@ -27,6 +27,13 @@ export type EnquiryActivityRecord =
   Database['public']['Tables']['enquiry_activity']['Row'];
 export type IntegrationDeliveryRecord =
   Database['public']['Tables']['integration_deliveries']['Row'];
+
+export type BlogPostRecord = Database['public']['Tables']['blog_posts']['Row'];
+export type ServiceRecord = Database['public']['Tables']['services']['Row'];
+export type TeamMemberRecord =
+  Database['public']['Tables']['team_members']['Row'];
+export type WebsiteSettingRecord =
+  Database['public']['Tables']['website_settings']['Row'];
 
 export interface Database {
   public: {
@@ -56,6 +63,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       enquiries: {
         Row: {
@@ -136,6 +144,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       enquiry_notes: {
         Row: {
@@ -162,6 +171,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       enquiry_activity: {
         Row: {
@@ -191,6 +201,7 @@ export interface Database {
           new_value?: Json | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       integration_deliveries: {
         Row: {
@@ -226,7 +237,254 @@ export interface Database {
           last_error_code?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          title: string;
+          slug: string;
+          excerpt: string;
+          content: string;
+          featured_image_url: string;
+          featured_image_alt: string;
+          category: string;
+          tags: string[];
+          author_name: string;
+          status: 'draft' | 'published';
+          is_featured: boolean;
+          featured_position: 'left' | 'right' | null;
+          published_at: string | null;
+          seo_title: string | null;
+          meta_description: string | null;
+          og_image_url: string | null;
+          created_by: string | null;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+          archived_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          slug: string;
+          excerpt: string;
+          content: string;
+          featured_image_url: string;
+          featured_image_alt?: string;
+          category: string;
+          tags?: string[];
+          author_name: string;
+          status?: 'draft' | 'published';
+          is_featured?: boolean;
+          featured_position?: 'left' | 'right' | null;
+          published_at?: string | null;
+          seo_title?: string | null;
+          meta_description?: string | null;
+          og_image_url?: string | null;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          slug?: string;
+          excerpt?: string;
+          content?: string;
+          featured_image_url?: string;
+          featured_image_alt?: string;
+          category?: string;
+          tags?: string[];
+          author_name?: string;
+          status?: 'draft' | 'published';
+          is_featured?: boolean;
+          featured_position?: 'left' | 'right' | null;
+          published_at?: string | null;
+          seo_title?: string | null;
+          meta_description?: string | null;
+          og_image_url?: string | null;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Relationships: [];
+      };
+      services: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          short_description: string;
+          hero_title: string;
+          hero_description: string;
+          hero_image_url: string | null;
+          icon_url: string | null;
+          content_blocks: Json;
+          cta_label: string;
+          cta_url: string;
+          seo_title: string | null;
+          meta_description: string | null;
+          status: 'draft' | 'published';
+          show_in_navigation: boolean;
+          show_on_homepage: boolean;
+          display_order: number;
+          created_by: string | null;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+          archived_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          short_description: string;
+          hero_title: string;
+          hero_description: string;
+          hero_image_url?: string | null;
+          icon_url?: string | null;
+          content_blocks?: Json;
+          cta_label?: string;
+          cta_url?: string;
+          seo_title?: string | null;
+          meta_description?: string | null;
+          status?: 'draft' | 'published';
+          show_in_navigation?: boolean;
+          show_on_homepage?: boolean;
+          display_order?: number;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          slug?: string;
+          short_description?: string;
+          hero_title?: string;
+          hero_description?: string;
+          hero_image_url?: string | null;
+          icon_url?: string | null;
+          content_blocks?: Json;
+          cta_label?: string;
+          cta_url?: string;
+          seo_title?: string | null;
+          meta_description?: string | null;
+          status?: 'draft' | 'published';
+          show_in_navigation?: boolean;
+          show_on_homepage?: boolean;
+          display_order?: number;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Relationships: [];
+      };
+      team_members: {
+        Row: {
+          id: string;
+          full_name: string;
+          job_title: string;
+          profile_image_url: string | null;
+          image_alt: string;
+          bio: string | null;
+          email: string | null;
+          phone: string | null;
+          linkedin_url: string | null;
+          social_url: string | null;
+          show_email_publicly: boolean;
+          show_phone_publicly: boolean;
+          is_visible: boolean;
+          display_order: number;
+          created_by: string | null;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+          archived_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          full_name: string;
+          job_title: string;
+          profile_image_url?: string | null;
+          image_alt?: string;
+          bio?: string | null;
+          email?: string | null;
+          phone?: string | null;
+          linkedin_url?: string | null;
+          social_url?: string | null;
+          show_email_publicly?: boolean;
+          show_phone_publicly?: boolean;
+          is_visible?: boolean;
+          display_order?: number;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          full_name?: string;
+          job_title?: string;
+          profile_image_url?: string | null;
+          image_alt?: string;
+          bio?: string | null;
+          email?: string | null;
+          phone?: string | null;
+          linkedin_url?: string | null;
+          social_url?: string | null;
+          show_email_publicly?: boolean;
+          show_phone_publicly?: boolean;
+          is_visible?: boolean;
+          display_order?: number;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          archived_at?: string | null;
+        };
+        Relationships: [];
+      };
+      website_settings: {
+        Row: {
+          id: string;
+          setting_group: string;
+          setting_key: string;
+          setting_value: Json;
+          updated_by: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          setting_group: string;
+          setting_key: string;
+          setting_value: Json;
+          updated_by?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          setting_group?: string;
+          setting_key?: string;
+          setting_value?: Json;
+          updated_by?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: {
+      [_ in never]: never;
     };
     Functions: {
       is_active_admin: {
@@ -259,6 +517,15 @@ export interface Database {
         };
         Returns: Json;
       };
+    };
+    Enums: {
+      admin_role: AdminRole;
+      enquiry_status: EnquiryStatus;
+      enquiry_priority: EnquiryPriority;
+      delivery_status: DeliveryStatus;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 }

@@ -10,12 +10,13 @@ import { Section } from '@/components/layout/Section';
 import { Reveal } from '@/components/motion/Reveal';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { BandEyebrow } from '@/components/ui/BandEyebrow';
-import { BLOG_POSTS } from '@/content/blogs';
+import { getBlogPostBySlug, getPublishedBlogPosts } from '@/lib/cms-data';
 import { breadcrumbSchema, organizationSchema } from '@/lib/json-ld';
 import { absoluteUrl, buildMetadata } from '@/lib/seo';
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
+  const posts = await getPublishedBlogPosts();
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
@@ -26,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return {};
 
   return buildMetadata({
@@ -42,13 +43,14 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const otherPosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3);
+  const allPosts = await getPublishedBlogPosts();
+  const otherPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   const jsonLdGraph = {
     '@context': 'https://schema.org',
@@ -128,58 +130,65 @@ export default async function BlogPostPage({
         {/* Article Body Content */}
         <Section className="bg-white py-16 sm:py-20">
           <Container width="wide" className="max-w-4xl">
-            <article className="prose prose-lg max-w-none text-[#333333]">
-              <p className="text-[18px] leading-[180%] text-[#404040] sm:text-[19px]">
-                Navigating the financial and regulatory landscape in the United
-                Arab Emirates requires strict adherence to institutional
-                standards, comprehensive documentation, and proactive risk
-                management.
-              </p>
-
-              <h2 className="font-display mt-10 text-[26px] font-bold text-[#1A1A1A]">
-                Key Advisory Considerations
-              </h2>
-
-              <p className="mt-4 text-[16px] leading-[175%] text-[#5A5A5A]">
-                Whether you are establishing a new mainland presence,
-                structuring a freezone holding company, or undergoing an annual
-                compliance audit, banking underwriting officers look for
-                transparency, proof of economic substance, and clear ultimate
-                beneficial ownership (UBO) declaration.
-              </p>
-
-              <ul className="mt-6 space-y-3 pl-6 text-[16px] text-[#333333]">
-                <li>
-                  • Clear identification of primary suppliers and client base.
-                </li>
-                <li>
-                  • Verified source of funds declarations with supporting
-                  audited accounts.
-                </li>
-                <li>
-                  • Alignment between registered trade license activities and
-                  actual transaction flows.
-                </li>
-              </ul>
-
-              <div className="mt-10 rounded-xl border border-[#035551]/20 bg-[#FDFBEE] p-6 sm:p-8">
-                <h3 className="font-display text-[20px] font-bold text-[#035551]">
-                  Need dedicated advisory on this topic?
-                </h3>
-                <p className="mt-2 text-[15px] text-[#5A5A5A]">
-                  Our senior advisory team reviews complex banking and
-                  structuring files prior to submission.
+            {post.content ? (
+              <article
+                className="prose prose-lg max-w-none text-[#333333]"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            ) : (
+              <article className="prose prose-lg max-w-none text-[#333333]">
+                <p className="text-[18px] leading-[180%] text-[#404040] sm:text-[19px]">
+                  Navigating the financial and regulatory landscape in the
+                  United Arab Emirates requires strict adherence to
+                  institutional standards, comprehensive documentation, and
+                  proactive risk management.
                 </p>
-                <div className="mt-5">
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center justify-center rounded-lg bg-[#035551] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#023F3D]"
-                  >
-                    Book a Consultation
-                  </a>
+
+                <h2 className="font-display mt-10 text-[26px] font-bold text-[#1A1A1A]">
+                  Key Advisory Considerations
+                </h2>
+
+                <p className="mt-4 text-[16px] leading-[175%] text-[#5A5A5A]">
+                  Whether you are establishing a new mainland presence,
+                  structuring a freezone holding company, or undergoing an
+                  annual compliance audit, banking underwriting officers look
+                  for transparency, proof of economic substance, and clear
+                  ultimate beneficial ownership (UBO) declaration.
+                </p>
+
+                <ul className="mt-6 space-y-3 pl-6 text-[16px] text-[#333333]">
+                  <li>
+                    • Clear identification of primary suppliers and client base.
+                  </li>
+                  <li>
+                    • Verified source of funds declarations with supporting
+                    audited accounts.
+                  </li>
+                  <li>
+                    • Alignment between registered trade license activities and
+                    actual transaction flows.
+                  </li>
+                </ul>
+
+                <div className="mt-10 rounded-xl border border-[#035551]/20 bg-[#FDFBEE] p-6 sm:p-8">
+                  <h3 className="font-display text-[20px] font-bold text-[#035551]">
+                    Need dedicated advisory on this topic?
+                  </h3>
+                  <p className="mt-2 text-[15px] text-[#5A5A5A]">
+                    Our senior advisory team reviews complex banking and
+                    structuring files prior to submission.
+                  </p>
+                  <div className="mt-5">
+                    <a
+                      href="#contact"
+                      className="inline-flex items-center justify-center rounded-lg bg-[#035551] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#023F3D]"
+                    >
+                      Book a Consultation
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </article>
+              </article>
+            )}
           </Container>
         </Section>
 

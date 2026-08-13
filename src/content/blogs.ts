@@ -10,6 +10,7 @@ export type BlogPost = {
   imageAlt: string;
   featured?: boolean;
   featuredPosition?: 'left' | 'right';
+  content?: string;
 };
 
 export const BLOG_POSTS: readonly BlogPost[] = [

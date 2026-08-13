@@ -7,7 +7,7 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { CtaContact } from '@/components/home/CtaContact';
 import { Eyebrow, HeadingText } from '@/components/ui/SectionHeading';
-import { SERVICES } from '@/content/services';
+import { getPublishedServices, getServiceBySlug } from '@/lib/cms-data';
 import { buildMetadata } from '@/lib/seo';
 
 import { ServiceFaq } from '@/components/services/ServiceFaq';
@@ -19,14 +19,15 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  return SERVICES.map((service) => ({
+  const services = await getPublishedServices();
+  return services.map((service) => ({
     slug: service.slug,
   }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = SERVICES.find((s) => s.slug === slug);
+  const service = await getServiceBySlug(slug);
 
   if (!service) {
     return buildMetadata({
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service = SERVICES.find((s) => s.slug === slug);
+  const service = await getServiceBySlug(slug);
 
   if (!service) {
     notFound();
@@ -157,8 +158,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         <CtaContact
           eyebrow="DIRECT CONSULTATION"
           heading={[
-            { text: 'Start With a Structure ' },
-            { text: 'That Works', accent: true },
+            { text: service.cta.headline || 'Start With a Structure ' },
+            { text: service.cta.headline ? '' : 'That Works', accent: true },
           ]}
           body={service.cta.subtext}
           ctaLabel={service.cta.buttonLabel}

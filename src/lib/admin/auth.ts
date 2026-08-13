@@ -79,3 +79,17 @@ export async function requireRole(
 
   return admin;
 }
+
+/**
+ * Helper to check if role can edit CMS content (Super Admin, Admin, Editor)
+ */
+export function canEditContent(role: AdminRole): boolean {
+  return role === 'super_admin' || role === 'admin' || role === 'editor';
+}
+
+/**
+ * Helper to check if role can edit critical website settings & user permissions (Super Admin, Admin)
+ */
+export function isSuperAdminOrAdmin(role: AdminRole): boolean {
+  return role === 'super_admin' || role === 'admin';
+}

@@ -1,6 +1,15 @@
 'use client';
 
-import { BarChart3, Inbox, LogOut, X } from 'lucide-react';
+import {
+  BarChart3,
+  FileText,
+  Inbox,
+  Layers,
+  LogOut,
+  Settings,
+  Users,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -14,6 +23,10 @@ type Props = {
 const NAV_ITEMS = [
   { label: 'Overview', href: '/admin', icon: BarChart3 },
   { label: 'Enquiries', href: '/admin/enquiries', icon: Inbox },
+  { label: 'Blog Posts', href: '/admin/blog', icon: FileText },
+  { label: 'Services', href: '/admin/services', icon: Layers },
+  { label: 'Team Members', href: '/admin/team', icon: Users },
+  { label: 'Website Settings', href: '/admin/settings', icon: Settings },
 ] as const;
 
 export function AdminSidebar({ isOpen, onClose }: Props) {
@@ -41,7 +54,7 @@ export function AdminSidebar({ isOpen, onClose }: Props) {
                 Ultron Admin
               </span>
               <span className="block text-[11px] font-medium tracking-widest text-[#DCCB8E] uppercase">
-                Lead System
+                CMS & Lead System
               </span>
             </div>
           </Link>

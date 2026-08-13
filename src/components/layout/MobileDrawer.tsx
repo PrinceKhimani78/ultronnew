@@ -1,7 +1,8 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, Phone, X } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -258,7 +259,15 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
                 'transition-colors duration-300 hover:bg-[#DCCB8E] hover:text-[#035551]',
               )}
             >
-              <Phone className="h-4 w-4" />
+              <Image
+                src="/brand/call.png"
+                alt=""
+                aria-hidden="true"
+                width={16}
+                height={18}
+                loading="eager"
+                className="h-[18px] w-4 shrink-0"
+              />
               <span>{PRIMARY_CTA.label}</span>
             </a>
           </div>
