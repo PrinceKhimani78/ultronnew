@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckCircle2, Loader2 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
@@ -13,6 +13,15 @@ import { HeadingText } from '@/components/ui/SectionHeading';
 import { PARTNER_PAGE } from '@/content/partner-page';
 import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
+
+const emptySubscribe = () => () => {};
+function useHasMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 const CREAM = '#FDFBEE';
 
@@ -76,7 +85,7 @@ function FieldLabel({
 }
 
 export function PartnerEnquirySection() {
-  const [hasMounted, setHasMounted] = useState(false);
+  const hasMounted = useHasMounted();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -91,10 +100,6 @@ export function PartnerEnquirySection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  React.useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   const validate = (): boolean => {
     const newErrors: FormErrors = {};

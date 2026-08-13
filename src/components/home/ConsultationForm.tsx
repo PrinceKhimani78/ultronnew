@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckCircle2, Loader2 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
@@ -9,6 +9,15 @@ import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { CTA_CONTACT } from '@/content/home';
 import { SERVICES } from '@/content/services';
 import { cn } from '@/lib/utils';
+
+const emptySubscribe = () => () => {};
+function useHasMounted() {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+}
 
 const CREAM = '#FDFBEE';
 
@@ -71,7 +80,7 @@ export function ConsultationForm({
   submitLabel = CTA_CONTACT.form.submitLabel,
   className,
 }: ConsultationFormProps) {
-  const [hasMounted, setHasMounted] = useState(false);
+  const hasMounted = useHasMounted();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -86,10 +95,6 @@ export function ConsultationForm({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [referenceNumber, setReferenceNumber] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-
-  React.useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
