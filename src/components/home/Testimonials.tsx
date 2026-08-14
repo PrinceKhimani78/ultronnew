@@ -29,9 +29,7 @@ export function Testimonials() {
     <Section spacing="spacious">
       <Container width="wide">
         <Reveal className="text-center">
-          <h2 className="font-display text-[clamp(1.875rem,3.6vw,2.75rem)] leading-[1.12] font-semibold tracking-[-0.02em]">
-            {TESTIMONIALS_INTRO.heading}
-          </h2>
+          <h2 className="heading-h2">{TESTIMONIALS_INTRO.heading}</h2>
         </Reveal>
 
         <ul className="mt-14 grid gap-6 lg:grid-cols-3">

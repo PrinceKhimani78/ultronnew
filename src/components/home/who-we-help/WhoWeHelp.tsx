@@ -57,10 +57,7 @@ export function WhoWeHelpSection() {
               uses. */}
           <Reveal>
             <BandEyebrow>{WHO_WE_HELP_HEADER.eyebrow}</BandEyebrow>
-            <h2
-              id="who-we-help-heading"
-              className="font-display mt-3 text-[32px] leading-[100%] font-semibold tracking-[-0.017em] text-black sm:text-[40px] lg:text-[48px]"
-            >
+            <h2 id="who-we-help-heading" className="heading-h2 mt-3 text-black">
               {WHO_WE_HELP_HEADER.heading.map((segment, index) => (
                 <span
                   key={index}

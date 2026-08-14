@@ -83,17 +83,17 @@ export default async function ServiceDetailPage({ params }: Props) {
             <div className="max-w-3xl">
               {/*
                * H1 typography system:
-               *   size:           clamp(2.4rem, 5vw, 5.25rem)
-               *   weight:         600  (font-semibold)
-               *   line-height:    0.98
-               *   letter-spacing: -0.045em
+               *   size:           clamp(36px, 5vw, 64px)
+               *   weight:         700 (font-bold)
+               *   line-height:    1.05
+               *   letter-spacing: -0.035em
                *   colour:         #111111 (near-black) + teal highlight via ServiceHeading
                */}
               <ServiceHeading
                 as="h1"
                 text={service.headline}
                 highlightedText={service.highlights?.hero}
-                className="text-[clamp(2.4rem,5vw,5.25rem)] leading-[0.98] font-semibold tracking-[-0.045em] uppercase"
+                className="heading-h1 uppercase"
               />
               <p className="text-ink-muted/90 mt-5 text-sm leading-relaxed sm:text-base">
                 {service.description}
@@ -114,16 +114,16 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <Eyebrow>CORE ADVANTAGES</Eyebrow>
                 {/*
                  * H2 typography system:
-                 *   size:           clamp(2rem, 3.2vw, 3.5rem)
-                 *   weight:         600
-                 *   line-height:    1.05
-                 *   letter-spacing: -0.035em
+                 *   size:           clamp(30px, 3.75vw, 48px)
+                 *   weight:         700
+                 *   line-height:    1.1
+                 *   letter-spacing: -0.03em
                  */}
                 <ServiceHeading
                   as="h2"
                   text={service.advantages.headline}
                   highlightedText={service.highlights?.advantages}
-                  className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
+                  className="heading-h2 mt-4"
                 />
                 <p className="text-ink-muted mt-5 leading-relaxed">
                   {service.advantages.subtext}

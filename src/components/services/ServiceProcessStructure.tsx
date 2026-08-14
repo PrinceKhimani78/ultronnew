@@ -27,16 +27,16 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
           <Eyebrow align="left">OUR PROCESS</Eyebrow>
           {/*
            * Process section H2 typography:
-           *   size:           clamp(2rem, 3.2vw, 3.5rem)
-           *   weight:         600
-           *   line-height:    1.05
-           *   letter-spacing: -0.035em
-           */}
+           *   size:           clamp(30px, 3.75vw, 48px)
+           *   weight:         700
+           *   line-height:    1.1
+           *   letter-spacing: -0.03em
+           * */}
           <ServiceHeading
             as="h2"
             text={service.process.headline}
             highlightedText={service.highlights?.process}
-            className="mt-3.5 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
+            className="heading-h2 mt-3.5"
           />
           <p className="mt-4 max-w-[680px] text-base leading-relaxed font-medium text-[#4b5563] sm:text-lg">
             {service.process.subtext}
@@ -113,12 +113,12 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                       </span>
                       {/*
                        * Step title H3 typography:
-                       *   size:           clamp(1.25rem, 1.7vw, 1.75rem)
-                       *   weight:         600
-                       *   line-height:    1.15
-                       *   letter-spacing: -0.02em
-                       */}
-                      <h3 className="font-display text-[clamp(1.25rem,1.7vw,1.75rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-[#111111]">
+                       *   size:           clamp(21px, 2vw, 24px)
+                       *   weight:         700
+                       *   line-height:    1.2
+                       *   letter-spacing: -0.015em
+                       * */}
+                      <h3 className="heading-h3 text-[#111111]">
                         {step.title}
                       </h3>
                       <p className="mt-3.5 text-base leading-[1.6] text-[#4b5563] sm:text-lg">

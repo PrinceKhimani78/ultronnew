@@ -52,10 +52,7 @@ export function CtaContact({
           {/* Proposition first, then the form it argues for. */}
           <Reveal className="lg:w-[394px] lg:shrink-0">
             <BandEyebrow>{eyebrow}</BandEyebrow>
-            <h2
-              id="contact-heading"
-              className="font-display mt-3 text-[clamp(2rem,4.6vw,48px)] leading-[100%] font-semibold tracking-[-0.017em] text-black"
-            >
+            <h2 id="contact-heading" className="heading-h2 mt-3 text-black">
               {heading.map((segment, index) => (
                 <span
                   key={index}

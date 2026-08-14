@@ -28,16 +28,16 @@ export function ServiceWhyChooseUs({ service }: Props) {
           <Eyebrow>WHY ULTRON FINANCIALS</Eyebrow>
           {/*
            * Why Choose Us H2 typography:
-           *   size:           clamp(2rem, 3.2vw, 3.5rem)
-           *   weight:         600
-           *   line-height:    1.05
-           *   letter-spacing: -0.035em
-           */}
+           *   size:           clamp(30px, 3.75vw, 48px)
+           *   weight:         700
+           *   line-height:    1.1
+           *   letter-spacing: -0.03em
+           * */}
           <ServiceHeading
             as="h2"
             text={`Why ${service.highlights?.whyUltron ? `Choose Us for ${service.title}` : `Choose Us for ${service.title}`}`}
             highlightedText={service.highlights?.whyUltron}
-            className="mt-4 text-[clamp(2rem,3.2vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.035em]"
+            className="heading-h2 mt-4"
           />
           <p className="text-ink-muted mt-5 max-w-2xl leading-relaxed">
             {introduction}
