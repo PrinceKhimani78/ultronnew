@@ -605,5 +605,37 @@ VALUES
   false,
   true,
   3
+),
+(
+  't4444444-4444-4444-4444-444444444444',
+  'Manoj',
+  'Business Development',
+  '/brand/manoj.jpeg',
+  'Manoj - Business Development',
+  'Business development lead focused on corporate setup, licensing strategy, and market entry.',
+  'manoj@ultronfinancials.com',
+  '',
+  '',
+  '',
+  false,
+  false,
+  true,
+  4
+),
+(
+  't5555555-5555-5555-5555-555555555555',
+  'Virendra',
+  'Business Development',
+  '/brand/viren.jpeg',
+  'Virendra - Business Development',
+  'Business development advisor assisting clients with company structuring and commercial licensing.',
+  'virendra@ultronfinancials.com',
+  '',
+  '',
+  '',
+  false,
+  false,
+  true,
+  5
 )
 ON CONFLICT (id) DO NOTHING;
