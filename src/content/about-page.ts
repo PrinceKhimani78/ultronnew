@@ -38,7 +38,7 @@ export const ABOUT_PAGE = {
           { text: 'Vision', accent: true },
         ] as readonly HeadingSegment[],
         body: 'To be the firm ambitious businesses call first when a UAE structure needs to work under real scrutiny, not just on paper. We measure a case by how it holds up two years after formation, not by how quickly it closes.',
-        image: undefined as string | undefined,
+        image: '/brand/our-vision.jpg' as string | undefined,
       },
       {
         id: 'mission',
