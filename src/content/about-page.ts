@@ -58,7 +58,7 @@ export const ABOUT_PAGE = {
           { text: 'Story', accent: true },
         ] as readonly HeadingSegment[],
         body: 'Ultron Financials started with a simple observation: most UAE business setup goes smoothly right up until the bank account or the compliance filing, and that is exactly where generalist agents step back. We built a firm around the part of the process everyone else avoids.',
-        image: undefined as string | undefined,
+        image: '/brand/our-story.jpg' as string | undefined,
       },
     ],
   },
