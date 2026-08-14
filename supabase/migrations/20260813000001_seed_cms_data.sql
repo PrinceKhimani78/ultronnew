@@ -258,10 +258,10 @@ VALUES
       "headline": "How We Move a Mortgage Case Forward",
       "subtext": "A process built to fix what went wrong before.",
       "steps": [
-        {"step": "STEP 01", "title": "Case Review", "desc": "We assess income, assets and prior flags.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Case Review"},
-        {"step": "STEP 02", "title": "Repositioning", "desc": "We restructure how the case is presented.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Repositioning"},
-        {"step": "STEP 03", "title": "Lender Matching", "desc": "We approach lenders that genuinely fit.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Lender Matching"},
-        {"step": "STEP 04", "title": "Completion", "desc": "We manage the process through to disbursement.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Completion"}
+        {"step": "STEP 01", "title": "Case Review", "desc": "We assess income, assets and prior flags.", "imageSrc": "/brand/mortgage-process-01.jpg", "imageAlt": "Case Review"},
+        {"step": "STEP 02", "title": "Repositioning", "desc": "We restructure how the case is presented.", "imageSrc": "/brand/mortgage-process-02.jpg", "imageAlt": "Repositioning"},
+        {"step": "STEP 03", "title": "Lender Matching", "desc": "We approach lenders that genuinely fit.", "imageSrc": "/brand/mortgage-process-03.jpg", "imageAlt": "Lender Matching"},
+        {"step": "STEP 04", "title": "Completion", "desc": "We manage the process through to disbursement.", "imageSrc": "/brand/mortgage-process-04.jpg", "imageAlt": "Completion"}
       ]
     },
     "whyUltron": {
