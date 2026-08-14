@@ -26,12 +26,13 @@ export const SITE = {
   description:
     'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, compliance and financial structuring.',
   // TODO(client): confirm the live enquiry address before launch.
-  email: 'lorem@ultronfinancials.com',
+  email: 'info@ultronfinancials.com',
   // TODO(client): placeholder from the design. Replace with the real number.
-  telephone: '98765 43210',
+  telephone: '+971 4 575 1693',
   address: {
     // TODO(client): the design carries lorem ipsum here. Replace in full.
-    streetAddress: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+    streetAddress:
+      'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road',
     locality: 'Dubai',
     region: 'Dubai',
     postalCode: '00000',

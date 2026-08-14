@@ -9,11 +9,11 @@ VALUES
   "legal_name": "Ultron Financials",
   "tagline": "UAE company formation, banking and compliance",
   "short_description": "Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, compliance and financial structuring.",
-  "primary_email": "lorem@ultronfinancials.com",
+  "primary_email": "info@ultronfinancials.com",
   "secondary_email": "info@ultronfinancials.com",
-  "primary_phone": "98765 43210",
-  "whatsapp_number": "98765 43210",
-  "office_address": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+  "primary_phone": "+971 4 575 1693",
+  "whatsapp_number": "+971 4 575 1693",
+  "office_address": "Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road",
   "city": "Dubai",
   "state_emirate": "Dubai",
   "country": "AE",
@@ -30,20 +30,20 @@ VALUES
   "twitter_url": ""
 }'::jsonb),
 ('header_footer', 'contact_details', '{
-  "header_phone": "98765 43210",
-  "header_email": "lorem@ultronfinancials.com",
-  "footer_phone": "98765 43210",
-  "footer_email": "lorem@ultronfinancials.com",
-  "footer_address": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, Dubai, UAE",
+  "header_phone": "+971 4 575 1693",
+  "header_email": "info@ultronfinancials.com",
+  "footer_phone": "+971 4 575 1693",
+  "footer_email": "info@ultronfinancials.com",
+  "footer_address": "Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE",
   "footer_copyright_text": "Ultron Financials. All rights reserved.",
   "footer_short_description": "UAE corporate advisory firm delivering business banking, setup, finance, and regulatory compliance."
 }'::jsonb),
 ('cta_forms', 'cta_settings', '{
   "default_cta_label": "Book a call",
   "default_cta_destination": "#contact",
-  "consultation_email_recipient": "lorem@ultronfinancials.com",
-  "form_notification_email": "lorem@ultronfinancials.com",
-  "whatsapp_cta_number": "9876543210"
+  "consultation_email_recipient": "info@ultronfinancials.com",
+  "form_notification_email": "info@ultronfinancials.com",
+  "whatsapp_cta_number": "97145751693"
 }'::jsonb)
 ON CONFLICT (setting_key) DO NOTHING;
 
