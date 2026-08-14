@@ -376,10 +376,10 @@ VALUES
       "headline": "How We Manage Your Compliance Position",
       "subtext": "A structured review, not a one off filing.",
       "steps": [
-        {"step": "STEP 01", "title": "Review", "desc": "We assess your current compliance position.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Review"},
-        {"step": "STEP 02", "title": "Gap Analysis", "desc": "We identify exposure and missing filings.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Gap Analysis"},
-        {"step": "STEP 03", "title": "Remediation", "desc": "We put the required framework in place.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Remediation"},
-        {"step": "STEP 04", "title": "Ongoing Support", "desc": "We manage filings as they come due.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Ongoing Support"}
+        {"step": "STEP 01", "title": "Review", "desc": "We assess your current compliance position.", "imageSrc": "/brand/compliance-process-01.jpg", "imageAlt": "Review"},
+        {"step": "STEP 02", "title": "Gap Analysis", "desc": "We identify exposure and missing filings.", "imageSrc": "/brand/compliance-process-02.jpg", "imageAlt": "Gap Analysis"},
+        {"step": "STEP 03", "title": "Remediation", "desc": "We put the required framework in place.", "imageSrc": "/brand/compliance-process-03.jpg", "imageAlt": "Remediation"},
+        {"step": "STEP 04", "title": "Ongoing Support", "desc": "We manage filings as they come due.", "imageSrc": "/brand/compliance-process-04.jpg", "imageAlt": "Ongoing Support"}
       ]
     },
     "whyUltron": {
