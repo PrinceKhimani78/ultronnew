@@ -38,6 +38,7 @@ export const ABOUT_PAGE = {
           { text: 'Vision', accent: true },
         ] as readonly HeadingSegment[],
         body: 'To be the firm ambitious businesses call first when a UAE structure needs to work under real scrutiny, not just on paper. We measure a case by how it holds up two years after formation, not by how quickly it closes.',
+        image: undefined as string | undefined,
       },
       {
         id: 'mission',
@@ -47,6 +48,7 @@ export const ABOUT_PAGE = {
           { text: 'Mission', accent: true },
         ] as readonly HeadingSegment[],
         body: 'We handle what standard formation agents step back from: multi-jurisdiction shareholders, previously declined banking, and structures that need to survive a licensing or compliance review. Every engagement is led by one named adviser, quoted against a written scope.',
+        image: '/brand/our-mission.jpg' as string | undefined,
       },
       {
         id: 'story',
@@ -56,6 +58,7 @@ export const ABOUT_PAGE = {
           { text: 'Story', accent: true },
         ] as readonly HeadingSegment[],
         body: 'Ultron Financials started with a simple observation: most UAE business setup goes smoothly right up until the bank account or the compliance filing, and that is exactly where generalist agents step back. We built a firm around the part of the process everyone else avoids.',
+        image: undefined as string | undefined,
       },
     ],
   },

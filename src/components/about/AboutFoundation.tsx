@@ -78,12 +78,17 @@ export function AboutFoundation() {
                     )}
                   >
                     <Image
-                      src="/brand/services-monogram.png"
-                      alt=""
-                      aria-hidden="true"
-                      width={240}
-                      height={258}
-                      className="h-auto w-[150px] object-contain opacity-80 sm:w-[190px] lg:w-[240px]"
+                      src={row.image || '/brand/services-monogram.png'}
+                      alt={row.image ? row.eyebrow : ''}
+                      aria-hidden={row.image ? undefined : true}
+                      width={row.image ? 540 : 240}
+                      height={row.image ? 400 : 258}
+                      className={cn(
+                        'h-auto object-contain',
+                        row.image
+                          ? 'shadow-lift aspect-[4/3] w-full max-w-[440px] rounded-2xl object-cover grayscale transition-[filter] duration-300 hover:grayscale-0'
+                          : 'w-[150px] opacity-80 sm:w-[190px] lg:w-[240px]',
+                      )}
                     />
                   </div>
                 </Reveal>
