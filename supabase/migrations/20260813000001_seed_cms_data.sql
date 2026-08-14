@@ -199,10 +199,10 @@ VALUES
       "headline": "How We Get a Facility Approved",
       "subtext": "A process built around lender fit.",
       "steps": [
-        {"step": "STEP 01", "title": "Assessment", "desc": "We review your financing need and financials.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Assessment"},
-        {"step": "STEP 02", "title": "Structuring", "desc": "We prepare documentation for underwriting.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Structuring"},
-        {"step": "STEP 03", "title": "Matching", "desc": "We approach lenders that genuinely fit.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Matching"},
-        {"step": "STEP 04", "title": "Funding", "desc": "We manage the process through to disbursement.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Funding"}
+        {"step": "STEP 01", "title": "Assessment", "desc": "We review your financing need and financials.", "imageSrc": "/brand/finance-process-01.jpg", "imageAlt": "Assessment"},
+        {"step": "STEP 02", "title": "Structuring", "desc": "We prepare documentation for underwriting.", "imageSrc": "/brand/finance-process-02.jpg", "imageAlt": "Structuring"},
+        {"step": "STEP 03", "title": "Matching", "desc": "We approach lenders that genuinely fit.", "imageSrc": "/brand/finance-process-03.jpg", "imageAlt": "Matching"},
+        {"step": "STEP 04", "title": "Funding", "desc": "We manage the process through to disbursement.", "imageSrc": "/brand/finance-process-04.jpg", "imageAlt": "Funding"}
       ]
     },
     "whyUltron": {
