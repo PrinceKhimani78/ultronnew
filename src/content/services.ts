@@ -90,7 +90,7 @@ export const SERVICES: readonly Service[] = [
           step: 'STEP 01',
           title: 'Initial Review',
           description: 'We flag anything a bank might question.',
-          imageSrc: '/brand/process-consultation.webp',
+          imageSrc: '/brand/banking-process-01.jpg',
           imageAlt: 'Initial Review',
         },
         {
@@ -98,7 +98,7 @@ export const SERVICES: readonly Service[] = [
           title: 'Positioning',
           description:
             'We rebuild the application to answer those questions upfront.',
-          imageSrc: '/brand/process-strategy.webp',
+          imageSrc: '/brand/banking-process-02.jpg',
           imageAlt: 'Positioning',
         },
         {
@@ -106,14 +106,14 @@ export const SERVICES: readonly Service[] = [
           title: 'Submission',
           description:
             'We approach banks with genuine appetite for your profile.',
-          imageSrc: '/brand/process-execution.webp',
+          imageSrc: '/brand/banking-process-03.jpg',
           imageAlt: 'Submission',
         },
         {
           step: 'STEP 04',
           title: 'Resolution',
           description: 'We stay involved until the account is active.',
-          imageSrc: '/brand/process-support.webp',
+          imageSrc: '/brand/banking-process-04.jpg',
           imageAlt: 'Resolution',
         },
       ],

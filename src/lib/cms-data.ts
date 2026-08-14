@@ -205,7 +205,7 @@ const INITIAL_STATIC_POSTS = [
 
 export const INITIAL_STATIC_SERVICES: ServiceRecord[] = SERVICES.map(
   (s, idx) => ({
-    id: `s${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}-1111-1111-1111-111111111111`,
+    id: `c${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}${idx + 1}-1111-1111-1111-111111111111`,
     name: s.title,
     slug: s.slug,
     short_description: s.description,
@@ -242,7 +242,7 @@ export const INITIAL_STATIC_SERVICES: ServiceRecord[] = SERVICES.map(
 
 export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
   {
-    id: 't1111111-1111-1111-1111-111111111111',
+    id: 'a1111111-1111-1111-1111-111111111111',
     full_name: 'Kuldeep',
     job_title: 'Founder & Lead Advisor',
     profile_image_url: '/brand/kuldeep.png',
@@ -263,7 +263,7 @@ export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
     archived_at: null,
   },
   {
-    id: 't2222222-2222-2222-2222-222222222222',
+    id: 'a2222222-2222-2222-2222-222222222222',
     full_name: 'Raghuveer',
     job_title: 'Banking Advisor',
     profile_image_url: '/brand/raghuveer.png',
@@ -284,7 +284,7 @@ export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
     archived_at: null,
   },
   {
-    id: 't3333333-3333-3333-3333-333333333333',
+    id: 'a3333333-3333-3333-3333-333333333333',
     full_name: 'Chanchal',
     job_title: 'Operations & Client Relations',
     profile_image_url: '/brand/chanchal.png',
@@ -305,7 +305,7 @@ export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
     archived_at: null,
   },
   {
-    id: 't4444444-4444-4444-4444-444444444444',
+    id: 'a4444444-4444-4444-4444-444444444444',
     full_name: 'Manoj',
     job_title: 'Business Development',
     profile_image_url: '/brand/manoj.jpeg',
@@ -326,7 +326,7 @@ export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
     archived_at: null,
   },
   {
-    id: 't5555555-5555-5555-5555-555555555555',
+    id: 'a5555555-5555-5555-5555-555555555555',
     full_name: 'Virendra',
     job_title: 'Business Development',
     profile_image_url: '/brand/viren.jpeg',

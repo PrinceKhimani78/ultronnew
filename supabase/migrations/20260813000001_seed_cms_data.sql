@@ -81,10 +81,10 @@ VALUES
       "headline": "How We Get Your Account Approved",
       "subtext": "A process built on why applications actually fail.",
       "steps": [
-        {"step": "STEP 01", "title": "Initial Review", "desc": "We flag anything a bank might question.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Initial Review"},
-        {"step": "STEP 02", "title": "Positioning", "desc": "We rebuild the application to answer those questions upfront.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Positioning"},
-        {"step": "STEP 03", "title": "Submission", "desc": "We approach banks with genuine appetite for your profile.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Submission"},
-        {"step": "STEP 04", "title": "Resolution", "desc": "We stay involved until the account is active.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Resolution"}
+        {"step": "STEP 01", "title": "Initial Review", "desc": "We flag anything a bank might question.", "imageSrc": "/brand/banking-process-01.jpg", "imageAlt": "Initial Review"},
+        {"step": "STEP 02", "title": "Positioning", "desc": "We rebuild the application to answer those questions upfront.", "imageSrc": "/brand/banking-process-02.jpg", "imageAlt": "Positioning"},
+        {"step": "STEP 03", "title": "Submission", "desc": "We approach banks with genuine appetite for your profile.", "imageSrc": "/brand/banking-process-03.jpg", "imageAlt": "Submission"},
+        {"step": "STEP 04", "title": "Resolution", "desc": "We stay involved until the account is active.", "imageSrc": "/brand/banking-process-04.jpg", "imageAlt": "Resolution"}
       ]
     },
     "whyUltron": {
