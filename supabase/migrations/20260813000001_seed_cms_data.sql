@@ -317,10 +317,10 @@ VALUES
       "headline": "How We Structure a Trade Finance Facility",
       "subtext": "Built around your trade cycle, not a standard product.",
       "steps": [
-        {"step": "STEP 01", "title": "Assessment", "desc": "We review your trade cycle and financing need.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Assessment"},
-        {"step": "STEP 02", "title": "Structuring", "desc": "We match the facility type to your requirement.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Structuring"},
-        {"step": "STEP 03", "title": "Lender Matching", "desc": "We approach institutions with trade finance appetite.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Lender Matching"},
-        {"step": "STEP 04", "title": "Activation", "desc": "We manage the process through to activation.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Activation"}
+        {"step": "STEP 01", "title": "Assessment", "desc": "We review your trade cycle and financing need.", "imageSrc": "/brand/trade-process-01.jpg", "imageAlt": "Assessment"},
+        {"step": "STEP 02", "title": "Structuring", "desc": "We match the facility type to your requirement.", "imageSrc": "/brand/trade-process-02.jpg", "imageAlt": "Structuring"},
+        {"step": "STEP 03", "title": "Lender Matching", "desc": "We approach institutions with trade finance appetite.", "imageSrc": "/brand/trade-process-03.jpg", "imageAlt": "Lender Matching"},
+        {"step": "STEP 04", "title": "Activation", "desc": "We manage the process through to activation.", "imageSrc": "/brand/trade-process-04.jpg", "imageAlt": "Activation"}
       ]
     },
     "whyUltron": {
