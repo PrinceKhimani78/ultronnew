@@ -140,10 +140,10 @@ VALUES
       "headline": "From Idea to Operational Business",
       "subtext": "A sequence built to avoid rework later.",
       "steps": [
-        {"step": "STEP 01", "title": "Consultation", "desc": "We understand your activity and banking plans.", "imageSrc": "/brand/process-consultation.webp", "imageAlt": "Consultation"},
-        {"step": "STEP 02", "title": "Structuring", "desc": "We design the jurisdiction and ownership structure.", "imageSrc": "/brand/process-strategy.webp", "imageAlt": "Structuring"},
-        {"step": "STEP 03", "title": "Registration", "desc": "We manage filings and government processes.", "imageSrc": "/brand/process-execution.webp", "imageAlt": "Registration"},
-        {"step": "STEP 04", "title": "Handover", "desc": "We coordinate your transition into banking.", "imageSrc": "/brand/process-support.webp", "imageAlt": "Handover"}
+        {"step": "STEP 01", "title": "Consultation", "desc": "We understand your activity and banking plans.", "imageSrc": "/brand/setup-process-01.jpg", "imageAlt": "Consultation"},
+        {"step": "STEP 02", "title": "Structuring", "desc": "We design the jurisdiction and ownership structure.", "imageSrc": "/brand/setup-process-02.jpg", "imageAlt": "Structuring"},
+        {"step": "STEP 03", "title": "Registration", "desc": "We manage filings and government processes.", "imageSrc": "/brand/setup-process-03.jpg", "imageAlt": "Registration"},
+        {"step": "STEP 04", "title": "Handover", "desc": "We coordinate your transition into banking.", "imageSrc": "/brand/setup-process-04.jpg", "imageAlt": "Handover"}
       ]
     },
     "whyUltron": {
