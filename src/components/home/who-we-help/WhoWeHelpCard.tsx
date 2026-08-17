@@ -43,19 +43,9 @@ export function WhoWeHelpCard({
 }: WhoWeHelpCardProps) {
   const computedDelay = delay !== undefined ? delay : index * STAGGER_MS;
 
-  const isTargetCard = [
-    'international-entrepreneurs',
-    'high-net-worth',
-    'foreign-investors',
-    'smes-growing-businesses',
-    'global-companies',
-  ].includes(item.id);
-
   const cardClass = cn(
     'group flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 border border-transparent shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
-    isTargetCard
-      ? 'transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:-translate-y-2.5 hover:scale-[1.015] hover:bg-[#035551] hover:shadow-[0_20px_35px_-10px_rgba(3,85,81,0.25)]'
-      : 'transition-all duration-[250ms] ease-out hover:-translate-y-1.5',
+    'transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:-translate-y-2.5 hover:scale-[1.015] hover:bg-[#035551] hover:shadow-[0_20px_35px_-10px_rgba(3,85,81,0.25)]',
   );
 
   return (
@@ -70,20 +60,10 @@ export function WhoWeHelpCard({
       amount={0.1}
     >
       <div className={cardClass}>
-        <h3
-          className={cn(
-            'mb-3 text-[18px] leading-tight font-semibold text-black transition-colors duration-300 sm:text-[20px]',
-            isTargetCard && 'group-hover:text-[#DCCB8E]',
-          )}
-        >
+        <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black transition-colors duration-300 group-hover:text-[#DCCB8E] sm:text-[20px]">
           {item.title}
         </h3>
-        <p
-          className={cn(
-            'text-[16px] leading-[1.6] font-normal text-[#5A5A5A] transition-colors duration-300',
-            isTargetCard && 'group-hover:text-white/90',
-          )}
-        >
+        <p className="text-[16px] leading-[1.6] font-normal text-[#5A5A5A] transition-colors duration-300 group-hover:text-white/90">
           {item.description}
         </p>
       </div>
