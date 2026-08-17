@@ -7,7 +7,6 @@ import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
 import { HOME_HERO } from '@/content/home';
 import { SITE } from '@/content/site';
 import { type PublicSiteSettings } from '@/lib/cms-data';
-import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { HeroUFParticleLogoWrapper } from './HeroUFParticleLogoWrapper';
 
 /**
@@ -208,12 +207,7 @@ export function Hero({ settings }: HeroProps) {
               read as the whole band moving. */}
           <Reveal delay={BEAT.cta} className="inline-block w-full sm:w-auto">
             <div className="flex flex-wrap items-center gap-4">
-              <ActionButton href={whatsappUrl}>
-                <div className="flex items-center gap-2">
-                  <WhatsAppIcon className="h-5 w-5" />
-                  <span>WhatsApp Us Now</span>
-                </div>
-              </ActionButton>
+              <ActionButton href={whatsappUrl}>WhatsApp Us Now</ActionButton>
               <ActionButton href={HOME_HERO.cta.href} variant="cream">
                 {HOME_HERO.cta.label.toUpperCase()}
               </ActionButton>
