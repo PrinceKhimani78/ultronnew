@@ -17,9 +17,6 @@ import { cn } from '@/lib/utils';
 
 type CardPosition = 'left' | 'right' | 'center';
 
-const BASE_CARD_CLASS =
-  'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 transition-all duration-[250ms] ease-out hover:-translate-y-1.5 shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]';
-
 type WhoWeHelpCardProps = {
   item: WhoWeHelpItem;
   /** Position in the bento, 0-based. Drives default stagger delay if delay is not explicitly passed. */
@@ -46,6 +43,21 @@ export function WhoWeHelpCard({
 }: WhoWeHelpCardProps) {
   const computedDelay = delay !== undefined ? delay : index * STAGGER_MS;
 
+  const isTargetCard = [
+    'international-entrepreneurs',
+    'high-net-worth',
+    'foreign-investors',
+    'smes-growing-businesses',
+    'global-companies',
+  ].includes(item.id);
+
+  const cardClass = cn(
+    'flex flex-1 flex-col rounded-[20px] bg-white p-5 sm:p-6 lg:p-7 border border-transparent shadow-[inset_4px_-4px_4px_0px_rgba(3,85,81,0.25)]',
+    isTargetCard
+      ? 'transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:-translate-y-2.5 hover:scale-[1.015] hover:border-[#DCCB8E] hover:shadow-[0_20px_35px_-10px_rgba(3,85,81,0.15),inset_2px_-2px_2px_0px_rgba(3,85,81,0.15)] hover:bg-gradient-to-br hover:from-white hover:to-[#FDFBEE]/50'
+      : 'transition-all duration-[250ms] ease-out hover:-translate-y-1.5',
+  );
+
   return (
     <Reveal
       delay={computedDelay}
@@ -57,7 +69,7 @@ export function WhoWeHelpCard({
       // column waiting. A tenth of a card is unambiguously on screen.
       amount={0.1}
     >
-      <div className={BASE_CARD_CLASS}>
+      <div className={cardClass}>
         <h3 className="mb-3 text-[18px] leading-tight font-semibold text-black sm:text-[20px]">
           {item.title}
         </h3>
