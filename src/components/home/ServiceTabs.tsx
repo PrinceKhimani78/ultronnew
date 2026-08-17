@@ -155,13 +155,17 @@ export function ServiceTabs() {
               tabIndex={isActive ? 0 : -1}
               onClick={() => selectTab(index)}
               className={cn(
-                'ease-house relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-[18px] font-semibold transition-colors duration-[250ms]',
+                'group relative flex h-[55px] w-full shrink-0 items-center justify-center px-4 text-center text-[18px] font-semibold',
                 'border-b border-[#035551]/15 last:border-b-0',
+                'transition-[color,background-color,transform] duration-[240ms] ease-out',
                 isActive
                   ? 'bg-[#035551] text-white'
-                  : 'bg-white text-[#035551] hover:bg-[#035551]/5',
+                  : 'bg-white text-[#035551] hover:translate-x-[5px] hover:bg-[rgba(3,85,81,0.055)]',
               )}
             >
+              {!isActive && (
+                <span className="absolute top-0 bottom-0 left-0 w-[4px] origin-center scale-y-0 bg-[#035551] transition-transform duration-[240ms] ease-out group-hover:scale-y-100" />
+              )}
               <span>{service.title}</span>
             </button>
           );
@@ -354,12 +358,15 @@ export function ServiceTabs() {
                       height={240}
                       className={cn(
                         'h-auto max-h-full w-full max-w-[240px] object-contain transition-transform duration-300 hover:scale-105',
-                        showInitialEntrance && 'core-services-illustration',
+                        (showInitialEntrance || isSwitchedActive) &&
+                          'core-services-illustration',
                       )}
                       style={
                         showInitialEntrance
                           ? { animationDelay: `${ILLUSTRATION_DELAY_MS}ms` }
-                          : undefined
+                          : isSwitchedActive
+                            ? { animationDelay: '50ms' }
+                            : undefined
                       }
                     />
                   </div>
@@ -375,14 +382,19 @@ export function ServiceTabs() {
                           key={benefit}
                           className={cn(
                             'flex items-start gap-2.5 text-[16px] leading-snug font-medium text-[#232323]',
-                            showInitialEntrance && 'core-services-benefit',
+                            (showInitialEntrance || isSwitchedActive) &&
+                              'core-services-benefit',
                           )}
                           style={
                             showInitialEntrance
                               ? {
                                   animationDelay: `${BENEFITS_BASE_DELAY_MS + benefitIndex * BENEFIT_STAGGER_MS}ms`,
                                 }
-                              : undefined
+                              : isSwitchedActive
+                                ? {
+                                    animationDelay: `${50 + benefitIndex * 50}ms`,
+                                  }
+                                : undefined
                           }
                         >
                           <span className="mt-0.5 inline-flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-[#035551]/10 text-[#035551]">
