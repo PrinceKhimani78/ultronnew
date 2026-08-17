@@ -263,9 +263,9 @@ export const INITIAL_STATIC_TEAM: TeamMemberRecord[] = [
   {
     id: 'a1111111-1111-1111-1111-111111111111',
     full_name: 'Kuldeep',
-    job_title: 'Founder & Lead Advisor',
+    job_title: 'Lead Advisor',
     profile_image_url: '/brand/kuldeep.png',
-    image_alt: 'Kuldeep - Founder & Lead Advisor',
+    image_alt: 'Kuldeep -Lead Advisor',
     bio: 'Founder and senior strategic corporate advisor at Ultron Financials.',
     email: 'kuldeep@ultronfinancials.com',
     phone: null,

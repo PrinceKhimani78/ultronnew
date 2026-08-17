@@ -132,22 +132,17 @@ export default async function ServiceDetailPage({ params }: Props) {
 
               <div className="lg:col-span-7">
                 <ul className="space-y-4">
-                  {service.benefits.map((benefit, index) => (
+                  {service.benefits.map((benefit) => (
                     <li
                       key={benefit}
-                      className="border-line bg-surface flex items-start gap-4 rounded-2xl border p-5 shadow-sm sm:p-6"
+                      className="border-line bg-surface flex items-center gap-4 rounded-2xl border p-5 shadow-sm sm:p-6"
                     >
-                      <div className="bg-brand/10 text-brand-bright mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full">
+                      <div className="bg-brand/10 text-brand-bright flex h-7 w-7 shrink-0 items-center justify-center rounded-full">
                         <Check className="h-4 w-4" />
                       </div>
-                      <div>
-                        <span className="text-brand-bright mb-1 block text-xs font-semibold tracking-wider uppercase">
-                          Deliverable 0{index + 1}
-                        </span>
-                        <p className="text-ink text-sm leading-relaxed font-medium sm:text-base">
-                          {benefit}
-                        </p>
-                      </div>
+                      <p className="text-ink text-sm leading-relaxed font-medium sm:text-base">
+                        {benefit}
+                      </p>
                     </li>
                   ))}
                 </ul>

@@ -32,7 +32,7 @@ export const SITE = {
   address: {
     // TODO(client): the design carries lorem ipsum here. Replace in full.
     streetAddress:
-      'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road',
+      'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
     locality: 'Dubai',
     region: 'Dubai',
     postalCode: '00000',
@@ -93,6 +93,10 @@ export const PRIMARY_CTA = {
  * Footer columns, matching the design: Quick Links and Services.
  * Entries marked `pending` render as plain text rather than links until the
  * route exists — an anchor into nothing is worse than no anchor.
+ *
+ * The Services column mirrors every live service route in `STATIC_ROUTES`,
+ * in the same order, so the footer never drifts out of sync with what
+ * `/services` actually publishes.
  */
 export const FOOTER_NAV: readonly {
   heading: string;
@@ -102,7 +106,6 @@ export const FOOTER_NAV: readonly {
     heading: 'Quick Links',
     items: [
       { label: 'Home', href: '/' },
-      { label: 'Services', href: '/services' },
       { label: 'About Us', href: '/about' },
       { label: 'Partner With Us', href: '/partner' },
       { label: 'Contact Us', href: '/contact' },

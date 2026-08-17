@@ -129,7 +129,7 @@ export default function NewTeamMemberPage() {
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
-              placeholder="e.g. Founder & Lead Advisor"
+              placeholder="e.g. Lead Advisor"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>

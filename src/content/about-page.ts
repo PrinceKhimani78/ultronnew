@@ -65,16 +65,11 @@ export const ABOUT_PAGE = {
 
   /**
    * "Our Team", the section directly beneath the foundation band in the
-   * design. Only three people have photos and named roles in the project
-   * today (`public/brand/{kuldeep,raghuveer,chanchal}.png`), which is also
-   * exactly what the comp itself shows — its 3×2 grid is those same three
-   * people repeated once to fill six slots, not six distinct hires. The list
-   * below repeats them the same way, on explicit instruction, so the id on
-   * each entry is suffixed `-2` for the repeat rather than reusing the first
-   * id outright — React keys need to be unique even when the person isn't.
-   * None has a published LinkedIn URL yet; `linkedin` is left unset rather
-   * than invented, which is also what keeps the card's icon slot empty for
-   * them by design.
+   * design. Each member carries a dedicated `linkedinUrl` field with their
+   * real, provided LinkedIn profile URL — never invented. A member without a
+   * confirmed URL should have `linkedinUrl` left `undefined`, which is what
+   * keeps the card's icon slot hidden for them (see `TeamCard` in
+   * `AboutTeam.tsx`).
    */
   team: {
     eyebrow: 'Meet the people behind Ultron',
@@ -86,37 +81,39 @@ export const ABOUT_PAGE = {
       {
         id: 'kuldeep',
         name: 'Kuldeep',
-        role: 'Founder & Lead Advisor',
+        role: 'Lead Advisor',
         image: '/brand/kuldeep.png',
-        linkedin: undefined as string | undefined,
+        linkedinUrl: 'https://www.linkedin.com/in/cakuldeepchauhan',
       },
       {
         id: 'raghuveer',
         name: 'Raghuveer',
         role: 'Banking Advisor',
         image: '/brand/raghuveer.png',
-        linkedin: undefined as string | undefined,
+        linkedinUrl:
+          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQFszn4r9tqPBwAAAaAPbYmA4-TJvUegc_NkSPSsTnnS8eGx4bFBN6Z6XeR8wgHBnbmEfmUD1iDaCPt_K3QiSCUbYNUHcgIABTlofOY5e1f-qNTwJj8flOtxkLkl1XMcsa9w0Hc=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fraghuveersingh0432',
       },
       {
         id: 'chanchal',
         name: 'Chanchal',
         role: 'Operations & Client Relations',
         image: '/brand/chanchal.png',
-        linkedin: undefined as string | undefined,
+        linkedinUrl: 'https://www.linkedin.com/in/chanchal-rawat11',
       },
       {
         id: 'manoj',
         name: 'Manoj',
         role: 'Business Development',
         image: '/brand/manoj.jpeg',
-        linkedin: undefined as string | undefined,
+        linkedinUrl:
+          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQEOXpXN7LSh4AAAAaAPbkjoT1ZKIvhKKhprl1IfgLYobGSaH8eth8L_J492UObjVL6a5FabPbNpiT4TwziulivUZASymjzEpfJ_HefS7kRWmnlWLIFuIA0qeJn1R7y3up4xPvw=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fmanoj-kuchan317',
       },
       {
         id: 'virendra',
         name: 'Virendra',
         role: 'Business Development',
         image: '/brand/viren.jpeg',
-        linkedin: undefined as string | undefined,
+        linkedinUrl: 'https://www.linkedin.com/in/virendra-singh-c0212',
       },
     ],
   },

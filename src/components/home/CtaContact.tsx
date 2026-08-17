@@ -43,11 +43,27 @@ export function CtaContact({
   return (
     <section
       id="contact"
-      className="overflow-hidden py-[60px] lg:pt-[122px] lg:pb-[148px]"
+      className="final-cta-section overflow-hidden"
       style={{ backgroundColor: CREAM }}
       aria-labelledby="contact-heading"
     >
-      <Container width="wide">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .final-cta-section {
+              min-height: auto;
+              height: auto;
+              padding-top: clamp(70px, 7vw, 105px);
+              padding-bottom: clamp(70px, 7vw, 105px);
+            }
+            .final-cta-section .cta-container {
+              margin-top: 0;
+              transform: none;
+            }
+          `,
+        }}
+      />
+      <Container width="wide" className="cta-container">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between lg:gap-[62px]">
           {/* Proposition first, then the form it argues for. */}
           <Reveal className="lg:w-[394px] lg:shrink-0">

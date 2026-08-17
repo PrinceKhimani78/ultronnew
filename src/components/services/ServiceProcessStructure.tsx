@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 
-import { ActionButton } from '@/components/ui/ActionButton';
 import { Eyebrow } from '@/components/ui/SectionHeading';
 import { ServiceHeading } from '@/components/services/ServiceHeading';
 import type { Service } from '@/content/services';
@@ -124,11 +123,6 @@ export function ServiceProcessStructure({ service }: { service: Service }) {
                       <p className="mt-3.5 text-base leading-[1.6] text-[#4b5563] sm:text-lg">
                         {step.description}
                       </p>
-                      <div className="mt-5 sm:mt-6">
-                        <ActionButton href="#contact" variant="teal">
-                          Talk to Us
-                        </ActionButton>
-                      </div>
                     </div>
                   </div>
                 </div>

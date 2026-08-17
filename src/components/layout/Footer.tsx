@@ -105,7 +105,7 @@ export function Footer({ settings = SITE }: FooterProps) {
         </Reveal>
 
         {/* 3-Column Navigation & Contact Grid */}
-        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1.2fr] lg:gap-12 xl:gap-16">
+        <div className="mt-10 grid grid-cols-1 gap-10 text-left sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr] lg:gap-12 xl:gap-16">
           {/* Column 1: Contact Us */}
           <address className="not-italic">
             <Reveal delay={BEAT.contact}>

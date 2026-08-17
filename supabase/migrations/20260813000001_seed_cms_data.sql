@@ -561,9 +561,9 @@ VALUES
 (
   't1111111-1111-1111-1111-111111111111',
   'Kuldeep',
-  'Founder & Lead Advisor',
+  'Lead Advisor',
   '/brand/kuldeep.png',
-  'Kuldeep - Founder & Lead Advisor',
+  'Kuldeep - Lead Advisor',
   'Founder and senior strategic corporate advisor at Ultron Financials.',
   'kuldeep@ultronfinancials.com',
   '',
