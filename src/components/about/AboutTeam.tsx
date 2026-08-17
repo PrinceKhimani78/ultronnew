@@ -19,19 +19,17 @@ type TeamMember = {
   phone?: string;
 };
 
-// Client wrapper to fetch members safely
 export function AboutTeam() {
   const [members, setMembers] = useState<readonly TeamMember[]>([]);
+  const [isTouchPaused, setIsTouchPaused] = useState(false);
 
   useEffect(() => {
-    // Fetch members on mount
     const fetchMembers = async () => {
       try {
         const res = await fetch('/api/admin/team');
         if (res.ok) {
           const data: unknown = await res.json();
           const records = Array.isArray(data) ? data : [];
-          // Filter visible non-archived members
           const visible = records.filter(
             (m: { is_visible?: boolean; archived_at?: string | null }) =>
               m.is_visible && !m.archived_at,
@@ -47,7 +45,6 @@ export function AboutTeam() {
           err,
         );
       }
-      // Fallback
       setMembers(ABOUT_PAGE.team.members);
     };
 
@@ -58,10 +55,10 @@ export function AboutTeam() {
 
   return (
     <Section
-      spacing="default"
+      spacing="tight"
       tone="raised"
       aria-label="Our team"
-      className="relative overflow-hidden bg-[#FDFBEE] pb-14 sm:pb-18 lg:pt-[106px] lg:pb-24"
+      className="relative overflow-hidden bg-[#FDFBEE] pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-[88px] lg:pb-16"
     >
       <style
         dangerouslySetInnerHTML={{
@@ -77,41 +74,36 @@ export function AboutTeam() {
             .animate-team-marquee {
               display: flex;
               width: max-content;
-              animation: team-marquee 35s linear infinite;
+              flex-wrap: nowrap;
+              will-change: transform;
+              animation: team-marquee 25s linear infinite;
             }
-            .animate-team-marquee:hover {
-              animation-play-state: paused;
-            }
-            .animate-team-marquee:focus-within {
-              animation-play-state: paused;
-            }
-            @media (prefers-reduced-motion: reduce) {
+            @media (min-width: 640px) {
               .animate-team-marquee {
-                animation: none !important;
-                overflow-x: auto;
-                width: 100%;
+                animation-duration: 32s;
               }
             }
-            @media (max-width: 1023px) {
-              .team-carousel-container {
+            @media (min-width: 1024px) {
+              .animate-team-marquee {
+                animation-duration: 36s;
+              }
+            }
+            .team-carousel-wrapper:hover .animate-team-marquee,
+            .team-carousel-wrapper:focus-within .animate-team-marquee,
+            .animate-team-marquee.is-paused {
+              animation-play-state: paused !important;
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .team-carousel-wrapper {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
               }
-              .team-carousel-container::-webkit-scrollbar {
+              .team-carousel-wrapper::-webkit-scrollbar {
                 display: none;
               }
               .animate-team-marquee {
                 animation: none !important;
-                width: auto;
-                display: flex;
-                flex-direction: row;
-                gap: 2.5rem;
-                padding-left: 2rem;
-                padding-right: 2rem;
-              }
-              .team-duplicate-track {
-                display: none !important;
               }
             }
           `,
@@ -120,7 +112,7 @@ export function AboutTeam() {
 
       {/* Abstract Globe Line Illustration background */}
       <svg
-        className="pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 stroke-[#035551]/7"
+        className="pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 stroke-[#035551]/7 sm:h-[500px] sm:w-[500px]"
         viewBox="0 0 400 400"
         fill="none"
         aria-hidden="true"
@@ -167,29 +159,45 @@ export function AboutTeam() {
             accentClassName="text-brand"
           />
 
-          <p className="mx-auto mt-4 max-w-2xl text-center text-[16px] leading-relaxed text-[#5A5A5A] lg:mt-5">
+          <p className="mx-auto mt-3 max-w-2xl text-center text-[15px] leading-relaxed text-[#5A5A5A] sm:mt-4 sm:text-[16px] lg:mt-5">
             A focused team of advisors with deep UAE market knowledge and
             hands-on experience across banking, compliance, and business
             structuring.
           </p>
 
           {/* Carousel Wrapper */}
-          <div className="team-carousel-container relative mt-16 w-full overflow-hidden py-4">
-            <div className="animate-team-marquee gap-10 lg:gap-16">
-              {/* Original Track */}
-              <div className="flex flex-row gap-10 lg:gap-16">
+          <div
+            className="team-carousel-wrapper relative mt-8 w-full overflow-hidden py-3 sm:mt-10 lg:mt-12"
+            onTouchStart={() => setIsTouchPaused(true)}
+            onTouchEnd={() => {
+              setTimeout(() => setIsTouchPaused(false), 1200);
+            }}
+            onTouchCancel={() => setIsTouchPaused(false)}
+          >
+            <div
+              className={cn(
+                'animate-team-marquee flex flex-nowrap gap-8 sm:gap-10 lg:gap-16',
+                isTouchPaused && 'is-paused',
+              )}
+            >
+              {/* Primary Group */}
+              <div className="flex shrink-0 flex-nowrap gap-8 sm:gap-10 lg:gap-16">
                 {members.map((member) => (
                   <TeamCard key={member.id} member={member} />
                 ))}
               </div>
 
-              {/* Duplicate Track (for infinite loop) */}
+              {/* Duplicated Group (seamless loop) */}
               <div
-                className="team-duplicate-track flex flex-row gap-10 lg:gap-16"
+                className="flex shrink-0 flex-nowrap gap-8 sm:gap-10 lg:gap-16"
                 aria-hidden="true"
               >
                 {members.map((member) => (
-                  <TeamCard key={`${member.id}-duplicate`} member={member} />
+                  <TeamCard
+                    key={`${member.id}-dup`}
+                    member={member}
+                    isDuplicate
+                  />
                 ))}
               </div>
             </div>
@@ -200,40 +208,46 @@ export function AboutTeam() {
   );
 }
 
-function TeamCard({ member }: { member: TeamMember }) {
+function TeamCard({
+  member,
+  isDuplicate,
+}: {
+  member: TeamMember;
+  isDuplicate?: boolean;
+}) {
   return (
-    <div className="group flex w-[180px] shrink-0 flex-col items-center text-center transition-all duration-300 sm:w-[200px] lg:w-[220px]">
+    <div className="group flex w-[215px] shrink-0 flex-col items-center text-center transition-all duration-300 sm:w-[200px] lg:w-[220px]">
       {/* Circle Image Wrapper */}
-      <div className="relative aspect-square w-[130px] rounded-full border border-[#035551]/20 bg-[#FDFBEE] p-1.5 transition-all duration-300 group-hover:scale-[1.04] group-hover:border-[#C9B37E] group-hover:shadow-[0_0_15px_rgba(3,85,81,0.2)] sm:w-[140px] lg:w-[150px]">
+      <div className="relative aspect-square w-[135px] rounded-full border border-[#035551]/20 bg-[#FDFBEE] p-1.5 transition-all duration-300 group-hover:scale-[1.04] group-hover:border-[#C9B37E] group-hover:shadow-[0_0_15px_rgba(3,85,81,0.2)] sm:w-[140px] lg:w-[150px]">
         <div className="relative h-full w-full overflow-hidden rounded-full border border-[#035551] transition-colors duration-300 group-hover:border-[#C9B37E]">
           <Image
             src={member.image}
             alt={member.name}
             fill
-            sizes="150px"
+            sizes="(max-width: 640px) 135px, 150px"
             className="object-cover object-center grayscale transition-transform duration-300"
           />
         </div>
       </div>
 
       {/* Text Info */}
-      <div className="mt-4 flex flex-col items-center">
-        <h3 className="font-display text-[16px] font-bold text-black uppercase transition-colors duration-300 group-hover:text-[#035551] sm:text-[18px]">
+      <div className="mt-3 flex flex-col items-center sm:mt-4">
+        <h3 className="font-display text-[15px] font-bold text-black uppercase transition-colors duration-300 group-hover:text-[#035551] sm:text-[17px] lg:text-[18px]">
           {member.name}
         </h3>
-        <p className="mt-1 text-[13px] font-medium text-[#5A5A5A] sm:text-[14px]">
+        <p className="mt-0.5 text-[12px] font-medium text-[#5A5A5A] sm:mt-1 sm:text-[13px] lg:text-[14px]">
           {member.role}
         </p>
 
-        {/* LinkedIn icon — always visible in teal, turns gold on hover.
-            Hidden entirely when no linkedinUrl has been provided for this
-            member, rather than guessing at one. */}
-        <div className="mt-2 flex h-6 items-center justify-center">
+        {/* LinkedIn icon */}
+        <div className="mt-1.5 flex h-6 items-center justify-center sm:mt-2">
           {member.linkedinUrl ? (
             <a
               href={member.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
+              tabIndex={isDuplicate ? -1 : 0}
+              aria-hidden={isDuplicate}
               onClick={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
               className={cn(
