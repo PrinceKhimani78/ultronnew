@@ -20,7 +20,7 @@ export const HOME_HERO = {
     { text: 'Possible.', accent: true },
   ] as readonly HeadingSegment[],
 
-  body: "Every case we take starts the same way: something that should have worked, didn't. We step in where standard applications get rejected, structure it properly, and stay in the case until it's resolved.",
+  body: "End-to-end business advisory for banking, company setup, compliance and financial structuring in the UAE. We handle what others won't.",
 
   cta: { label: 'Explore', href: '#contact' },
 

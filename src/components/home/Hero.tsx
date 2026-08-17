@@ -5,6 +5,9 @@ import { ActionButton } from '@/components/ui/ActionButton';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import { STAT_ICONS, type StatIconName } from '@/components/ui/StatIcons';
 import { HOME_HERO } from '@/content/home';
+import { SITE } from '@/content/site';
+import { type PublicSiteSettings } from '@/lib/cms-data';
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon';
 import { HeroUFParticleLogoWrapper } from './HeroUFParticleLogoWrapper';
 
 /**
@@ -51,7 +54,17 @@ const BEAT = {
   image: STAGGER_MS * 4,
 } as const;
 
-export function Hero() {
+interface HeroProps {
+  settings?: PublicSiteSettings;
+}
+
+export function Hero({ settings }: HeroProps) {
+  const currentSettings = settings || {
+    ...SITE,
+    whatsapp: SITE.telephone.replace(/\D/g, ''),
+  };
+
+  const whatsappUrl = `https://wa.me/${(currentSettings.whatsapp || currentSettings.telephone).replace(/\D/g, '')}`;
   return (
     <section
       id="top"
@@ -193,10 +206,18 @@ export function Hero() {
           {/* `inline-block` so the reveal box hugs the button rather than
               spanning the measure — a full-width wrapper would make the rise
               read as the whole band moving. */}
-          <Reveal delay={BEAT.cta} className="inline-block">
-            <ActionButton href={HOME_HERO.cta.href}>
-              {HOME_HERO.cta.label.toUpperCase()}
-            </ActionButton>
+          <Reveal delay={BEAT.cta} className="inline-block w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-4">
+              <ActionButton href={whatsappUrl}>
+                <div className="flex items-center gap-2">
+                  <WhatsAppIcon className="h-5 w-5" />
+                  <span>WhatsApp Us Now</span>
+                </div>
+              </ActionButton>
+              <ActionButton href={HOME_HERO.cta.href} variant="cream">
+                {HOME_HERO.cta.label.toUpperCase()}
+              </ActionButton>
+            </div>
           </Reveal>
         </Container>
       </div>

@@ -28,6 +28,7 @@ export interface PublicSiteSettings {
     linkedin: string;
   };
   builtBy: string;
+  whatsapp?: string;
 }
 
 const INITIAL_STATIC_POSTS = [
@@ -696,6 +697,7 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
     const companyInfo = settingsMap.company_info || {};
     const socialLinks = settingsMap.social_links || {};
     const contactDetails = settingsMap.contact_details || {};
+    const ctaSettings = settingsMap.cta_settings || {};
 
     return {
       name: companyInfo.business_name || SITE.name,
@@ -719,8 +721,17 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
         linkedin: socialLinks.linkedin_url || SITE.social.linkedin,
       },
       builtBy: SITE.builtBy,
+      whatsapp: (
+        (ctaSettings.whatsapp_cta_number as string) ||
+        (companyInfo.whatsapp_number as string) ||
+        (companyInfo.primary_phone as string) ||
+        SITE.telephone
+      ).replace(/\D/g, ''),
     };
   } catch {
-    return SITE;
+    return {
+      ...SITE,
+      whatsapp: SITE.telephone.replace(/\D/g, ''),
+    };
   }
 }
