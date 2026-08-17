@@ -11,6 +11,7 @@ import { Logo } from '@/components/layout/Logo';
 import { MobileDrawer } from '@/components/layout/MobileDrawer';
 import { SERVICES } from '@/content/services';
 import { PRIMARY_CTA, PRIMARY_NAV, SITE } from '@/content/site';
+import { type PublicSiteSettings } from '@/lib/cms-data';
 import { isCurrentRoute } from '@/lib/nav';
 import { cn } from '@/lib/utils';
 
@@ -75,7 +76,11 @@ const NAV_LINK =
 const NAV_LINK_CURRENT = 'border-[#DCCB8E] text-[#DCCB8E]';
 const NAV_LINK_DEFAULT = 'border-transparent text-white hover:text-[#DCCB8E]';
 
-export function Header() {
+interface HeaderProps {
+  settings?: PublicSiteSettings;
+}
+
+export function Header({ settings = SITE }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -267,7 +272,7 @@ export function Header() {
             <Link
               href="/"
               className="shrink-0 rounded-sm"
-              aria-label={`${SITE.name} — home`}
+              aria-label={`${settings.name} — home`}
             >
               {/*
                 Width is pinned, not height. The lockup is 640×177 (ratio 3.62)

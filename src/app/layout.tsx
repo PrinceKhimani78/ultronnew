@@ -5,6 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { UltronLoader } from '@/components/ui/UltronLoader';
 import { SITE } from '@/content/site';
+import { getSiteSettings } from '@/lib/cms-data';
 import { env } from '@/lib/env';
 import './globals.css';
 
@@ -38,11 +39,12 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
   return (
     <html
       lang="en"
@@ -95,9 +97,9 @@ export default function RootLayout({
           layout is the right home for it. An admin area (Phase 8) gets its own
           route group and its own chrome rather than opting out of this one.
         */}
-        <Header />
+        <Header settings={settings} />
         {children}
-        <Footer />
+        <Footer settings={settings} />
       </body>
     </html>
   );

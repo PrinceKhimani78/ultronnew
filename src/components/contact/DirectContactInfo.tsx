@@ -4,7 +4,8 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { BandEyebrow } from '@/components/ui/BandEyebrow';
-import { SITE, WHATSAPP_URL } from '@/content/site';
+import { SITE } from '@/content/site';
+import { type PublicSiteSettings } from '@/lib/cms-data';
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -25,40 +26,51 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
-const CONTACT_METHODS = [
-  {
-    icon: Mail,
-    label: 'EMAIL US',
-    value: SITE.email,
-    href: `mailto:${SITE.email}`,
-  },
-  {
-    icon: Phone,
-    label: 'PHONE & WHATSAPP',
-    value: SITE.telephone,
-    href: WHATSAPP_URL,
-  },
-  {
-    icon: MapPin,
-    label: 'OFFICE LOCATION',
-    value: `${SITE.address.locality}, ${SITE.address.country}`,
-    href: undefined,
-  },
-  {
-    icon: LinkedinIcon,
-    label: 'LINKEDIN',
-    value: 'Ultron Financials',
-    href: SITE.social.linkedin,
-  },
-  {
-    icon: Clock,
-    label: 'BUSINESS HOURS',
-    value: 'Mon – Fri: 9:00 AM – 6:00 PM (GST)',
-    href: undefined,
-  },
-] as const;
+interface DirectContactInfoProps {
+  settings?: PublicSiteSettings;
+}
 
-export function DirectContactInfo() {
+export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
+  const email = settings.email;
+  const telephone = settings.telephone;
+  const address = settings.address;
+  const linkedin = settings.social?.linkedin || SITE.social.linkedin;
+
+  const whatsappUrl = `https://wa.me/${telephone.replace(/\D/g, '')}`;
+
+  const contactMethods = [
+    {
+      icon: Mail,
+      label: 'EMAIL US',
+      value: email,
+      href: `mailto:${email}`,
+    },
+    {
+      icon: Phone,
+      label: 'PHONE & WHATSAPP',
+      value: telephone,
+      href: whatsappUrl,
+    },
+    {
+      icon: MapPin,
+      label: 'OFFICE LOCATION',
+      value: `${address.locality}, ${address.country}`,
+      href: undefined,
+    },
+    {
+      icon: LinkedinIcon,
+      label: 'LINKEDIN',
+      value: settings.name,
+      href: linkedin,
+    },
+    {
+      icon: Clock,
+      label: 'BUSINESS HOURS',
+      value: 'Mon – Fri: 9:00 AM – 6:00 PM (GST)',
+      href: undefined,
+    },
+  ];
+
   return (
     <Section
       tone="raised"
@@ -74,7 +86,7 @@ export function DirectContactInfo() {
         </div>
 
         <Stagger className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {CONTACT_METHODS.map((item) => {
+          {contactMethods.map((item) => {
             const Icon = item.icon;
             const content = (
               <div className="card-shadow-center flex h-full flex-col items-center justify-center rounded-[16px] bg-[#FDFBEE] p-6 text-center transition-all duration-300 hover:shadow-lg">

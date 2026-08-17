@@ -14,6 +14,7 @@ import {
   PhoneGlyph,
 } from '@/components/ui/ContactIcons';
 import { FOOTER_NAV, SITE } from '@/content/site';
+import { type PublicSiteSettings } from '@/lib/cms-data';
 
 /**
  * Site footer, from the comp's 1280×572 "Footer" frame.
@@ -72,7 +73,11 @@ const BEAT = {
   closing: STAGGER_MS * 4,
 } as const;
 
-export function Footer() {
+interface FooterProps {
+  settings?: PublicSiteSettings;
+}
+
+export function Footer({ settings = SITE }: FooterProps) {
   const pathname = usePathname();
 
   if (pathname?.startsWith('/admin')) {
@@ -89,7 +94,7 @@ export function Footer() {
         <Reveal delay={BEAT.logo}>
           <Link
             href="/"
-            aria-label={`${SITE.name} — home`}
+            aria-label={`${settings.name} — home`}
             className="inline-block"
           >
             <Logo
@@ -123,7 +128,7 @@ export function Footer() {
                 <span
                   className={`${BODY} max-w-[420px] text-left text-white/90`}
                 >
-                  {SITE.address.streetAddress}
+                  {settings.address.streetAddress}
                 </span>
               </StaggerItem>
               <StaggerItem
@@ -132,10 +137,10 @@ export function Footer() {
               >
                 <MailGlyph className="shrink-0 text-white" />
                 <a
-                  href={`mailto:${SITE.email}`}
+                  href={`mailto:${settings.email}`}
                   className={`${BODY} text-left text-white/90 transition-colors duration-200 hover:text-[#DCCB8E]`}
                 >
-                  {SITE.email}
+                  {settings.email}
                 </a>
               </StaggerItem>
               <StaggerItem
@@ -144,10 +149,10 @@ export function Footer() {
               >
                 <PhoneGlyph className="shrink-0 text-white" />
                 <a
-                  href={`tel:${SITE.telephone.replace(/\s/g, '')}`}
+                  href={`tel:${settings.telephone.replace(/\s/g, '')}`}
                   className={`${BODY} text-left text-white/90 transition-colors duration-200 hover:text-[#DCCB8E]`}
                 >
-                  {SITE.telephone}
+                  {settings.telephone}
                 </a>
               </StaggerItem>
             </Stagger>
@@ -177,7 +182,7 @@ export function Footer() {
           style={{ color: BODY_COLOR }}
         >
           <span className="text-white/80">
-            &copy; 2026 Ultron Financials. All rights reserved.
+            &copy; 2026 {settings.name}. All rights reserved.
           </span>
         </Reveal>
       </div>

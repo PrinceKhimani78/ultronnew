@@ -4,6 +4,7 @@ import { ContactFormSection } from '@/components/contact/ContactFormSection';
 import { ContactHero } from '@/components/contact/ContactHero';
 import { ContactProcess } from '@/components/contact/ContactProcess';
 import { DirectContactInfo } from '@/components/contact/DirectContactInfo';
+import { getSiteSettings } from '@/lib/cms-data';
 
 export const metadata: Metadata = {
   title: 'Contact Ultron Financials | Financial & Business Support Dubai',
@@ -14,12 +15,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSiteSettings();
   return (
     <main id="main-content">
       <ContactHero />
       <ContactFormSection />
-      <DirectContactInfo />
+      <DirectContactInfo settings={settings} />
       <ContactProcess />
     </main>
   );

@@ -10,7 +10,25 @@ import type {
   WebsiteSettingRecord,
 } from '@/lib/supabase/types';
 
-export type PublicSiteSettings = typeof SITE;
+export interface PublicSiteSettings {
+  name: string;
+  legalName: string;
+  tagline: string;
+  description: string;
+  email: string;
+  telephone: string;
+  address: {
+    streetAddress: string;
+    locality: string;
+    region: string;
+    postalCode: string;
+    country: string;
+  };
+  social: {
+    linkedin: string;
+  };
+  builtBy: string;
+}
 
 const INITIAL_STATIC_POSTS = [
   {
@@ -658,7 +676,7 @@ function formatTeamMemberRecord(tm: TeamMemberRecord) {
 /**
  * Fetches website settings with fallback to static `SITE`.
  */
-export async function getSiteSettings() {
+export async function getSiteSettings(): Promise<PublicSiteSettings> {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase.from('website_settings').select('*');
