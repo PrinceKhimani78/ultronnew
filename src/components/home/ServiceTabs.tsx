@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
  * 3D Illustrations mapped per service slug matching the Ultron brand 3D aesthetic.
  */
 const SERVICE_ILLUSTRATIONS: Record<string, string> = {
-  'business-banking': '/brand/process-consultation.webp',
+  'business-banking': '/brand/business-banking-hero.jpg',
   'business-setup': '/brand/process-execution.webp',
   'trade-finance': '/brand/audience-entrepreneurs.webp',
   'compliance-regulatory-advisory': '/brand/audience-startups.webp',
