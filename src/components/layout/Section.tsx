@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -5,7 +6,7 @@ import { cn } from '@/lib/utils';
  * section component has to know what sits above or below it.
  */
 
-type SectionProps = React.ComponentPropsWithoutRef<'section'> & {
+export type SectionProps = React.ComponentPropsWithRef<'section'> & {
   /** `tight` for a strip, `spacious` for a band that should breathe. */
   spacing?: 'tight' | 'default' | 'spacious';
   tone?: 'surface' | 'raised' | 'brand';
@@ -37,17 +38,18 @@ const TONES = {
   brand: 'bg-brand text-surface',
 } as const;
 
-export function Section({
-  spacing = 'default',
-  tone = 'surface',
-  className,
-  ...props
-}: SectionProps) {
-  return (
-    <section
-      data-header-tone={tone === 'brand' ? 'dark' : undefined}
-      className={cn('relative', SPACING[spacing], TONES[tone], className)}
-      {...props}
-    />
-  );
-}
+export const Section = React.forwardRef<HTMLElement, SectionProps>(
+  function Section(
+    { spacing = 'default', tone = 'surface', className, ...props },
+    ref,
+  ) {
+    return (
+      <section
+        ref={ref}
+        data-header-tone={tone === 'brand' ? 'dark' : undefined}
+        className={cn('relative', SPACING[spacing], TONES[tone], className)}
+        {...props}
+      />
+    );
+  },
+);

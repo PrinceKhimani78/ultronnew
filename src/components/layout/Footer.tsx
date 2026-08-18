@@ -30,12 +30,17 @@ interface FooterProps {
   settings?: PublicSiteSettings;
 }
 
-export function Footer({ settings = SITE }: FooterProps) {
-  const email = settings.footer?.email || settings.email;
-  const phone = settings.footer?.phone || settings.telephone;
-  const address = settings.footer?.address || settings.address.streetAddress;
+export function Footer({ settings }: FooterProps) {
+  const email = settings?.footer?.email || settings?.email || SITE.email;
+  const phone =
+    settings?.footer?.phone || settings?.telephone || SITE.telephone;
+  const address =
+    settings?.footer?.address ||
+    settings?.address?.streetAddress ||
+    SITE.address.streetAddress;
   const copyrightText =
-    settings.footer?.copyrightText || `${settings.name}. All rights reserved.`;
+    settings?.footer?.copyrightText ||
+    `${settings?.name || SITE.name}. All rights reserved.`;
 
   return (
     <FooterVisibility>
@@ -48,7 +53,7 @@ export function Footer({ settings = SITE }: FooterProps) {
           <Reveal delay={BEAT.logo}>
             <Link
               href="/"
-              aria-label={`${settings.name} — home`}
+              aria-label={`${settings?.name || SITE.name} — home`}
               className="inline-block"
             >
               <Logo

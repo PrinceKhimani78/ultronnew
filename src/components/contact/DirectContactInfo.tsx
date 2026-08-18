@@ -30,17 +30,18 @@ interface DirectContactInfoProps {
   settings?: PublicSiteSettings;
 }
 
-export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
-  const email = settings.header?.email || settings.email;
-  const telephone = settings.header?.phone || settings.telephone;
-  const address = settings.address;
-  const linkedin = settings.social?.linkedin || SITE.social.linkedin;
+export function DirectContactInfo({ settings }: DirectContactInfoProps) {
+  const email = settings?.header?.email || settings?.email || SITE.email;
+  const telephone =
+    settings?.header?.phone || settings?.telephone || SITE.telephone;
+  const address = settings?.address || SITE.address;
+  const linkedin = settings?.social?.linkedin || SITE.social.linkedin;
   const workingHours =
-    settings.workingHours || 'Mon – Fri: 9:00 AM – 6:00 PM (GST)';
-  const googleMapsUrl = settings.googleMapsUrl;
+    settings?.workingHours || 'Mon – Fri: 9:00 AM – 6:00 PM (GST)';
+  const googleMapsUrl = settings?.googleMapsUrl;
 
   const rawWhatsapp =
-    settings.cta?.whatsappNumber || settings.whatsapp || telephone;
+    settings?.cta?.whatsappNumber || settings?.whatsapp || telephone;
   const whatsappUrl = `https://wa.me/${rawWhatsapp.replace(/\D/g, '')}`;
 
   const contactMethods = [
@@ -65,7 +66,7 @@ export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
     {
       icon: LinkedinIcon,
       label: 'LINKEDIN',
-      value: settings.name,
+      value: settings?.name || SITE.name,
       href: linkedin,
     },
     {

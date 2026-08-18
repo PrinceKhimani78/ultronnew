@@ -58,16 +58,11 @@ interface HeroProps {
 }
 
 export function Hero({ settings }: HeroProps) {
-  const currentSettings = settings || {
-    ...SITE,
-    whatsapp: SITE.telephone.replace(/\D/g, ''),
-  };
-
   const phone =
-    currentSettings.footer?.whatsapp ||
-    currentSettings.cta?.whatsappNumber ||
-    currentSettings.whatsapp ||
-    currentSettings.telephone ||
+    settings?.footer?.whatsapp ||
+    settings?.cta?.whatsappNumber ||
+    settings?.whatsapp ||
+    settings?.telephone ||
     SITE.telephone ||
     '';
   const cleanPhone = phone.replace(/\D/g, '');

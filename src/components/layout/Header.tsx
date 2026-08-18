@@ -80,7 +80,7 @@ interface HeaderProps {
   settings?: PublicSiteSettings;
 }
 
-export function Header({ settings = SITE }: HeaderProps) {
+export function Header({ settings }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -272,7 +272,7 @@ export function Header({ settings = SITE }: HeaderProps) {
             <Link
               href="/"
               className="shrink-0 rounded-sm"
-              aria-label={`${settings.name} — home`}
+              aria-label={`${settings?.name || SITE.name} — home`}
             >
               {/*
                 Width is pinned, not height. The lockup is 640×177 (ratio 3.62)
