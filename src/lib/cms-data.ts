@@ -16,7 +16,11 @@ export interface PublicSiteSettings {
   tagline: string;
   description: string;
   email: string;
+  secondaryEmail?: string;
   telephone: string;
+  workingHours?: string;
+  googleMapsUrl?: string;
+  googleMapsEmbedUrl?: string;
   address: {
     streetAddress: string;
     locality: string;
@@ -25,10 +29,37 @@ export interface PublicSiteSettings {
     country: string;
   };
   social: {
-    linkedin: string;
+    linkedin?: string;
+    instagram?: string;
+    facebook?: string;
+    youtube?: string;
+    twitter?: string;
+    whatsapp?: string;
+  };
+  header?: {
+    phone?: string;
+    email?: string;
+    ctaLabel?: string;
+    ctaLink?: string;
+  };
+  footer?: {
+    email?: string;
+    phone?: string;
+    whatsapp?: string;
+    address?: string;
+    workingHours?: string;
+    copyrightText?: string;
+    shortDescription?: string;
+  };
+  cta?: {
+    label?: string;
+    destination?: string;
+    whatsappNumber?: string;
+    formNotificationEmail?: string;
+    consultationEmailRecipient?: string;
   };
   builtBy: string;
-  whatsapp?: string;
+  whatsapp: string;
 }
 
 const INITIAL_STATIC_POSTS = [
@@ -478,6 +509,7 @@ export async function getBlogPostBySlug(
 /**
  * Fetches published services with fallback to static `SERVICES`.
  * Auto-seeds missing static services into Supabase database.
+ * Filters out any services where isVisible is set to false.
  */
 export async function getPublishedServices(): Promise<Service[]> {
   try {
@@ -490,7 +522,9 @@ export async function getPublishedServices(): Promise<Service[]> {
       .order('display_order', { ascending: true });
 
     if (error) {
-      return SERVICES as unknown as Service[];
+      return SERVICES.filter(
+        (s) => s.isVisible !== false,
+      ) as unknown as Service[];
     }
 
     const currentServices = (dbData || []) as ServiceRecord[];
@@ -516,7 +550,9 @@ export async function getPublishedServices(): Promise<Service[]> {
           .order('display_order', { ascending: true });
 
         if (reFetched && reFetched.length > 0) {
-          return (reFetched as ServiceRecord[]).map(formatServiceRecord);
+          return (reFetched as ServiceRecord[])
+            .map(formatServiceRecord)
+            .filter((s) => s.isVisible !== false);
         }
       } catch {
         // Fallback
@@ -524,18 +560,25 @@ export async function getPublishedServices(): Promise<Service[]> {
     }
 
     if (currentServices.length === 0) {
-      return SERVICES as unknown as Service[];
+      return SERVICES.filter(
+        (s) => s.isVisible !== false,
+      ) as unknown as Service[];
     }
 
-    return currentServices.map(formatServiceRecord);
+    return currentServices
+      .map(formatServiceRecord)
+      .filter((s) => s.isVisible !== false);
   } catch {
-    return SERVICES as unknown as Service[];
+    return SERVICES.filter(
+      (s) => s.isVisible !== false,
+    ) as unknown as Service[];
   }
 }
 
 function formatServiceRecord(dbService: ServiceRecord, index: number): Service {
   const content = (dbService.content_blocks || {}) as Record<string, unknown>;
   const staticMatch = SERVICES.find((s) => s.slug === dbService.slug);
+  const isVisible = staticMatch ? staticMatch.isVisible !== false : true;
 
   // Pull highlights from CMS content_blocks, fall back to static data
   const dbHighlights = content.highlights as
@@ -543,6 +586,7 @@ function formatServiceRecord(dbService: ServiceRecord, index: number): Service {
 
   return {
     slug: dbService.slug,
+    isVisible,
     number: (dbService.display_order || index + 1).toString(),
     title: dbService.name,
     headline: dbService.hero_title || staticMatch?.headline || dbService.name,
@@ -598,13 +642,17 @@ function formatServiceRecord(dbService: ServiceRecord, index: number): Service {
 
 /**
  * Fetches single published service by slug.
+ * Returns null if the service is hidden (isVisible: false).
  */
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
   const services = await getPublishedServices();
   const found = services.find((s) => s.slug === slug);
-  if (found) return found;
+  if (found && found.isVisible !== false) return found;
   const staticFound = SERVICES.find((s) => s.slug === slug);
-  return staticFound ? (staticFound as Service) : null;
+  if (staticFound && staticFound.isVisible !== false) {
+    return staticFound as Service;
+  }
+  return null;
 }
 
 /**
@@ -682,36 +730,60 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
     const supabase = await createClient();
     const { data, error } = await supabase.from('website_settings').select('*');
 
-    if (error || !data || data.length === 0) {
-      return SITE;
-    }
-
     const settingsMap: Record<string, Record<string, string>> = {};
-    (data as WebsiteSettingRecord[]).forEach((row) => {
-      settingsMap[row.setting_key] = (row.setting_value || {}) as Record<
-        string,
-        string
-      >;
-    });
+    if (!error && data && data.length > 0) {
+      (data as WebsiteSettingRecord[]).forEach((row) => {
+        settingsMap[row.setting_key] = (row.setting_value || {}) as Record<
+          string,
+          string
+        >;
+      });
+    }
 
     const companyInfo = settingsMap.company_info || {};
     const socialLinks = settingsMap.social_links || {};
     const contactDetails = settingsMap.contact_details || {};
     const ctaSettings = settingsMap.cta_settings || {};
 
+    const cleanWhatsapp = (
+      contactDetails.footer_whatsapp ||
+      ctaSettings.whatsapp_cta_number ||
+      companyInfo.whatsapp_number ||
+      companyInfo.primary_phone ||
+      SITE.telephone
+    ).replace(/\D/g, '');
+
+    const generatedWhatsappUrl = cleanWhatsapp
+      ? `https://wa.me/${cleanWhatsapp}`
+      : 'https://wa.me/97145751693';
+
     return {
-      name: companyInfo.business_name || SITE.name,
-      legalName: companyInfo.legal_name || SITE.legalName,
+      name: companyInfo.business_name || companyInfo.legal_name || SITE.name,
+      legalName:
+        companyInfo.legal_name || companyInfo.business_name || SITE.legalName,
       tagline: companyInfo.tagline || SITE.tagline,
-      description: companyInfo.short_description || SITE.description,
+      description:
+        companyInfo.short_description ||
+        contactDetails.footer_short_description ||
+        SITE.description,
       email:
         contactDetails.header_email || companyInfo.primary_email || SITE.email,
+      secondaryEmail: companyInfo.secondary_email || undefined,
       telephone:
         contactDetails.header_phone ||
         companyInfo.primary_phone ||
         SITE.telephone,
+      workingHours:
+        companyInfo.working_hours ||
+        contactDetails.footer_working_hours ||
+        'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
+      googleMapsUrl: companyInfo.google_maps_url || undefined,
+      googleMapsEmbedUrl: companyInfo.google_maps_embed_url || undefined,
       address: {
-        streetAddress: companyInfo.office_address || SITE.address.streetAddress,
+        streetAddress:
+          companyInfo.office_address ||
+          contactDetails.footer_address ||
+          SITE.address.streetAddress,
         locality: companyInfo.city || SITE.address.locality,
         region: companyInfo.state_emirate || SITE.address.region,
         postalCode: companyInfo.postal_code || SITE.address.postalCode,
@@ -719,19 +791,102 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
       },
       social: {
         linkedin: socialLinks.linkedin_url || SITE.social.linkedin,
+        instagram: socialLinks.instagram_url || undefined,
+        facebook: socialLinks.facebook_url || undefined,
+        youtube: socialLinks.youtube_url || undefined,
+        twitter: socialLinks.twitter_url || undefined,
+        whatsapp: socialLinks.whatsapp_url || generatedWhatsappUrl || undefined,
+      },
+      header: {
+        phone:
+          contactDetails.header_phone ||
+          companyInfo.primary_phone ||
+          SITE.telephone,
+        email:
+          contactDetails.header_email ||
+          companyInfo.primary_email ||
+          SITE.email,
+        ctaLabel:
+          contactDetails.header_cta_label ||
+          ctaSettings.default_cta_label ||
+          'Book a call',
+        ctaLink:
+          contactDetails.header_cta_link ||
+          ctaSettings.default_cta_destination ||
+          '#contact',
+      },
+      footer: {
+        email:
+          contactDetails.footer_email ||
+          companyInfo.primary_email ||
+          SITE.email,
+        phone:
+          contactDetails.footer_phone ||
+          companyInfo.primary_phone ||
+          SITE.telephone,
+        whatsapp:
+          contactDetails.footer_whatsapp ||
+          companyInfo.whatsapp_number ||
+          SITE.telephone,
+        address:
+          contactDetails.footer_address ||
+          companyInfo.office_address ||
+          SITE.address.streetAddress,
+        workingHours:
+          contactDetails.footer_working_hours ||
+          companyInfo.working_hours ||
+          'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
+        copyrightText:
+          contactDetails.footer_copyright_text ||
+          `${companyInfo.business_name || SITE.name}. All rights reserved.`,
+        shortDescription:
+          contactDetails.footer_short_description ||
+          companyInfo.short_description ||
+          SITE.description,
+      },
+      cta: {
+        label:
+          ctaSettings.default_cta_label ||
+          contactDetails.header_cta_label ||
+          'Book a call',
+        destination:
+          ctaSettings.default_cta_destination ||
+          contactDetails.header_cta_link ||
+          '#contact',
+        whatsappNumber: cleanWhatsapp,
+        formNotificationEmail: ctaSettings.form_notification_email || undefined,
+        consultationEmailRecipient:
+          ctaSettings.consultation_email_recipient || undefined,
       },
       builtBy: SITE.builtBy,
-      whatsapp: (
-        (ctaSettings.whatsapp_cta_number as string) ||
-        (companyInfo.whatsapp_number as string) ||
-        (companyInfo.primary_phone as string) ||
-        SITE.telephone
-      ).replace(/\D/g, ''),
+      whatsapp: cleanWhatsapp,
     };
   } catch {
+    const cleanPhone = SITE.telephone.replace(/\D/g, '');
     return {
       ...SITE,
-      whatsapp: SITE.telephone.replace(/\D/g, ''),
+      workingHours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
+      header: {
+        phone: SITE.telephone,
+        email: SITE.email,
+        ctaLabel: 'Book a call',
+        ctaLink: '#contact',
+      },
+      footer: {
+        email: SITE.email,
+        phone: SITE.telephone,
+        whatsapp: SITE.telephone,
+        address: SITE.address.streetAddress,
+        workingHours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
+        copyrightText: `${SITE.name}. All rights reserved.`,
+        shortDescription: SITE.description,
+      },
+      cta: {
+        label: 'Book a call',
+        destination: '#contact',
+        whatsappNumber: cleanPhone,
+      },
+      whatsapp: cleanPhone,
     };
   }
 }

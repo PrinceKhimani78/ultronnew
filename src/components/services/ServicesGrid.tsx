@@ -43,17 +43,19 @@ export function ServicesGrid() {
           each other rather than sharing a row delay.
         */}
         <ul className="mt-10 grid grid-cols-1 gap-6 pl-0 sm:mt-12 sm:gap-8 sm:pl-[40px] lg:grid-cols-2 lg:gap-8">
-          {SERVICES.map((service, index) => (
-            <Reveal
-              as="li"
-              key={service.slug}
-              delay={index * STAGGER_MS}
-              amount={0.1}
-              className="flex h-full w-full"
-            >
-              <ServiceCard service={service} />
-            </Reveal>
-          ))}
+          {SERVICES.filter((s) => s.isVisible !== false).map(
+            (service, index) => (
+              <Reveal
+                as="li"
+                key={service.slug}
+                delay={index * STAGGER_MS}
+                amount={0.1}
+                className="flex h-full w-full"
+              >
+                <ServiceCard service={service} />
+              </Reveal>
+            ),
+          )}
         </ul>
       </Container>
     </Section>

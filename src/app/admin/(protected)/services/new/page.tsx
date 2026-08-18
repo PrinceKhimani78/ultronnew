@@ -94,6 +94,9 @@ export default function NewServicePage() {
 
       <form
         onSubmit={handleSubmit}
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-type="other"
         className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8"
       >
         <div className="flex items-center justify-between">
@@ -125,6 +128,8 @@ export default function NewServicePage() {
               type="text"
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="e.g. Corporate Tax Advisory"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -138,6 +143,8 @@ export default function NewServicePage() {
               type="text"
               value={slug}
               onChange={(e) => setSlug(slugify(e.target.value))}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 font-mono text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -150,6 +157,8 @@ export default function NewServicePage() {
               rows={2}
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="Brief description displayed on service cards..."
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -163,6 +172,8 @@ export default function NewServicePage() {
               type="text"
               value={heroTitle}
               onChange={(e) => setHeroTitle(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="Headline for service page hero..."
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -176,6 +187,8 @@ export default function NewServicePage() {
               type="number"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -188,6 +201,8 @@ export default function NewServicePage() {
               rows={2}
               value={heroDescription}
               onChange={(e) => setHeroDescription(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -200,6 +215,8 @@ export default function NewServicePage() {
               type="text"
               value={ctaLabel}
               onChange={(e) => setCtaLabel(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -212,6 +229,8 @@ export default function NewServicePage() {
               type="text"
               value={ctaUrl}
               onChange={(e) => setCtaUrl(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -222,6 +241,8 @@ export default function NewServicePage() {
                 type="checkbox"
                 checked={showInNav}
                 onChange={(e) => setShowInNav(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Show in Header Navigation Menu
@@ -232,6 +253,8 @@ export default function NewServicePage() {
                 type="checkbox"
                 checked={showOnHomepage}
                 onChange={(e) => setShowOnHomepage(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Show on Homepage Services Section
@@ -252,6 +275,8 @@ export default function NewServicePage() {
               type="text"
               value={seoTitle}
               onChange={(e) => setSeoTitle(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -263,6 +288,8 @@ export default function NewServicePage() {
               rows={2}
               value={metaDescription}
               onChange={(e) => setMetaDescription(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>

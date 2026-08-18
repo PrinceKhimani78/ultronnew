@@ -7,7 +7,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
-import { Reveal } from '@/components/motion/Reveal';
 import { HeadingText } from '@/components/ui/SectionHeading';
 import {
   PROCESS_INTRO,
@@ -21,18 +20,18 @@ if (typeof window !== 'undefined') {
 }
 
 const CARD_PLATE = cn(
-  'how-ultron-card mx-auto w-full max-w-[360px]',
-  'lg:mx-0 lg:min-h-[287px] lg:max-w-[360px]',
+  'how-ultron-card-wrapper w-full max-w-[380px]',
+  'lg:min-h-[290px] lg:max-w-[400px]',
 );
 
-function StepCardContent({ title, body }: { title: string; body: string }) {
+function ProcessCardSurface({ title, body }: { title: string; body: string }) {
   return (
-    <>
+    <div className="process-card-hover-surface @media(hover:hover):hover:-translate-y-1 relative z-10 flex h-full w-full flex-col items-start justify-center gap-[19px] transition-transform duration-500 ease-[ease] motion-reduce:transform-none">
       <h3 className="heading-h3--compact text-[#035551]">{title}</h3>
-      <p className="text-[18px] leading-[1.5] font-normal tracking-[0] text-[rgba(35,35,35,0.82)]">
+      <p className="text-[17px] leading-[1.55] font-normal tracking-[0] text-[rgba(35,35,35,0.85)] sm:text-[18px]">
         {body}
       </p>
-    </>
+    </div>
   );
 }
 
@@ -48,18 +47,19 @@ export function HowUltronWorks({
   intro = PROCESS_INTRO,
   steps = PROCESS_STEPS,
 }: HowUltronWorksProps) {
-  const triggerRef = useRef<HTMLDivElement | null>(null);
-  const pinRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLOListElement | null>(null);
   const activeLineRef = useRef<HTMLDivElement | null>(null);
+  const headingRef = useRef<HTMLDivElement | null>(null);
+  const eyebrowRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (
       typeof window === 'undefined' ||
-      !triggerRef.current ||
-      !pinRef.current ||
-      !sectionRef.current
+      !sectionRef.current ||
+      !stageRef.current ||
+      !listRef.current
     )
       return;
 
@@ -68,35 +68,44 @@ export function HowUltronWorks({
     ).matches;
 
     if (prefersReducedMotion) {
-      gsap.set(activeLineRef.current, { scaleY: 1 });
-      const stepNodes = triggerRef.current.querySelectorAll(
-        'li[data-step-index]',
-      );
+      if (activeLineRef.current) {
+        gsap.set(activeLineRef.current, { scaleY: 1 });
+      }
+      const stepNodes = listRef.current.querySelectorAll('li[data-step-index]');
       stepNodes.forEach((step) => {
-        const card = step.querySelector('[data-step-card]');
-        const image = step.querySelector('[data-step-image]');
+        const cardLift = step.querySelector('[data-step-card-lift]');
+        const imageLift =
+          step.querySelector('[data-step-image-lift]') ||
+          step.querySelector('[data-step-image]');
         const dot = step.querySelector('[data-step-dot]');
-        gsap.set([card, image], { opacity: 1, scale: 1, x: 0, y: 0 });
-        gsap.set(dot, { scale: 1.08, boxShadow: '0 0 0 2px #FFFFFF' });
+        if (cardLift) gsap.set(cardLift, { opacity: 1, scale: 1, y: 0 });
+        if (imageLift) gsap.set(imageLift, { opacity: 1, scale: 1, y: 0 });
+        if (dot) {
+          gsap.set(dot, {
+            scale: 1.15,
+            boxShadow: '0 0 0 3px #FFFFFF, 0 0 16px rgba(220,203,142,0.85)',
+          });
+        }
       });
       return;
     }
 
     const mm = gsap.matchMedia();
 
-    // DESKTOP PINNED ANIMATION (lg: min-width: 1024px)
+    // DESKTOP: PINNED SEQUENTIAL STEP-BY-STEP SCROLL ANIMATION (lg: min-width: 1024px)
     mm.add('(min-width: 1024px)', () => {
       const ctx = gsap.context(() => {
-        // Query elements directly from DOM to avoid any React ref timing mismatches
-        const stepNodes = triggerRef.current?.querySelectorAll(
+        const stepNodes = listRef.current?.querySelectorAll(
           'li[data-step-index]',
         );
-        if (!stepNodes || stepNodes.length < 4) return;
+        if (!stepNodes || stepNodes.length === 0) return;
 
         const validSteps: {
           step: HTMLElement;
           card: HTMLElement;
+          cardLift: HTMLElement;
           image: HTMLElement;
+          imageLift: HTMLElement;
           dot: HTMLElement;
         }[] = [];
 
@@ -105,59 +114,73 @@ export function HowUltronWorks({
           const card = step.querySelector(
             '[data-step-card]',
           ) as HTMLElement | null;
+          const cardLift = step.querySelector(
+            '[data-step-card-lift]',
+          ) as HTMLElement | null;
           const image = step.querySelector(
             '[data-step-image]',
           ) as HTMLElement | null;
+          const imageLift = (step.querySelector('[data-step-image-lift]') ||
+            image) as HTMLElement | null;
           const dot = step.querySelector(
             '[data-step-dot]',
           ) as HTMLElement | null;
-          if (card && image && dot) {
-            validSteps.push({ step, card, image, dot });
+          if (card && cardLift && image && imageLift && dot) {
+            validSteps.push({ step, card, cardLift, image, imageLift, dot });
           }
         });
 
-        if (validSteps.length < 4) return;
+        const totalSteps = validSteps.length;
+        if (totalSteps === 0) return;
 
-        // Set sectionRef container height to match the first row's height dynamically
-        const step1Height = validSteps[0].step.offsetHeight || 300;
-        gsap.set(sectionRef.current, { height: step1Height });
+        // Calculate vertical translation offsets for each step relative to step 1
+        const step1Top = validSteps[0].step.offsetTop;
+        const listYOffsets = validSteps.map(
+          (s) => -(s.step.offsetTop - step1Top),
+        );
 
-        // Calculate translation offsets relative to step 1
-        const listYOffsets = validSteps.map((s) => {
-          return -(s.step.offsetTop - validSteps[0].step.offsetTop);
-        });
-
-        // Calculate timeline line progress ratios for each dot
+        // Calculate progress line ratios based on dots in the list
         const listHeight = listRef.current?.offsetHeight || 1200;
-        const dotYPositions = validSteps.map((s) => {
-          return s.step.offsetTop + s.step.offsetHeight / 2;
+        const dotRatios = validSteps.map((s) => {
+          const dotCenter = s.step.offsetTop + s.step.offsetHeight / 2;
+          return Math.min(1, Math.max(0.1, dotCenter / listHeight));
         });
-        const dotRatios = dotYPositions.map((y) => y / listHeight);
 
-        // Initial setup for desktop
+        // Set initial positions:
+        // Step 1 is active (opacity 1, scale 1, y 0)
+        // Steps 2..N start below (opacity 0, scale 0.98, y 60)
         validSteps.forEach((s, index) => {
           if (index === 0) {
-            gsap.set([s.card, s.image], { opacity: 1, scale: 1, x: 0 });
-            gsap.set(s.dot, { scale: 1.08, boxShadow: '0 0 0 2px #FFFFFF' });
+            gsap.set([s.cardLift, s.imageLift], {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              force3D: true,
+            });
+            gsap.set(s.dot, {
+              scale: 1.15,
+              boxShadow: '0 0 0 3px #FFFFFF, 0 0 16px rgba(220,203,142,0.85)',
+            });
           } else {
-            const isRight = index % 2 === 1;
-            gsap.set(s.card, {
-              opacity: 0.28,
-              scale: 0.97,
-              x: isRight ? 20 : -20,
+            gsap.set([s.cardLift, s.imageLift], {
+              opacity: 0,
+              scale: 0.98,
+              y: 60,
               force3D: true,
             });
-            gsap.set(s.image, {
-              opacity: 0.28,
-              scale: 0.97,
-              x: isRight ? -20 : 20,
-              force3D: true,
+            gsap.set(s.dot, {
+              scale: 1,
+              boxShadow: 'none',
             });
-            gsap.set(s.dot, { scale: 1, boxShadow: 'none' });
           }
         });
 
-        // Active line starts at dot 1 scale ratio
+        // Initial vertical translation of the list
+        if (listRef.current) {
+          gsap.set(listRef.current, { y: listYOffsets[0] });
+        }
+
+        // Active line starts at dot 1
         if (activeLineRef.current) {
           gsap.set(activeLineRef.current, {
             scaleY: dotRatios[0],
@@ -165,248 +188,183 @@ export function HowUltronWorks({
           });
         }
 
-        // Set initial vertical translation of the list so Step 1 is visible immediately
-        if (listRef.current) {
-          gsap.set(listRef.current, { y: listYOffsets[0] });
+        // Heading starts visible
+        if (headingRef.current) {
+          gsap.set(headingRef.current, { y: 0, opacity: 1 });
         }
 
+        // Calculate exact scroll distance from transition count (cards.length - 1)
+        const transitionCount = Math.max(totalSteps - 1, 1);
+        const scrollPerStep = window.innerHeight * 0.7;
+        const scrollDistance = transitionCount * scrollPerStep;
+
+        // Master ScrollTrigger Timeline
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: triggerRef.current,
+            trigger: sectionRef.current,
             start: 'top top',
-            end: '+=200%',
-            scrub: 0.7,
-            pin: pinRef.current,
+            end: () => `+=${scrollDistance}`,
+            pin: true,
             pinSpacing: true,
+            scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
         });
 
-        // Animate list translateY
-        if (listRef.current) {
+        // 0. Smoothly fade out large heading on scroll start, keeping small eyebrow visible
+        if (headingRef.current) {
           tl.to(
-            listRef.current,
+            headingRef.current,
             {
-              y: listYOffsets[1],
-              duration: 1,
-              ease: 'power2.inOut',
+              opacity: 0,
+              scale: 0.96,
+              duration: 0.35,
+              ease: 'power2.out',
             },
-            0.1,
-          );
-          tl.to(
-            listRef.current,
-            {
-              y: listYOffsets[2],
-              duration: 1,
-              ease: 'power2.inOut',
-            },
-            1.1,
-          );
-          tl.to(
-            listRef.current,
-            {
-              y: listYOffsets[3],
-              duration: 1,
-              ease: 'power2.inOut',
-            },
-            2.1,
+            0,
           );
         }
 
-        // Animate vertical timeline scale growth in sync with dots
-        if (activeLineRef.current) {
+        // Construct transitions: each transition occupies 1 unit of timeline time
+        const TRANSITION_DURATION = 0.8;
+        const HOLD_DURATION = 0.25;
+
+        for (let i = 0; i < transitionCount; i++) {
+          const current = validSteps[i];
+          const next = validSteps[i + 1];
+          const startTime =
+            i * (HOLD_DURATION + TRANSITION_DURATION) + HOLD_DURATION;
+
+          // 1. Translate the list upward to center the next card in the focus zone
+          if (listRef.current) {
+            tl.to(
+              listRef.current,
+              {
+                y: listYOffsets[i + 1],
+                duration: TRANSITION_DURATION,
+                ease: 'power2.inOut',
+              },
+              startTime,
+            );
+          }
+
+          // 2. Extend active timeline line smoothly from top to bottom
+          if (activeLineRef.current) {
+            tl.to(
+              activeLineRef.current,
+              {
+                scaleY: dotRatios[i + 1],
+                duration: TRANSITION_DURATION,
+                ease: 'power2.inOut',
+              },
+              startTime,
+            );
+          }
+
+          // 3. Current card and image smoothly transition to inactive state
           tl.to(
-            activeLineRef.current,
+            [current.cardLift, current.imageLift],
             {
-              scaleY: dotRatios[1],
-              duration: 1,
+              opacity: 0.2,
+              scale: 0.98,
+              y: -20,
+              duration: TRANSITION_DURATION * 0.75,
               ease: 'power2.inOut',
+              force3D: true,
             },
-            0.1,
+            startTime,
           );
+
+          // Current dot un-glows
           tl.to(
-            activeLineRef.current,
+            current.dot,
             {
-              scaleY: dotRatios[2],
-              duration: 1,
-              ease: 'power2.inOut',
+              scale: 1,
+              boxShadow: 'none',
+              duration: TRANSITION_DURATION * 0.5,
+              ease: 'power2.out',
             },
-            1.1,
+            startTime,
           );
+
+          // 4. Next card gently lifts from bottom to position (y: 60 -> 0, opacity: 0 -> 1, scale: 0.98 -> 1)
           tl.to(
-            activeLineRef.current,
+            next.cardLift,
             {
-              scaleY: dotRatios[3],
-              duration: 1,
-              ease: 'power2.inOut',
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: TRANSITION_DURATION,
+              ease: 'power3.out',
+              force3D: true,
             },
-            2.1,
+            startTime + 0.1,
+          );
+
+          // 5. Next matching image lifts ~0.1s after the card
+          tl.to(
+            next.imageLift,
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: TRANSITION_DURATION,
+              ease: 'power3.out',
+              force3D: true,
+            },
+            startTime + 0.2,
+          );
+
+          // Next dot glows
+          tl.to(
+            next.dot,
+            {
+              scale: 1.15,
+              boxShadow: '0 0 0 3px #FFFFFF, 0 0 16px rgba(220,203,142,0.85)',
+              duration: TRANSITION_DURATION * 0.6,
+              ease: 'power2.out',
+            },
+            startTime + 0.2,
           );
         }
 
-        // Step 1 exit to completed state
-        tl.to(
-          [validSteps[0].card, validSteps[0].image],
-          {
-            opacity: 0.5,
-            scale: 0.97,
-            x: (idx, target) => {
-              const isCard = (target as HTMLElement).hasAttribute(
-                'data-step-card',
-              );
-              return isCard ? -20 : 20; // card exits left, image exits right
-            },
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          0.2,
-        );
-        tl.to(
-          validSteps[0].dot,
-          { scale: 1, boxShadow: 'none', duration: 0.4 },
-          0.2,
-        );
+        // Brief hold on final card before unpinning cleanly
+        tl.to({}, { duration: 0.2 });
+      }, sectionRef);
 
-        // Step 2 enter to active state
-        tl.to(
-          [validSteps[1].card, validSteps[1].image],
-          {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          0.4,
-        );
-        tl.to(
-          validSteps[1].dot,
-          { scale: 1.08, boxShadow: '0 0 0 2px #FFFFFF', duration: 0.4 },
-          0.4,
-        );
-
-        // Step 2 exit to completed state
-        tl.to(
-          [validSteps[1].card, validSteps[1].image],
-          {
-            opacity: 0.5,
-            scale: 0.97,
-            x: (idx, target) => {
-              const isCard = (target as HTMLElement).hasAttribute(
-                'data-step-card',
-              );
-              return isCard ? 20 : -20; // card exits right, image exits left
-            },
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          1.2,
-        );
-        tl.to(
-          validSteps[1].dot,
-          { scale: 1, boxShadow: 'none', duration: 0.4 },
-          1.2,
-        );
-
-        // Step 3 enter to active state
-        tl.to(
-          [validSteps[2].card, validSteps[2].image],
-          {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          1.4,
-        );
-        tl.to(
-          validSteps[2].dot,
-          { scale: 1.08, boxShadow: '0 0 0 2px #FFFFFF', duration: 0.4 },
-          1.4,
-        );
-
-        // Step 3 exit to completed state
-        tl.to(
-          [validSteps[2].card, validSteps[2].image],
-          {
-            opacity: 0.5,
-            scale: 0.97,
-            x: (idx, target) => {
-              const isCard = (target as HTMLElement).hasAttribute(
-                'data-step-card',
-              );
-              return isCard ? -20 : 20; // card exits left, image exits right
-            },
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          2.2,
-        );
-        tl.to(
-          validSteps[2].dot,
-          { scale: 1, boxShadow: 'none', duration: 0.4 },
-          2.2,
-        );
-
-        // Step 4 enter to active state
-        tl.to(
-          [validSteps[3].card, validSteps[3].image],
-          {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            force3D: true,
-            duration: 0.6,
-            ease: 'power2.inOut',
-          },
-          2.4,
-        );
-        tl.to(
-          validSteps[3].dot,
-          { scale: 1.08, boxShadow: '0 0 0 2px #FFFFFF', duration: 0.4 },
-          2.4,
-        );
-
-        // Keep the final process fully visible for the last 20% of scroll
-        tl.to({}, { duration: 0.7 });
-      }, triggerRef);
       return () => ctx.revert();
     });
 
-    // MOBILE NORMAL SCROLL REVEAL (max-width: 1023px)
+    // MOBILE & TABLET: NATURAL FLOW SCROLL REVEAL (max-width: 1023px)
     mm.add('(max-width: 1023px)', () => {
       const ctx = gsap.context(() => {
-        // Reset section height on mobile
-        gsap.set(sectionRef.current, { height: 'auto' });
-
         if (listRef.current) {
           gsap.set(listRef.current, { y: 0 });
         }
 
-        const stepNodes = triggerRef.current?.querySelectorAll(
+        const stepNodes = listRef.current?.querySelectorAll(
           'li[data-step-index]',
         );
+
         stepNodes?.forEach((step) => {
-          const card = step.querySelector(
-            '[data-step-card]',
+          const cardLift = step.querySelector(
+            '[data-step-card-lift]',
           ) as HTMLElement | null;
-          const image = step.querySelector(
-            '[data-step-image]',
-          ) as HTMLElement | null;
+          const imageLift = (step.querySelector('[data-step-image-lift]') ||
+            step.querySelector('[data-step-image]')) as HTMLElement | null;
           const dot = step.querySelector(
             '[data-step-dot]',
           ) as HTMLElement | null;
 
-          if (card && image && dot) {
-            gsap.set([card, image], { opacity: 0, y: 30, x: 0, scale: 1 });
-            gsap.set(dot, { scale: 0, boxShadow: 'none' });
+          if (cardLift && imageLift && dot) {
+            gsap.set([cardLift, imageLift], {
+              opacity: 0.2,
+              y: 40,
+              scale: 0.98,
+              force3D: true,
+            });
+            gsap.set(dot, { scale: 0.9, boxShadow: 'none' });
           }
         });
 
@@ -415,14 +373,12 @@ export function HowUltronWorks({
             scaleY: 0,
             transformOrigin: 'top center',
           });
-        }
 
-        if (activeLineRef.current) {
           ScrollTrigger.create({
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            end: 'bottom 60%',
-            scrub: true,
+            trigger: listRef.current,
+            start: 'top 75%',
+            end: 'bottom 65%',
+            scrub: 0.6,
             animation: gsap.to(activeLineRef.current, {
               scaleY: 1,
               ease: 'none',
@@ -431,46 +387,66 @@ export function HowUltronWorks({
         }
 
         stepNodes?.forEach((step) => {
-          const card = step.querySelector(
-            '[data-step-card]',
+          const cardLift = step.querySelector(
+            '[data-step-card-lift]',
           ) as HTMLElement | null;
-          const image = step.querySelector(
-            '[data-step-image]',
-          ) as HTMLElement | null;
+          const imageLift = (step.querySelector('[data-step-image-lift]') ||
+            step.querySelector('[data-step-image]')) as HTMLElement | null;
           const dot = step.querySelector(
             '[data-step-dot]',
           ) as HTMLElement | null;
 
-          if (card && image && dot) {
-            gsap.to([card, image], {
+          if (cardLift && imageLift && dot) {
+            gsap.to(cardLift, {
               opacity: 1,
+              scale: 1,
               y: 0,
               duration: 0.6,
+              ease: 'power3.out',
               scrollTrigger: {
                 trigger: step,
                 start: 'top 85%',
-                toggleActions: 'play none none reverse',
+                end: 'bottom 20%',
+                toggleActions: 'play reverse play reverse',
+              },
+            });
+
+            gsap.to(imageLift, {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.6,
+              delay: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: step,
+                start: 'top 85%',
+                end: 'bottom 20%',
+                toggleActions: 'play reverse play reverse',
               },
             });
 
             gsap.to(dot, {
-              scale: 1.08,
-              boxShadow: '0 0 0 2px #FFFFFF',
-              duration: 0.3,
+              scale: 1.15,
+              boxShadow: '0 0 0 3px #FFFFFF, 0 0 14px rgba(220,203,142,0.85)',
+              duration: 0.4,
+              ease: 'power2.out',
               scrollTrigger: {
                 trigger: step,
                 start: 'top 85%',
-                toggleActions: 'play none none reverse',
+                end: 'bottom 20%',
+                toggleActions: 'play reverse play reverse',
               },
             });
           }
         });
-      }, triggerRef);
+      }, sectionRef);
+
       return () => ctx.revert();
     });
 
     // Refresh ScrollTrigger when images load
-    const images = sectionRef.current.querySelectorAll('img');
+    const images = stageRef.current.querySelectorAll('img');
     let loadedCount = 0;
     const handleImageLoad = () => {
       loadedCount++;
@@ -490,8 +466,8 @@ export function HowUltronWorks({
     const resizeObserver = new ResizeObserver(() => {
       ScrollTrigger.refresh();
     });
-    if (sectionRef.current) {
-      resizeObserver.observe(sectionRef.current);
+    if (stageRef.current) {
+      resizeObserver.observe(stageRef.current);
     }
 
     return () => {
@@ -505,9 +481,12 @@ export function HowUltronWorks({
   }, [steps]);
 
   return (
-    <div
-      ref={triggerRef}
-      className="relative w-full overflow-x-clip lg:h-[300vh]"
+    <Section
+      ref={sectionRef}
+      id="process"
+      spacing="default"
+      tone="brand"
+      className="how-ultron-works-section relative flex min-h-screen w-full max-w-full flex-col justify-center overflow-x-clip bg-[#035551] pt-28 pb-14 sm:pt-32 sm:pb-16 lg:h-screen lg:min-h-[700px] lg:pt-[105px] lg:pb-10"
     >
       <style
         dangerouslySetInnerHTML={{
@@ -520,127 +499,108 @@ export function HowUltronWorks({
             .how-ultron-works-section * {
               box-sizing: border-box;
             }
-            :root {
-              --how-ultron-gap: clamp(35px, 5vh, 50px);
-            }
-            @media (min-width: 768px) {
-              :root {
-                --how-ultron-gap: clamp(45px, 6vh, 65px);
-              }
-            }
-            @media (min-width: 1024px) {
-              :root {
-                --how-ultron-gap: clamp(55px, 7vh, 85px);
-              }
-            }
           `,
         }}
       />
-      <div
-        ref={pinRef}
-        className="w-full lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-center lg:overflow-hidden"
-      >
-        <Section
-          id="process"
-          spacing="default"
-          tone="brand"
-          className="how-ultron-works-section relative overflow-hidden bg-[#035551] lg:flex lg:h-full lg:flex-col lg:justify-center"
-        >
-          <Container width="wide">
-            <Reveal className="text-center">
-              <p
-                className="font-display flex items-center justify-center gap-2 text-[16px] leading-none font-normal tracking-[0.08em] uppercase"
-                style={{ color: '#C9B37E' }}
-              >
-                <span aria-hidden="true" className="shrink-0">
-                  --
-                </span>
-                {intro.eyebrow}
-              </p>
-
-              <h2 className="heading-h2 mt-3.5 text-white">
-                <HeadingText
-                  segments={intro.heading}
-                  accentClassName="text-white"
-                />
-              </h2>
-            </Reveal>
-
-            <div
-              ref={sectionRef}
-              className="relative lg:overflow-hidden"
-              style={{
-                marginTop: 'var(--how-ultron-gap, 55px)',
-              }}
+      <Container width="wide">
+        {/* Section Header with column wrapper preserving clean 16-20px gap */}
+        <div className="process-heading relative mb-6 flex flex-col items-center text-center sm:mb-8 lg:mb-6">
+          {/* Eyebrow: stays cleanly visible below fixed nav */}
+          <div
+            ref={eyebrowRef}
+            className="process-eyebrow sticky top-[calc(var(--header-height,70px)+16px)] z-30 flex items-center justify-center"
+          >
+            <p
+              className="font-display flex items-center justify-center gap-2 text-[15px] leading-none font-normal tracking-[0.08em] uppercase sm:text-[16px]"
+              style={{ color: '#C9B37E' }}
             >
-              <ol
-                ref={listRef}
-                className="relative z-10 space-y-10 sm:space-y-12 lg:absolute lg:top-0 lg:left-0 lg:w-full lg:space-y-24"
-              >
-                {/* Desktop vertical line track */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 left-4 -ml-px w-[2px] bg-white/30 lg:left-1/2"
-                />
+              <span aria-hidden="true" className="shrink-0">
+                --
+              </span>
+              {intro.eyebrow}
+            </p>
+          </div>
 
-                {/* Desktop active vertical progress line */}
-                <div
-                  ref={activeLineRef}
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-y-0 left-4 -ml-[1.5px] w-[3px] origin-top bg-[#DCCB8E] shadow-[0_0_12px_rgba(220,203,142,0.9)] lg:left-1/2"
-                />
+          {/* Large Heading: appears normally with clear 16-20px spacing in normal flow, then fades out smoothly */}
+          <div
+            ref={headingRef}
+            className="process-main-heading mt-2.5 origin-top sm:mt-3.5 lg:mt-4.5"
+          >
+            <h2 className="heading-h2 m-0 text-white">
+              <HeadingText
+                segments={intro.heading}
+                accentClassName="text-white"
+              />
+            </h2>
+          </div>
+        </div>
 
-                {steps.map((step, index) => {
-                  const isRight = index % 2 === 1;
+        {/* Central Stage for Process Cards */}
+        <div
+          ref={stageRef}
+          className="relative mx-auto w-full max-w-[1060px] lg:h-[390px]"
+        >
+          {/* Vertical background line track */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-5 -ml-px w-[2px] bg-white/20 sm:left-6 lg:left-1/2"
+          />
 
-                  return (
-                    <li
-                      key={step.step}
-                      data-step-index={index}
-                      className="relative"
+          {/* Active vertical progress line */}
+          <div
+            ref={activeLineRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-5 -ml-[1px] w-[3px] origin-top bg-[#DCCB8E] shadow-[0_0_14px_rgba(220,203,142,0.95)] sm:left-6 lg:left-1/2"
+          />
+
+          <ol
+            ref={listRef}
+            className="relative z-10 space-y-12 sm:space-y-16 lg:absolute lg:top-0 lg:left-0 lg:w-full lg:space-y-24"
+          >
+            {steps.map((step, index) => {
+              const isRight = index % 2 === 1;
+
+              return (
+                <li
+                  key={step.step}
+                  data-step-index={index}
+                  className="relative flex flex-col lg:flex-row lg:items-center"
+                >
+                  {/* Timeline Dot Indicator */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute top-1/2 left-5 z-20 h-4 w-4 -translate-x-1/2 -translate-y-1/2 sm:left-6 lg:left-1/2"
+                  >
+                    <span
+                      data-step-dot=""
+                      className={cn(
+                        'block h-full w-full rounded-full bg-[#DCCB8E]',
+                        'transition-[box-shadow,transform] duration-300',
+                        index === 0
+                          ? 'scale-[1.15] shadow-[0_0_0_3px_#FFFFFF,0_0_16px_rgba(220,203,142,0.85)]'
+                          : 'scale-100 shadow-none',
+                      )}
+                    />
+                  </div>
+
+                  {/* 2-Column Responsive Layout */}
+                  <div className="w-full pl-12 sm:pl-16 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12 lg:pl-0 xl:gap-20">
+                    {/* Column 1 */}
+                    <div
+                      className={
+                        isRight
+                          ? 'mt-6 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex lg:justify-end lg:pr-8'
+                          : 'lg:col-start-1 lg:flex lg:justify-end lg:pr-8'
+                      }
                     >
-                      <div
-                        aria-hidden="true"
-                        className="absolute top-1/2 left-4 z-20 h-4 w-4 -translate-x-1/2 -translate-y-1/2 lg:left-1/2"
-                      >
-                        <span
-                          data-step-dot=""
-                          className={cn(
-                            'ease-house block h-full w-full rounded-full bg-[#DCCB8E]',
-                            'transition-[box-shadow,transform] duration-300',
-                            index === 0
-                              ? 'scale-[1.08] shadow-[0_0_0_2px_#FFFFFF]'
-                              : 'scale-100 shadow-none',
-                          )}
-                        />
-                      </div>
-
-                      <div className="pl-10 lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:pl-0">
+                      {isRight ? (
                         <div
-                          className={
-                            isRight
-                              ? 'lg:col-start-2 lg:flex lg:justify-start lg:pl-4'
-                              : 'lg:col-start-1 lg:flex lg:justify-end lg:pr-4'
-                          }
-                        >
-                          <div data-step-card="" className={CARD_PLATE}>
-                            <StepCardContent
-                              title={step.title}
-                              body={step.body}
-                            />
-                          </div>
-                        </div>
-
-                        <div
-                          className={
-                            isRight
-                              ? 'mt-6 lg:col-start-1 lg:row-start-1 lg:mt-0 lg:flex lg:justify-end lg:pr-4'
-                              : 'mt-6 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:flex lg:justify-start lg:pl-4'
-                          }
+                          data-step-image=""
+                          className="flex w-full justify-center lg:justify-end"
                         >
                           <div
-                            data-step-image=""
-                            className="mx-auto flex h-44 w-44 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_25px_rgba(0,0,0,0.20)] sm:h-52 sm:w-52 lg:mx-0"
+                            data-step-image-lift=""
+                            className="mx-auto flex h-44 w-44 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_30px_rgba(0,0,0,0.25)] sm:h-52 sm:w-52 lg:mx-0 lg:h-56 lg:w-56"
                           >
                             <Image
                               src={step.image}
@@ -648,20 +608,75 @@ export function HowUltronWorks({
                               aria-hidden="true"
                               width={261}
                               height={184}
-                              sizes="200px"
-                              className="h-auto w-32 object-contain sm:w-40"
+                              sizes="(max-width: 640px) 176px, (max-width: 1024px) 208px, 224px"
+                              className="h-auto w-32 object-contain sm:w-40 lg:w-44"
                             />
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </Container>
-        </Section>
-      </div>
-    </div>
+                      ) : (
+                        <div data-step-card="" className={CARD_PLATE}>
+                          <div
+                            data-step-card-lift=""
+                            className="how-ultron-card h-full w-full"
+                          >
+                            <ProcessCardSurface
+                              title={step.title}
+                              body={step.body}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Column 2 */}
+                    <div
+                      className={
+                        isRight
+                          ? 'lg:col-start-2 lg:flex lg:justify-start lg:pl-8'
+                          : 'mt-6 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:flex lg:justify-start lg:pl-8'
+                      }
+                    >
+                      {isRight ? (
+                        <div data-step-card="" className={CARD_PLATE}>
+                          <div
+                            data-step-card-lift=""
+                            className="how-ultron-card h-full w-full"
+                          >
+                            <ProcessCardSurface
+                              title={step.title}
+                              body={step.body}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          data-step-image=""
+                          className="flex w-full justify-center lg:justify-start"
+                        >
+                          <div
+                            data-step-image-lift=""
+                            className="mx-auto flex h-44 w-44 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white/60 bg-white p-3 shadow-[0px_10px_30px_rgba(0,0,0,0.25)] sm:h-52 sm:w-52 lg:mx-0 lg:h-56 lg:w-56"
+                          >
+                            <Image
+                              src={step.image}
+                              alt=""
+                              aria-hidden="true"
+                              width={261}
+                              height={184}
+                              sizes="(max-width: 640px) 176px, (max-width: 1024px) 208px, 224px"
+                              className="h-auto w-32 object-contain sm:w-40 lg:w-44"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </Container>
+    </Section>
   );
 }

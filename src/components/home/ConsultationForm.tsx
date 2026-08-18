@@ -1,23 +1,15 @@
 'use client';
 
 import { CheckCircle2, Loader2 } from 'lucide-react';
-import React, { useState, useSyncExternalStore } from 'react';
+import React, { useState } from 'react';
 
 import { STAGGER_MS } from '@/components/motion/config';
 import { Reveal } from '@/components/motion/Reveal';
 import { Stagger, StaggerItem } from '@/components/motion/Stagger';
 import { CTA_CONTACT } from '@/content/home';
 import { SERVICES } from '@/content/services';
+import { useHasMounted } from '@/hooks/useHasMounted';
 import { cn } from '@/lib/utils';
-
-const emptySubscribe = () => () => {};
-function useHasMounted() {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false,
-  );
-}
 
 const CREAM = '#FDFBEE';
 
@@ -165,6 +157,9 @@ export function ConsultationForm({
   return (
     <form
       onSubmit={handleSubmit}
+      autoComplete="off"
+      data-lpignore="true"
+      data-form-type="other"
       suppressHydrationWarning
       className={cn(
         'card-shadow-right relative w-full rounded-[20px] px-6 py-7 sm:px-8 sm:py-8 lg:w-[630px] lg:shrink-0',
@@ -226,128 +221,150 @@ export function ConsultationForm({
           )}
 
           {/* Grid of fields */}
-          {(() => {
-            const GridContainer = hasMounted ? Stagger : 'div';
-            const ItemContainer = hasMounted ? StaggerItem : 'div';
-            return (
-              <GridContainer
-                delay={STAGGER_MS}
-                className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-                suppressHydrationWarning
-              >
-                <ItemContainer
-                  className="flex flex-col gap-1.5"
-                  suppressHydrationWarning
-                >
-                  <FieldLabel htmlFor="contact-name" required>
-                    Full Name
-                  </FieldLabel>
-                  <input
-                    id="contact-name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    autoComplete="name"
-                    required
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className={FIELD_CLASS}
-                    style={FIELD_STYLE}
-                  />
-                </ItemContainer>
+          {!hasMounted ? (
+            <div
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+              aria-hidden="true"
+            >
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-name" required>
+                  Full Name
+                </FieldLabel>
+                <div className={FIELD_CLASS} style={FIELD_STYLE} />
+              </div>
 
-                <ItemContainer
-                  className="flex flex-col gap-1.5"
-                  suppressHydrationWarning
-                >
-                  <FieldLabel htmlFor="contact-email" required>
-                    Email Address
-                  </FieldLabel>
-                  <input
-                    id="contact-email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    autoComplete="email"
-                    required
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className={FIELD_CLASS}
-                    style={FIELD_STYLE}
-                  />
-                </ItemContainer>
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-email" required>
+                  Email Address
+                </FieldLabel>
+                <div className={FIELD_CLASS} style={FIELD_STYLE} />
+              </div>
 
-                <ItemContainer
-                  className="flex flex-col gap-1.5"
-                  suppressHydrationWarning
-                >
-                  <FieldLabel htmlFor="contact-phone" required>
-                    Phone Number
-                  </FieldLabel>
-                  <input
-                    id="contact-phone"
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    autoComplete="tel"
-                    required
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className={FIELD_CLASS}
-                    style={FIELD_STYLE}
-                  />
-                </ItemContainer>
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-phone" required>
+                  Phone Number
+                </FieldLabel>
+                <div className={FIELD_CLASS} style={FIELD_STYLE} />
+              </div>
 
-                <ItemContainer
-                  className="flex flex-col gap-1.5"
-                  suppressHydrationWarning
-                >
-                  <FieldLabel htmlFor="contact-business" required>
-                    Business Type
-                  </FieldLabel>
-                  <input
-                    id="contact-business"
-                    name="company"
-                    type="text"
-                    value={formData.company}
-                    onChange={handleChange}
-                    autoComplete="organization"
-                    required
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className={FIELD_CLASS}
-                    style={FIELD_STYLE}
-                  />
-                </ItemContainer>
+              <div className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-business" required>
+                  Business Type
+                </FieldLabel>
+                <div className={FIELD_CLASS} style={FIELD_STYLE} />
+              </div>
 
-                <ItemContainer
-                  className="flex flex-col gap-1.5 sm:col-span-2"
-                  suppressHydrationWarning
+              <div className="flex flex-col gap-1.5 sm:col-span-2">
+                <FieldLabel htmlFor="contact-service" required>
+                  Service Interested In
+                </FieldLabel>
+                <div className={FIELD_CLASS} style={FIELD_STYLE} />
+              </div>
+
+              <div className="flex flex-col gap-1.5 sm:col-span-2">
+                <FieldLabel htmlFor="contact-message">Message</FieldLabel>
+                <div
+                  className="ease-house h-[97px] w-full resize-none rounded-[10px] border-none px-3 py-2 text-[16px]"
+                  style={FIELD_STYLE}
+                />
+              </div>
+            </div>
+          ) : (
+            <Stagger
+              delay={STAGGER_MS}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+            >
+              <StaggerItem className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-name" required>
+                  Full Name
+                </FieldLabel>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  autoComplete="name"
+                  required
+                  {...NO_AUTOFILL_UI}
+                  className={FIELD_CLASS}
+                  style={FIELD_STYLE}
+                />
+              </StaggerItem>
+
+              <StaggerItem className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-email" required>
+                  Email Address
+                </FieldLabel>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                  required
+                  {...NO_AUTOFILL_UI}
+                  className={FIELD_CLASS}
+                  style={FIELD_STYLE}
+                />
+              </StaggerItem>
+
+              <StaggerItem className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-phone" required>
+                  Phone Number
+                </FieldLabel>
+                <input
+                  id="contact-phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  autoComplete="tel"
+                  required
+                  {...NO_AUTOFILL_UI}
+                  className={FIELD_CLASS}
+                  style={FIELD_STYLE}
+                />
+              </StaggerItem>
+
+              <StaggerItem className="flex flex-col gap-1.5">
+                <FieldLabel htmlFor="contact-business" required>
+                  Business Type
+                </FieldLabel>
+                <input
+                  id="contact-business"
+                  name="company"
+                  type="text"
+                  value={formData.company}
+                  onChange={handleChange}
+                  autoComplete="organization"
+                  required
+                  {...NO_AUTOFILL_UI}
+                  className={FIELD_CLASS}
+                  style={FIELD_STYLE}
+                />
+              </StaggerItem>
+
+              <StaggerItem className="flex flex-col gap-1.5 sm:col-span-2">
+                <FieldLabel htmlFor="contact-service" required>
+                  Service Interested In
+                </FieldLabel>
+                <select
+                  id="contact-service"
+                  name="service"
+                  required
+                  value={formData.service}
+                  onChange={handleChange}
+                  {...NO_AUTOFILL_UI}
+                  className={cn(FIELD_CLASS, 'appearance-none rounded-[10px]')}
+                  style={FIELD_STYLE}
                 >
-                  <FieldLabel htmlFor="contact-service" required>
-                    Service Interested In
-                  </FieldLabel>
-                  <select
-                    id="contact-service"
-                    name="service"
-                    required
-                    value={formData.service}
-                    onChange={handleChange}
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className={cn(
-                      FIELD_CLASS,
-                      'appearance-none rounded-[10px]',
-                    )}
-                    style={FIELD_STYLE}
-                  >
-                    <option value="" disabled>
-                      Select a service
-                    </option>
-                    {SERVICES.map((service) => (
+                  <option value="" disabled>
+                    Select a service
+                  </option>
+                  {SERVICES.filter((s) => s.isVisible !== false).map(
+                    (service) => (
                       <option
                         key={service.slug}
                         value={service.title}
@@ -355,30 +372,26 @@ export function ConsultationForm({
                       >
                         {service.title}
                       </option>
-                    ))}
-                  </select>
-                </ItemContainer>
+                    ),
+                  )}
+                </select>
+              </StaggerItem>
 
-                <ItemContainer
-                  className="flex flex-col gap-1.5 sm:col-span-2"
-                  suppressHydrationWarning
-                >
-                  <FieldLabel htmlFor="contact-message">Message</FieldLabel>
-                  <textarea
-                    id="contact-message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    suppressHydrationWarning
-                    {...NO_AUTOFILL_UI}
-                    className="ease-house h-[97px] w-full resize-none rounded-[10px] border-none px-3 py-2 text-[16px] transition-shadow outline-none focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
-                    style={FIELD_STYLE}
-                  />
-                </ItemContainer>
-              </GridContainer>
-            );
-          })()}
+              <StaggerItem className="flex flex-col gap-1.5 sm:col-span-2">
+                <FieldLabel htmlFor="contact-message">Message</FieldLabel>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4}
+                  {...NO_AUTOFILL_UI}
+                  className="ease-house h-[97px] w-full resize-none rounded-[10px] border-none px-3 py-2 text-[16px] transition-shadow outline-none focus:shadow-[inset_0_0_0_2px_#FDFBEE]"
+                  style={FIELD_STYLE}
+                />
+              </StaggerItem>
+            </Stagger>
+          )}
 
           {/* Honeypot for spam protection */}
           <div aria-hidden="true" className="hidden" suppressHydrationWarning>

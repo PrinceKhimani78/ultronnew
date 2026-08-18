@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Logo } from '@/components/layout/Logo';
 import { SERVICES } from '@/content/services';
 import { PRIMARY_CTA, PRIMARY_NAV } from '@/content/site';
+import { type PublicSiteSettings } from '@/lib/cms-data';
 import { isCurrentRoute } from '@/lib/nav';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +21,7 @@ interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   drawerId: string;
+  settings?: PublicSiteSettings;
 }
 
 /**
@@ -31,7 +33,12 @@ interface MobileDrawerProps {
  * - Inactive: white at 85%, resolving to full white on hover
  * - Cream pill "BOOK A CALL" button transitioning to Gold on hover
  */
-export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
+export function MobileDrawer({
+  isOpen,
+  onClose,
+  drawerId,
+  settings,
+}: MobileDrawerProps) {
   const pathname = usePathname();
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -199,7 +206,9 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
                                     All Services
                                   </Link>
                                 </li>
-                                {SERVICES.map((s) => {
+                                {SERVICES.filter(
+                                  (s) => s.isVisible !== false,
+                                ).map((s) => {
                                   const isSubCurrent =
                                     pathname === `/services/${s.slug}`;
                                   return (
@@ -252,7 +261,11 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
           {/* Book A Call CTA Button near bottom */}
           <div className="mt-auto flex w-full shrink-0 justify-center pt-4 pb-6">
             <a
-              href={PRIMARY_CTA.href}
+              href={
+                settings?.header?.ctaLink ||
+                settings?.cta?.destination ||
+                PRIMARY_CTA.href
+              }
               onClick={onClose}
               className={cn(
                 'flex h-[50px] w-full max-w-[280px] items-center justify-center gap-2.5 rounded-full bg-[#FDFBEE] px-6 text-[14px] font-bold tracking-[0.08em] text-[#035551] uppercase',
@@ -268,7 +281,11 @@ export function MobileDrawer({ isOpen, onClose, drawerId }: MobileDrawerProps) {
                 loading="eager"
                 className="h-[18px] w-4 shrink-0"
               />
-              <span>{PRIMARY_CTA.label}</span>
+              <span>
+                {settings?.header?.ctaLabel ||
+                  settings?.cta?.label ||
+                  PRIMARY_CTA.label}
+              </span>
             </a>
           </div>
         </motion.div>

@@ -75,10 +75,12 @@ export async function PUT(request: Request) {
     }
 
     revalidatePath('/', 'layout');
-    revalidatePath('/about');
-    revalidatePath('/contact');
-    revalidatePath('/services');
-    revalidatePath('/blogs');
+    revalidatePath('/', 'page');
+    revalidatePath('/about', 'page');
+    revalidatePath('/partner', 'page');
+    revalidatePath('/contact', 'page');
+    revalidatePath('/services', 'page');
+    revalidatePath('/blogs', 'page');
 
     return NextResponse.json({ setting: data });
   } catch (err: unknown) {

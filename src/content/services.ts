@@ -57,6 +57,8 @@ export type Service = {
     subtext: string;
     buttonLabel: string;
   };
+  /** Visibility toggle. Set to false to temporarily hide service from public site and routes. */
+  isVisible?: boolean;
   /** Teal highlight phrases for each section heading. Optional — absent = plain black. */
   highlights?: ServiceHighlights;
 };
@@ -64,6 +66,7 @@ export type Service = {
 export const SERVICES: readonly Service[] = [
   {
     slug: 'business-banking',
+    isVisible: true,
     number: '1',
     title: 'Business Banking',
     headline: 'Banking Built Around Your Actual Profile',
@@ -165,6 +168,7 @@ export const SERVICES: readonly Service[] = [
   },
   {
     slug: 'business-setup',
+    isVisible: true,
     number: '2',
     title: 'Business Setup',
     headline: 'Company Structures Built to Actually Operate',
@@ -266,6 +270,7 @@ export const SERVICES: readonly Service[] = [
   },
   {
     slug: 'business-finance',
+    isVisible: false,
     number: '3',
     title: 'Business Finance',
     headline: 'Financing Matched to Lenders Who Actually Say Yes',
@@ -366,6 +371,7 @@ export const SERVICES: readonly Service[] = [
   },
   {
     slug: 'real-estate-mortgages',
+    isVisible: false,
     number: '4',
     title: 'Real Estate Mortgages',
     headline: "Mortgages for Cases That Don't Fit a Standard Checklist",
@@ -465,6 +471,7 @@ export const SERVICES: readonly Service[] = [
   },
   {
     slug: 'trade-finance',
+    isVisible: false,
     number: '5',
     title: 'Trade Finance',
     headline: 'Trade Finance That Keeps Cash Flow Moving',
@@ -564,6 +571,7 @@ export const SERVICES: readonly Service[] = [
   },
   {
     slug: 'compliance-regulatory-advisory',
+    isVisible: true,
     number: '6',
     title: 'Compliance & Regulatory Advisory',
     headline: 'Compliance That Holds Up Under Scrutiny',
@@ -664,3 +672,10 @@ export const SERVICES: readonly Service[] = [
     },
   },
 ] as const;
+
+/**
+ * Filter services to only those that are currently visible.
+ */
+export const getVisibleServices = (
+  services: readonly Service[] = SERVICES,
+): readonly Service[] => services.filter((s) => s.isVisible !== false);

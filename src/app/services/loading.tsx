@@ -13,7 +13,7 @@ export default function ServicesLoading() {
       className="flex min-h-[75vh] w-full flex-col items-center justify-center bg-[#FDFBEE] px-4 py-24"
       role="status"
       aria-live="polite"
-      aria-label="Loading service information..."
+      aria-label="Loading..."
     >
       <div className="relative flex flex-col items-center justify-center">
         {/* Outer spinning ring with brand gold accent */}
@@ -40,7 +40,7 @@ export default function ServicesLoading() {
 
         {/* Brand-compliant text indicator in Funnel Display */}
         <span className="font-display mt-6 animate-pulse text-[11px] font-bold tracking-[0.25em] text-[#035551]/80 uppercase sm:text-xs">
-          Loading Service Details
+          Loading...
         </span>
       </div>
     </div>

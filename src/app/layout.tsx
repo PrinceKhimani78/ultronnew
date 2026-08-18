@@ -101,7 +101,7 @@ export default async function RootLayout({
         <Header settings={settings} />
         {children}
         <Footer settings={settings} />
-        <FloatingWhatsAppButton />
+        <FloatingWhatsAppButton settings={settings} />
       </body>
     </html>
   );

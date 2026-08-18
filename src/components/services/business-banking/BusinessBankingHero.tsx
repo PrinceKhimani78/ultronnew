@@ -29,7 +29,7 @@ export function BusinessBankingHero() {
             <Reveal delay={STAGGER_MS}>
               <h1
                 id="business-banking-hero-heading"
-                className="heading-h1 mt-4 text-black"
+                className="service-hero-title mt-4 text-black"
               >
                 <HeadingText
                   segments={BUSINESS_BANKING_HERO.heading}

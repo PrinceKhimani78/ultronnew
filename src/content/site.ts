@@ -89,13 +89,15 @@ export const PRIMARY_CTA = {
   href: '#contact',
 } as const;
 
+import { SERVICES } from '@/content/services';
+
 /**
  * Footer columns, matching the design: Quick Links and Services.
  * Entries marked `pending` render as plain text rather than links until the
  * route exists — an anchor into nothing is worse than no anchor.
  *
  * The Services column mirrors every live service route in `STATIC_ROUTES`,
- * in the same order, so the footer never drifts out of sync with what
+ * in the same order, filtered by visibility so the footer never drifts out of sync with what
  * `/services` actually publishes.
  */
 export const FOOTER_NAV: readonly {
@@ -114,20 +116,10 @@ export const FOOTER_NAV: readonly {
   },
   {
     heading: 'Services',
-    items: [
-      { label: 'Business Banking', href: '/services/business-banking' },
-      { label: 'Business Setup', href: '/services/business-setup' },
-      { label: 'Business Finance', href: '/services/business-finance' },
-      {
-        label: 'Real Estate Mortgages',
-        href: '/services/real-estate-mortgages',
-      },
-      { label: 'Trade Finance', href: '/services/trade-finance' },
-      {
-        label: 'Compliance & Regulatory Advisory',
-        href: '/services/compliance-regulatory-advisory',
-      },
-    ],
+    items: SERVICES.filter((s) => s.isVisible !== false).map((s) => ({
+      label: s.title,
+      href: `/services/${s.slug}`,
+    })),
   },
 ] as const;
 
@@ -145,12 +137,10 @@ export const FOOTER_NAV: readonly {
 export const STATIC_ROUTES = [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
-  { path: '/services/business-banking', priority: 0.8 },
-  { path: '/services/business-setup', priority: 0.8 },
-  { path: '/services/business-finance', priority: 0.8 },
-  { path: '/services/real-estate-mortgages', priority: 0.8 },
-  { path: '/services/trade-finance', priority: 0.8 },
-  { path: '/services/compliance-regulatory-advisory', priority: 0.8 },
+  ...SERVICES.filter((s) => s.isVisible !== false).map((s) => ({
+    path: `/services/${s.slug}`,
+    priority: 0.8,
+  })),
   { path: '/about', priority: 0.8 },
   { path: '/partner', priority: 0.8 },
   { path: '/blogs', priority: 0.8 },

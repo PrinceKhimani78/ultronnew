@@ -49,7 +49,9 @@ export function organizationSchema() {
       { '@type': 'Country', name: 'United Arab Emirates' },
       { '@type': 'AdministrativeArea', name: 'Dubai' },
     ],
-    knowsAbout: SERVICES.map((service) => service.title),
+    knowsAbout: SERVICES.filter((s) => s.isVisible !== false).map(
+      (service) => service.title,
+    ),
     sameAs: [SITE.social.linkedin],
   };
 }
@@ -67,7 +69,7 @@ export function websiteSchema() {
 
 /** One `Service` node per catalogue entry, each pointing back at the firm. */
 export function servicesSchema() {
-  return SERVICES.map((service) => ({
+  return SERVICES.filter((s) => s.isVisible !== false).map((service) => ({
     '@type': 'Service',
     '@id': absoluteUrl(`/#service-${service.slug}`),
     name: service.title,
@@ -169,6 +171,7 @@ export function aboutPageGraph() {
  * restating them.
  */
 export function servicesPageGraph() {
+  const visibleServices = SERVICES.filter((s) => s.isVisible !== false);
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -186,8 +189,8 @@ export function servicesPageGraph() {
         '@type': 'ItemList',
         '@id': absoluteUrl('/services#catalogue'),
         name: 'Services offered',
-        numberOfItems: SERVICES.length,
-        itemListElement: SERVICES.map((service, index) => ({
+        numberOfItems: visibleServices.length,
+        itemListElement: visibleServices.map((service, index) => ({
           '@type': 'ListItem',
           position: index + 1,
           item: { '@id': absoluteUrl(`/#service-${service.slug}`) },

@@ -49,8 +49,14 @@ function ArrowUpRightIcon({ className }: { className?: string }) {
 }
 
 const BASE_SURFACE = [
-  'group inline-flex items-center justify-between rounded-[999px] gap-3 sm:gap-4 border-0 whitespace-nowrap',
-  'text-[15px] sm:text-[16px] lg:text-[17px] leading-none font-bold tracking-[0.02em] uppercase',
+  // `whitespace-nowrap` is a `sm:`-and-up rule, not a default: a long label
+  // (the "Get a Same-Day Feasibility Read" CTA is the longest on the site)
+  // is wider than a 320px viewport, and forcing it onto one line pushed the
+  // pill past the section's `overflow-hidden` edge — clipping the trailing
+  // icon disc clean off-screen. Wrapping to two lines below `sm` keeps the
+  // whole button, icon included, inside the viewport.
+  'group inline-flex items-center justify-between rounded-[28px] sm:rounded-[999px] gap-3 sm:gap-4 border-0 whitespace-normal sm:whitespace-nowrap',
+  'text-[15px] leading-[1.2] sm:text-[16px] sm:leading-none lg:text-[17px] font-bold tracking-[0.02em] uppercase',
   'transition-[background-color,transform] duration-500 ease-[ease]',
   'active:scale-[0.98]',
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#DCCB8E]',

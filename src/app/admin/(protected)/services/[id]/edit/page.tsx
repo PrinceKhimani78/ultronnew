@@ -430,7 +430,13 @@ export default function EditServicePage() {
       )}
 
       {/* Form Container */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-type="other"
+        className="space-y-4"
+      >
         {/* SECTION 1: BASIC INFORMATION */}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
           <button

@@ -169,6 +169,8 @@ export default function TeamManagementPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            data-lpignore="true"
+            data-form-type="other"
             placeholder="Search by name or job title..."
             className="w-full rounded-lg border border-slate-300 py-2 pr-4 pl-9 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
           />

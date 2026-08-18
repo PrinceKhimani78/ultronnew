@@ -151,7 +151,13 @@ export function EnquiryActionsForm({
           Management Controls
         </h3>
 
-        <form onSubmit={handleUpdateStatus} className="space-y-4">
+        <form
+          onSubmit={handleUpdateStatus}
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
+          className="space-y-4"
+        >
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase">
               Status
@@ -160,6 +166,8 @@ export function EnquiryActionsForm({
               value={status}
               disabled={isViewer || isUpdatingStatus}
               onChange={(e) => setStatus(e.target.value as EnquiryStatus)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:bg-white focus:outline-hidden disabled:opacity-60"
             >
               <option value="new">New</option>
@@ -180,6 +188,8 @@ export function EnquiryActionsForm({
               value={priority}
               disabled={isViewer || isUpdatingStatus}
               onChange={(e) => setPriority(e.target.value as EnquiryPriority)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1 block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:bg-white focus:outline-hidden disabled:opacity-60"
             >
               <option value="low">Low</option>
@@ -214,12 +224,20 @@ export function EnquiryActionsForm({
           Add Internal Note
         </h3>
 
-        <form onSubmit={handleAddNote} className="space-y-3">
+        <form
+          onSubmit={handleAddNote}
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
+          className="space-y-3"
+        >
           <textarea
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
             disabled={isViewer || isAddingNote}
             rows={3}
+            data-lpignore="true"
+            data-form-type="other"
             placeholder="Add internal notes visible only to Ultron administrators..."
             className="block w-full rounded-lg border border-slate-300 bg-slate-50 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#035551] focus:bg-white focus:outline-hidden disabled:opacity-60"
           />

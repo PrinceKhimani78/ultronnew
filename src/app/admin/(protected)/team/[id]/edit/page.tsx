@@ -129,6 +129,9 @@ export default function EditTeamMemberPage() {
 
       <form
         onSubmit={handleSubmit}
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-type="other"
         className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8"
       >
         <div className="flex items-center justify-between">
@@ -160,6 +163,8 @@ export default function EditTeamMemberPage() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -172,6 +177,8 @@ export default function EditTeamMemberPage() {
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -195,6 +202,8 @@ export default function EditTeamMemberPage() {
               rows={3}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -207,6 +216,8 @@ export default function EditTeamMemberPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -219,6 +230,8 @@ export default function EditTeamMemberPage() {
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -231,6 +244,8 @@ export default function EditTeamMemberPage() {
               type="url"
               value={linkedinUrl}
               onChange={(e) => setLinkedinUrl(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -243,6 +258,8 @@ export default function EditTeamMemberPage() {
               type="number"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -253,6 +270,8 @@ export default function EditTeamMemberPage() {
                 type="checkbox"
                 checked={isVisible}
                 onChange={(e) => setIsVisible(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Show Member on Public Website
@@ -263,6 +282,8 @@ export default function EditTeamMemberPage() {
                 type="checkbox"
                 checked={showEmailPublicly}
                 onChange={(e) => setShowEmailPublicly(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Show Email Publicly
@@ -273,6 +294,8 @@ export default function EditTeamMemberPage() {
                 type="checkbox"
                 checked={showPhonePublicly}
                 onChange={(e) => setShowPhonePublicly(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Show Phone Publicly

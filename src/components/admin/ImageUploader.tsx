@@ -120,6 +120,8 @@ export function ImageUploader({
                 type="text"
                 value={altValue}
                 onChange={(e) => onAltChange(e.target.value)}
+                data-lpignore="true"
+                data-form-type="other"
                 placeholder="Descriptive alt text for image..."
                 className="me-full mt-1 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
               />
@@ -151,6 +153,8 @@ export function ImageUploader({
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/svg+xml"
                 onChange={handleFileChange}
+                data-lpignore="true"
+                data-form-type="other"
                 className="absolute inset-0 cursor-pointer opacity-0"
               />
             </>

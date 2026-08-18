@@ -96,6 +96,9 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
         <form
           method="GET"
           action="/admin/enquiries"
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5"
         >
           {/* Search Input */}
@@ -105,6 +108,8 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
               type="text"
               name="q"
               defaultValue={q || ''}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="Search reference, name, email or phone..."
               className="block w-full rounded-lg border border-slate-300 bg-slate-50/50 py-2 pr-3 pl-9 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#035551] focus:bg-white focus:ring-2 focus:ring-[#035551]/20 focus:outline-hidden"
             />
@@ -115,6 +120,8 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
             <select
               name="status"
               defaultValue={status || 'all'}
+              data-lpignore="true"
+              data-form-type="other"
               className="block w-full rounded-lg border border-slate-300 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:bg-white focus:ring-2 focus:ring-[#035551]/20 focus:outline-hidden"
             >
               <option value="all">All Statuses</option>
@@ -134,6 +141,8 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
             <select
               name="service"
               defaultValue={service || 'all'}
+              data-lpignore="true"
+              data-form-type="other"
               className="block w-full rounded-lg border border-slate-300 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:bg-white focus:ring-2 focus:ring-[#035551]/20 focus:outline-hidden"
             >
               <option value="all">All Services</option>

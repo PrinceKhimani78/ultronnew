@@ -1,9 +1,16 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { type PublicSiteSettings } from '@/lib/cms-data';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
-export function FloatingWhatsAppButton() {
+interface FloatingWhatsAppButtonProps {
+  settings?: PublicSiteSettings;
+}
+
+export function FloatingWhatsAppButton({
+  settings,
+}: FloatingWhatsAppButtonProps) {
   const pathname = usePathname();
 
   // Hide on admin routes
@@ -11,9 +18,15 @@ export function FloatingWhatsAppButton() {
     return null;
   }
 
-  const phoneNumber = '971503453393';
+  const rawPhone =
+    settings?.cta?.whatsappNumber ||
+    settings?.whatsapp ||
+    settings?.telephone ||
+    '97145751693';
+  const phoneNumber = rawPhone.replace(/\D/g, '') || '97145751693';
+
   const prefilledMessage = encodeURIComponent(
-    'Hello Ultron Financials, I would like to discuss my requirements.',
+    `Hello ${settings?.name || 'Ultron Financials'}, I would like to discuss my requirements.`,
   );
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${prefilledMessage}`;
 

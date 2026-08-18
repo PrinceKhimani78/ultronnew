@@ -352,7 +352,9 @@ export function Header({ settings = SITE }: HeaderProps) {
                                 heading vacated.
                               */}
                               <ul className="space-y-0.5" role="none">
-                                {SERVICES.map((s) => {
+                                {SERVICES.filter(
+                                  (s) => s.isVisible !== false,
+                                ).map((s) => {
                                   const isSubCurrent = isCurrentRoute(
                                     `/services/${s.slug}`,
                                     pathname,
@@ -435,7 +437,11 @@ export function Header({ settings = SITE }: HeaderProps) {
             </nav>
 
             <a
-              href={PRIMARY_CTA.href}
+              href={
+                settings?.header?.ctaLink ||
+                settings?.cta?.destination ||
+                PRIMARY_CTA.href
+              }
               className={cn(
                 'hidden h-[38px] w-[177px] shrink-0 items-center gap-[9px] rounded-full pl-5 lg:inline-flex xl:ml-[110px]',
                 'text-[18px] leading-none font-medium uppercase',
@@ -466,7 +472,9 @@ export function Header({ settings = SITE }: HeaderProps) {
                 loading="eager"
                 className="h-[18px] w-4 shrink-0"
               />
-              {PRIMARY_CTA.label}
+              {settings?.header?.ctaLabel ||
+                settings?.cta?.label ||
+                PRIMARY_CTA.label}
             </a>
 
             <button
@@ -492,6 +500,7 @@ export function Header({ settings = SITE }: HeaderProps) {
         isOpen={isDrawerOpen}
         onClose={closeDrawer}
         drawerId={drawerId}
+        settings={settings}
       />
     </header>
   );

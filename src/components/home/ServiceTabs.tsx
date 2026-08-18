@@ -38,6 +38,7 @@ const BENEFITS_BASE_DELAY_MS = ILLUSTRATION_DELAY_MS + 500;
 const BENEFIT_STAGGER_MS = 80;
 
 export function ServiceTabs() {
+  const visibleServices = SERVICES.filter((s) => s.isVisible !== false);
   const [activeIndex, setActiveIndex] = useState(0);
   const baseId = useId();
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -71,7 +72,7 @@ export function ServiceTabs() {
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {
-    const last = SERVICES.length - 1;
+    const last = visibleServices.length - 1;
     switch (event.key) {
       case 'ArrowDown':
       case 'ArrowRight':
@@ -139,7 +140,7 @@ export function ServiceTabs() {
         )}
         style={tabListRevealed ? { animationDelay: '150ms' } : undefined}
       >
-        {SERVICES.map((service, index) => {
+        {visibleServices.map((service, index) => {
           const isActive = index === activeIndex;
           return (
             <button
@@ -181,7 +182,7 @@ export function ServiceTabs() {
         amount={0.1}
         className="flex w-full flex-col space-y-4 lg:hidden"
       >
-        {SERVICES.map((service, index) => {
+        {visibleServices.map((service, index) => {
           const isActive = index === activeIndex;
           const formattedNumber = service.number.padStart(2, '0');
           const illustrationSrc =
@@ -276,7 +277,7 @@ export function ServiceTabs() {
         )}
         style={cardGroupRevealed ? { animationDelay: '250ms' } : undefined}
       >
-        {SERVICES.map((service, index) => {
+        {visibleServices.map((service, index) => {
           const isActive = index === activeIndex;
           const formattedNumber = service.number.padStart(2, '0');
           const illustrationSrc =

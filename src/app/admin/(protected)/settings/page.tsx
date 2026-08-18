@@ -3,7 +3,7 @@
 import { CheckCircle2, Save, Undo2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-type CompanyInfo = {
+export type CompanyInfo = {
   business_name: string;
   legal_name: string;
   tagline: string;
@@ -22,25 +22,30 @@ type CompanyInfo = {
   working_hours: string;
 };
 
-type SocialLinks = {
+export type SocialLinks = {
   linkedin_url: string;
   instagram_url: string;
   facebook_url: string;
   youtube_url: string;
   twitter_url: string;
+  whatsapp_url: string;
 };
 
-type ContactDetails = {
+export type ContactDetails = {
   header_phone: string;
   header_email: string;
-  footer_phone: string;
+  header_cta_label: string;
+  header_cta_link: string;
   footer_email: string;
+  footer_phone: string;
+  footer_whatsapp: string;
   footer_address: string;
+  footer_working_hours: string;
   footer_copyright_text: string;
   footer_short_description: string;
 };
 
-type CtaSettings = {
+export type CtaSettings = {
   default_cta_label: string;
   default_cta_destination: string;
   consultation_email_recipient: string;
@@ -48,7 +53,7 @@ type CtaSettings = {
   whatsapp_cta_number: string;
 };
 
-type SettingsMap = {
+export type SettingsMap = {
   company_info?: CompanyInfo;
   social_links?: SocialLinks;
   contact_details?: ContactDetails;
@@ -64,7 +69,7 @@ export default function WebsiteSettingsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Form State
+  // Tab 1: General Info
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo>({
     business_name: 'Ultron Financials',
     legal_name: 'Ultron Financials',
@@ -76,36 +81,44 @@ export default function WebsiteSettingsPage() {
     primary_phone: '+971 4 575 1693',
     whatsapp_number: '+971 4 575 1693',
     office_address:
-      'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road',
+      'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
     city: 'Dubai',
     state_emirate: 'Dubai',
-    country: 'AE',
+    country: 'United Arab Emirates',
     postal_code: '00000',
     google_maps_url: '',
     google_maps_embed_url: '',
-    working_hours: 'Monday - Friday: 9:00 AM - 6:00 PM GST',
+    working_hours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
   });
 
+  // Tab 2: Social Media
   const [socialLinks, setSocialLinks] = useState<SocialLinks>({
     linkedin_url: 'https://www.linkedin.com/company/ultron-financials',
     instagram_url: '',
     facebook_url: '',
     youtube_url: '',
     twitter_url: '',
+    whatsapp_url: 'https://wa.me/97145751693',
   });
 
+  // Tab 3: Header & Footer
   const [contactDetails, setContactDetails] = useState<ContactDetails>({
     header_phone: '+971 4 575 1693',
     header_email: 'info@ultronfinancials.com',
-    footer_phone: '+971 4 575 1693',
+    header_cta_label: 'Book a call',
+    header_cta_link: '#contact',
     footer_email: 'info@ultronfinancials.com',
+    footer_phone: '+971 4 575 1693',
+    footer_whatsapp: '+971 4 575 1693',
     footer_address:
       'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
+    footer_working_hours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
     footer_copyright_text: 'Ultron Financials. All rights reserved.',
     footer_short_description:
       'UAE corporate advisory firm delivering business banking, setup, finance, and regulatory compliance.',
   });
 
+  // Tab 4: CTA & Forms
   const [ctaSettings, setCtaSettings] = useState<CtaSettings>({
     default_cta_label: 'Book a call',
     default_cta_destination: '#contact',
@@ -121,7 +134,7 @@ export default function WebsiteSettingsPage() {
     let ignore = false;
     async function fetchSettings() {
       try {
-        const res = await fetch('/api/admin/settings');
+        const res = await fetch('/api/admin/settings', { cache: 'no-store' });
         const data = await res.json();
         if (!ignore && data.settings) {
           const settings = data.settings as SettingsMap;
@@ -214,7 +227,7 @@ export default function WebsiteSettingsPage() {
         throw new Error(data.error || 'Failed to update settings');
       }
 
-      setSuccessMessage('Website settings successfully updated!');
+      setSuccessMessage('Website settings successfully saved & synchronized!');
       setTimeout(() => setSuccessMessage(null), 4000);
     } catch (err: unknown) {
       const message =
@@ -254,7 +267,7 @@ export default function WebsiteSettingsPage() {
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50"
           >
             <Undo2 className="h-4 w-4" />
-            Reset Unsaved Changes
+            Reset Changes
           </button>
           <button
             type="button"
@@ -293,7 +306,7 @@ export default function WebsiteSettingsPage() {
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
         >
-          General Information
+          1. General Information
         </button>
 
         <button
@@ -305,7 +318,7 @@ export default function WebsiteSettingsPage() {
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
         >
-          Social Media
+          2. Social Media
         </button>
 
         <button
@@ -317,7 +330,7 @@ export default function WebsiteSettingsPage() {
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
         >
-          Header & Footer
+          3. Header & Footer
         </button>
 
         <button
@@ -329,380 +342,630 @@ export default function WebsiteSettingsPage() {
               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
           }`}
         >
-          CTA & Forms
+          4. CTA & Forms
         </button>
       </div>
 
       {/* Tab Panels */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
-        {/* Tab 1: General Info */}
+        {/* TAB 1: GENERAL INFORMATION */}
         {activeTab === 'general' && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="space-y-6">
             <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Business Name
-              </label>
-              <input
-                type="text"
-                value={companyInfo.business_name}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    business_name: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+              <h3 className="font-display text-base font-bold text-slate-900">
+                Company Profile & Primary Contact Details
+              </h3>
+              <p className="text-xs text-slate-500">
+                These are the company&apos;s main contact details and serve as
+                global defaults across the public site.
+              </p>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Legal Entity Name
-              </label>
-              <input
-                type="text"
-                value={companyInfo.legal_name}
-                onChange={(e) =>
-                  setCompanyInfo({ ...companyInfo, legal_name: e.target.value })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  1. Business Name
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.business_name}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      business_name: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Business Description
-              </label>
-              <textarea
-                rows={2}
-                value={companyInfo.short_description}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    short_description: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  2. Legal Entity Name
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.legal_name}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      legal_name: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Primary Contact Email
-              </label>
-              <input
-                type="email"
-                value={companyInfo.primary_email}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    primary_email: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  3. Business Description
+                </label>
+                <textarea
+                  rows={2}
+                  value={companyInfo.short_description}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      short_description: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Primary Phone Number
-              </label>
-              <input
-                type="text"
-                value={companyInfo.primary_phone}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    primary_phone: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  4. Primary Contact Email
+                </label>
+                <input
+                  type="email"
+                  value={companyInfo.primary_email}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      primary_email: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                WhatsApp Business Number
-              </label>
-              <input
-                type="text"
-                value={companyInfo.whatsapp_number}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    whatsapp_number: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  5. Primary Phone Number
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.primary_phone}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      primary_phone: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Working Hours
-              </label>
-              <input
-                type="text"
-                value={companyInfo.working_hours}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    working_hours: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  6. WhatsApp Business Number
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.whatsapp_number}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      whatsapp_number: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Office Street Address
-              </label>
-              <input
-                type="text"
-                value={companyInfo.office_address}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    office_address: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  7. Working Hours
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.working_hours}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      working_hours: e.target.value,
+                    })
+                  }
+                  placeholder="Monday – Friday: 9:00 AM – 6:00 PM (GST)"
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                City / Locality
-              </label>
-              <input
-                type="text"
-                value={companyInfo.city}
-                onChange={(e) =>
-                  setCompanyInfo({ ...companyInfo, city: e.target.value })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  8. Full Office Address
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.office_address}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      office_address: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                State / Emirate
-              </label>
-              <input
-                type="text"
-                value={companyInfo.state_emirate}
-                onChange={(e) =>
-                  setCompanyInfo({
-                    ...companyInfo,
-                    state_emirate: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  9. City
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.city}
+                  onChange={(e) =>
+                    setCompanyInfo({ ...companyInfo, city: e.target.value })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  10. Country
+                </label>
+                <input
+                  type="text"
+                  value={companyInfo.country}
+                  onChange={(e) =>
+                    setCompanyInfo({
+                      ...companyInfo,
+                      country: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {/* Tab 2: Social Media */}
+        {/* TAB 2: SOCIAL MEDIA */}
         {activeTab === 'social' && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                LinkedIn Company Page URL
-              </label>
-              <input
-                type="url"
-                value={socialLinks.linkedin_url}
-                onChange={(e) =>
-                  setSocialLinks({
-                    ...socialLinks,
-                    linkedin_url: e.target.value,
-                  })
-                }
-                placeholder="https://www.linkedin.com/company/..."
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-display text-base font-bold text-slate-900">
+                Social Media Profiles & Channels
+              </h3>
+              <p className="text-xs text-slate-500">
+                Only profiles with a non-empty URL will be publicly rendered in
+                the footer and contact sections.
+              </p>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Instagram URL
-              </label>
-              <input
-                type="url"
-                value={socialLinks.instagram_url}
-                onChange={(e) =>
-                  setSocialLinks({
-                    ...socialLinks,
-                    instagram_url: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  1. LinkedIn URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.linkedin_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      linkedin_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://www.linkedin.com/company/ultron-financials"
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                X / Twitter URL
-              </label>
-              <input
-                type="url"
-                value={socialLinks.twitter_url}
-                onChange={(e) =>
-                  setSocialLinks({
-                    ...socialLinks,
-                    twitter_url: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  2. Instagram URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.instagram_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      instagram_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://instagram.com/..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  3. Facebook URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.facebook_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      facebook_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://facebook.com/..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  4. X / Twitter URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.twitter_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      twitter_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://x.com/..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  5. YouTube URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.youtube_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      youtube_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://youtube.com/@..."
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  6. WhatsApp Direct Link / URL
+                </label>
+                <input
+                  type="url"
+                  value={socialLinks.whatsapp_url}
+                  onChange={(e) =>
+                    setSocialLinks({
+                      ...socialLinks,
+                      whatsapp_url: e.target.value,
+                    })
+                  }
+                  placeholder="https://wa.me/97145751693"
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {/* Tab 3: Header & Footer */}
+        {/* TAB 3: HEADER & FOOTER */}
         {activeTab === 'header_footer' && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Header Display Phone
-              </label>
-              <input
-                type="text"
-                value={contactDetails.header_phone}
-                onChange={(e) =>
-                  setContactDetails({
-                    ...contactDetails,
-                    header_phone: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+          <div className="space-y-8">
+            {/* GROUP 1: HEADER SETTINGS */}
+            <div className="space-y-4">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="font-display text-base font-bold text-slate-900">
+                  Header Settings
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Configuration for the fixed top navbar and mobile drawer.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    1. Header Display Phone
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.header_phone}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        header_phone: e.target.value,
+                      })
+                    }
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    2. Header Display Email
+                  </label>
+                  <input
+                    type="email"
+                    value={contactDetails.header_email}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        header_email: e.target.value,
+                      })
+                    }
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    3. Header CTA Label
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.header_cta_label}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        header_cta_label: e.target.value,
+                      })
+                    }
+                    placeholder="Book a call"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    4. Header CTA Link
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.header_cta_link}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        header_cta_link: e.target.value,
+                      })
+                    }
+                    placeholder="#contact"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Header Display Email
-              </label>
-              <input
-                type="email"
-                value={contactDetails.header_email}
-                onChange={(e) =>
-                  setContactDetails({
-                    ...contactDetails,
-                    header_email: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+            {/* GROUP 2: FOOTER CONTACT INFORMATION */}
+            <div className="space-y-4 border-t border-slate-200 pt-4">
+              <div className="border-b border-slate-200 pb-2">
+                <h3 className="font-display text-base font-bold text-slate-900">
+                  Footer Contact Information
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Dedicated footer contact details, NAP address, working hours,
+                  and legal copyright text.
+                </p>
+              </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Footer Address Summary
-              </label>
-              <input
-                type="text"
-                value={contactDetails.footer_address}
-                onChange={(e) =>
-                  setContactDetails({
-                    ...contactDetails,
-                    footer_address: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    1. Footer Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={contactDetails.footer_email}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_email: e.target.value,
+                      })
+                    }
+                    placeholder="info@ultronfinancials.com"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Footer Copyright Text
-              </label>
-              <input
-                type="text"
-                value={contactDetails.footer_copyright_text}
-                onChange={(e) =>
-                  setContactDetails({
-                    ...contactDetails,
-                    footer_copyright_text: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    2. Footer Phone Number
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.footer_phone}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_phone: e.target.value,
+                      })
+                    }
+                    placeholder="+971 4 575 1693"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    3. Footer WhatsApp Number
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.footer_whatsapp}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_whatsapp: e.target.value,
+                      })
+                    }
+                    placeholder="+971 4 575 1693"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    4. Footer Working Hours
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.footer_working_hours}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_working_hours: e.target.value,
+                      })
+                    }
+                    placeholder="Monday – Friday: 9:00 AM – 6:00 PM (GST)"
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    5. Footer Office Address
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.footer_address}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_address: e.target.value,
+                      })
+                    }
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                    6. Footer Copyright Text
+                  </label>
+                  <input
+                    type="text"
+                    value={contactDetails.footer_copyright_text}
+                    onChange={(e) =>
+                      setContactDetails({
+                        ...contactDetails,
+                        footer_copyright_text: e.target.value,
+                      })
+                    }
+                    className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Tab 4: CTA & Forms */}
+        {/* TAB 4: CTA & FORMS */}
         {activeTab === 'cta' && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="space-y-6">
             <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Default CTA Button Text
-              </label>
-              <input
-                type="text"
-                value={ctaSettings.default_cta_label}
-                onChange={(e) =>
-                  setCtaSettings({
-                    ...ctaSettings,
-                    default_cta_label: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+              <h3 className="font-display text-base font-bold text-slate-900">
+                Call-to-Action & Form Lead Routing
+              </h3>
+              <p className="text-xs text-slate-500">
+                Manage destination links, consultation button texts, and lead
+                notification email addresses.
+              </p>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Default CTA Target Link
-              </label>
-              <input
-                type="text"
-                value={ctaSettings.default_cta_destination}
-                onChange={(e) =>
-                  setCtaSettings({
-                    ...ctaSettings,
-                    default_cta_destination: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Default CTA Button Text
+                </label>
+                <input
+                  type="text"
+                  value={ctaSettings.default_cta_label}
+                  onChange={(e) =>
+                    setCtaSettings({
+                      ...ctaSettings,
+                      default_cta_label: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                Form Notification Recipient Email
-              </label>
-              <input
-                type="email"
-                value={ctaSettings.form_notification_email}
-                onChange={(e) =>
-                  setCtaSettings({
-                    ...ctaSettings,
-                    form_notification_email: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Default CTA Target Link
+                </label>
+                <input
+                  type="text"
+                  value={ctaSettings.default_cta_destination}
+                  onChange={(e) =>
+                    setCtaSettings({
+                      ...ctaSettings,
+                      default_cta_destination: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
-                WhatsApp CTA Phone Number
-              </label>
-              <input
-                type="text"
-                value={ctaSettings.whatsapp_cta_number}
-                onChange={(e) =>
-                  setCtaSettings({
-                    ...ctaSettings,
-                    whatsapp_cta_number: e.target.value,
-                  })
-                }
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
-              />
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Form Notification Recipient Email
+                </label>
+                <input
+                  type="email"
+                  value={ctaSettings.form_notification_email}
+                  onChange={(e) =>
+                    setCtaSettings({
+                      ...ctaSettings,
+                      form_notification_email: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  Consultation Recipient Email
+                </label>
+                <input
+                  type="email"
+                  value={ctaSettings.consultation_email_recipient}
+                  onChange={(e) =>
+                    setCtaSettings({
+                      ...ctaSettings,
+                      consultation_email_recipient: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-bold tracking-wider text-slate-700 uppercase">
+                  WhatsApp CTA Phone Number
+                </label>
+                <input
+                  type="text"
+                  value={ctaSettings.whatsapp_cta_number}
+                  onChange={(e) =>
+                    setCtaSettings({
+                      ...ctaSettings,
+                      whatsapp_cta_number: e.target.value,
+                    })
+                  }
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:outline-none"
+                />
+              </div>
             </div>
           </div>
         )}

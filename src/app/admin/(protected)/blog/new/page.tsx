@@ -100,7 +100,12 @@ export default function NewBlogPostPage() {
         </Link>
       </div>
 
-      <form className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8">
+      <form
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-type="other"
+        className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:p-8"
+      >
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
           <h2 className="font-display text-xl font-bold text-slate-900">
             Create New Article
@@ -141,6 +146,8 @@ export default function NewBlogPostPage() {
               type="text"
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="e.g. Navigating UAE Business Banking in 2026"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -154,6 +161,8 @@ export default function NewBlogPostPage() {
               type="text"
               value={slug}
               onChange={(e) => setSlug(slugify(e.target.value))}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="navigating-uae-business-banking"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 font-mono text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -167,6 +176,8 @@ export default function NewBlogPostPage() {
               type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="e.g. Banking & Advisory, Company Formation"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -180,6 +191,8 @@ export default function NewBlogPostPage() {
               rows={2}
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder="Brief overview shown on blog listings and cards..."
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -212,6 +225,8 @@ export default function NewBlogPostPage() {
               type="text"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
           </div>
@@ -222,6 +237,8 @@ export default function NewBlogPostPage() {
                 type="checkbox"
                 checked={isFeatured}
                 onChange={(e) => setIsFeatured(e.target.checked)}
+                data-lpignore="true"
+                data-form-type="other"
                 className="h-4 w-4 rounded border-slate-300 text-[#035551] focus:ring-[#035551]"
               />
               Mark as Featured Article
@@ -239,6 +256,8 @@ export default function NewBlogPostPage() {
                     value="left"
                     checked={featuredPosition === 'left'}
                     onChange={() => setFeaturedPosition('left')}
+                    data-lpignore="true"
+                    data-form-type="other"
                   />
                   Left
                 </label>
@@ -249,6 +268,8 @@ export default function NewBlogPostPage() {
                     value="right"
                     checked={featuredPosition === 'right'}
                     onChange={() => setFeaturedPosition('right')}
+                    data-lpignore="true"
+                    data-form-type="other"
                   />
                   Right
                 </label>
@@ -270,6 +291,8 @@ export default function NewBlogPostPage() {
               type="text"
               value={seoTitle}
               onChange={(e) => setSeoTitle(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder={title || 'Search title fallback...'}
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />
@@ -282,6 +305,8 @@ export default function NewBlogPostPage() {
               rows={2}
               value={metaDescription}
               onChange={(e) => setMetaDescription(e.target.value)}
+              data-lpignore="true"
+              data-form-type="other"
               placeholder={excerpt || 'Search snippet fallback...'}
               className="mt-1.5 w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
             />

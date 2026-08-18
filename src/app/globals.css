@@ -87,6 +87,7 @@
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
@@ -96,6 +97,7 @@
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
@@ -284,6 +286,17 @@
     isolation: isolate;
   }
 
+  @media (hover: hover) {
+    .how-ultron-card {
+      transition: box-shadow 500ms ease;
+    }
+    .how-ultron-card:hover {
+      box-shadow:
+        0 24px 50px 0 rgba(3, 85, 81, 0.22),
+        0 1px 2px 0 rgba(255, 255, 255, 0.4) inset;
+    }
+  }
+
   .how-ultron-card::before {
     content: '';
     position: absolute;
@@ -304,6 +317,17 @@
       linear-gradient(#000 0 0);
     mask-composite: exclude;
     -webkit-mask-composite: xor;
+    transition: background 500ms ease;
+  }
+
+  @media (hover: hover) {
+    .how-ultron-card:hover::before {
+      background: linear-gradient(
+        270deg,
+        rgba(255, 255, 255, 0.2) 0%,
+        #dccb8e 100%
+      );
+    }
   }
 }
 
@@ -351,10 +375,32 @@
   h1:not(.admin-scope *):not(footer *),
   .heading-h1 {
     font-family: var(--font-brand);
-    font-size: clamp(36px, 5vw, 64px);
+    font-size: clamp(30px, 5vw, 64px);
     font-weight: var(--heading-h1-weight);
     line-height: 1.05;
     letter-spacing: -0.035em;
+  }
+
+  /* Service page hero title: 24px/28px on mobile (<768px), preserved responsive clamp on md+ */
+  .service-hero-title {
+    font-family: var(--font-brand);
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: var(--heading-h1-weight);
+    letter-spacing: -0.035em;
+  }
+
+  @media (min-width: 768px) {
+    .service-hero-title {
+      font-size: clamp(30px, 5vw, 64px);
+      line-height: 1.05;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .service-hero-title {
+      font-size: var(--heading-h1-size);
+    }
   }
 
   h2:not(.admin-scope *):not(footer *),
@@ -388,10 +434,12 @@
     .heading-h1 {
       font-size: var(--heading-h1-size);
     }
+
     h2:not(.admin-scope *):not(footer *),
     .heading-h2 {
       font-size: var(--heading-h2-size);
     }
+
     h3:not(.admin-scope *):not(footer *):not(.heading-h3--compact),
     .heading-h3 {
       font-size: var(--heading-h3-size);

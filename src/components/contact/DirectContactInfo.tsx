@@ -31,12 +31,17 @@ interface DirectContactInfoProps {
 }
 
 export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
-  const email = settings.email;
-  const telephone = settings.telephone;
+  const email = settings.header?.email || settings.email;
+  const telephone = settings.header?.phone || settings.telephone;
   const address = settings.address;
   const linkedin = settings.social?.linkedin || SITE.social.linkedin;
+  const workingHours =
+    settings.workingHours || 'Mon – Fri: 9:00 AM – 6:00 PM (GST)';
+  const googleMapsUrl = settings.googleMapsUrl;
 
-  const whatsappUrl = `https://wa.me/${telephone.replace(/\D/g, '')}`;
+  const rawWhatsapp =
+    settings.cta?.whatsappNumber || settings.whatsapp || telephone;
+  const whatsappUrl = `https://wa.me/${rawWhatsapp.replace(/\D/g, '')}`;
 
   const contactMethods = [
     {
@@ -54,8 +59,8 @@ export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
     {
       icon: MapPin,
       label: 'OFFICE LOCATION',
-      value: `${address.locality}, ${address.country}`,
-      href: undefined,
+      value: address.streetAddress || `${address.locality}, ${address.country}`,
+      href: googleMapsUrl || undefined,
     },
     {
       icon: LinkedinIcon,
@@ -66,7 +71,7 @@ export function DirectContactInfo({ settings = SITE }: DirectContactInfoProps) {
     {
       icon: Clock,
       label: 'BUSINESS HOURS',
-      value: 'Mon – Fri: 9:00 AM – 6:00 PM (GST)',
+      value: workingHours,
       href: undefined,
     },
   ];

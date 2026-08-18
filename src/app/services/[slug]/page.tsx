@@ -82,18 +82,15 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             <div className="max-w-3xl">
               {/*
-               * H1 typography system:
-               *   size:           clamp(36px, 5vw, 64px)
-               *   weight:         700 (font-bold)
-               *   line-height:    1.05
-               *   letter-spacing: -0.035em
-               *   colour:         #111111 (near-black) + teal highlight via ServiceHeading
+               * Main service hero heading:
+               *   Mobile (<768px):  24px / 28px / 700
+               *   Tablet / Desktop: clamp(36px, 5vw, 64px) / 1.05 / 700
                */}
               <ServiceHeading
                 as="h1"
                 text={service.headline}
                 highlightedText={service.highlights?.hero}
-                className="heading-h1 uppercase"
+                className="service-hero-title uppercase"
               />
               <p className="text-ink-muted/90 mt-5 text-sm leading-relaxed sm:text-base">
                 {service.description}

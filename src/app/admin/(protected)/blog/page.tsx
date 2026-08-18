@@ -102,6 +102,8 @@ export default function BlogManagementPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            data-lpignore="true"
+            data-form-type="other"
             placeholder="Search by title, category or author..."
             className="w-full rounded-lg border border-slate-300 py-2 pr-4 pl-9 text-sm text-slate-900 focus:border-[#035551] focus:ring-1 focus:ring-[#035551] focus:outline-none"
           />
@@ -114,6 +116,8 @@ export default function BlogManagementPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
+            data-lpignore="true"
+            data-form-type="other"
             className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:border-[#035551] focus:outline-none"
           >
             <option value="all">All Statuses</option>

@@ -63,7 +63,17 @@ export function Hero({ settings }: HeroProps) {
     whatsapp: SITE.telephone.replace(/\D/g, ''),
   };
 
-  const whatsappUrl = `https://wa.me/${(currentSettings.whatsapp || currentSettings.telephone).replace(/\D/g, '')}`;
+  const phone =
+    currentSettings.footer?.whatsapp ||
+    currentSettings.cta?.whatsappNumber ||
+    currentSettings.whatsapp ||
+    currentSettings.telephone ||
+    SITE.telephone ||
+    '';
+  const cleanPhone = phone.replace(/\D/g, '');
+  const whatsappUrl = cleanPhone
+    ? `https://wa.me/${cleanPhone}`
+    : 'https://wa.me/97145751693';
   return (
     <section
       id="top"
@@ -207,7 +217,7 @@ export function Hero({ settings }: HeroProps) {
               read as the whole band moving. */}
           <Reveal delay={BEAT.cta} className="inline-block w-full sm:w-auto">
             <div className="flex flex-wrap items-center gap-4">
-              <ActionButton href={whatsappUrl}>WhatsApp Us Now</ActionButton>
+              <ActionButton href={whatsappUrl}>Contact Us</ActionButton>
               <ActionButton href={HOME_HERO.cta.href} variant="cream">
                 {HOME_HERO.cta.label.toUpperCase()}
               </ActionButton>
