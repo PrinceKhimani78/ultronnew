@@ -337,6 +337,8 @@
 
 @layer base {
   html {
+    overflow-x: clip;
+    max-width: 100%;
     scroll-behavior: smooth;
     /* Stops the sticky header covering the target of an in-page anchor. Must
        stay below the pill's lowest edge — 49px of top inset plus a 66px bar is
@@ -347,11 +349,20 @@
   }
 
   body {
+    overflow-x: clip;
+    max-width: 100%;
     background-color: var(--color-surface);
     color: var(--color-ink);
     font-family: var(--font-brand);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  @supports not (overflow: clip) {
+    html,
+    body {
+      overflow-x: hidden;
+    }
   }
 
   h1,

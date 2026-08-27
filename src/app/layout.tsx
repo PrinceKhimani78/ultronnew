@@ -69,7 +69,7 @@ export default async function RootLayout({
        * animating to the top instead of jumping.
        */
       data-scroll-behavior="smooth"
-      className={`${funnelDisplay.variable} h-full antialiased`}
+      className={`${funnelDisplay.variable} h-full antialiased overflow-x-clip`}
     >
       <head>
         {/*
@@ -88,7 +88,7 @@ export default async function RootLayout({
           <style>{`[data-reveal]{opacity:1!important;transform:none!important;animation:none!important}`}</style>
         </noscript>
       </head>
-      <body className="flex min-h-full flex-col" suppressHydrationWarning>
+      <body className="flex min-h-full flex-col overflow-x-clip" suppressHydrationWarning>
         <UltronLoader />
         {/*
           First thing in the tab order, visible only once focused. A keyboard
