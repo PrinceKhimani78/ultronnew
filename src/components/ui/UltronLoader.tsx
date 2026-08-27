@@ -113,8 +113,8 @@ export function UltronLoader() {
             />
           </svg>
 
-          {/* Prominent Centred UF Monogram Symbol with Bottom-to-Top Fill */}
-          <div className="relative flex h-[92px] w-[92px] items-center justify-center sm:h-[118px] sm:w-[118px]">
+          {/* Prominent Centred UF Monogram Symbol with Generous Inner Padding and Optical Centering */}
+          <div className="relative flex h-[76px] w-[76px] translate-x-[4px] translate-y-[3px] items-center justify-center sm:h-[96px] sm:w-[96px] sm:translate-x-[5px] sm:translate-y-[4px]">
             {/* Inactive Muted Base UF Layer */}
             <div
               className="absolute inset-0 bg-[#DCCB8E]/30"

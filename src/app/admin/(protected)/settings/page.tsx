@@ -75,11 +75,11 @@ export default function WebsiteSettingsPage() {
     legal_name: 'Ultron Financials',
     tagline: 'UAE company formation, banking and compliance',
     short_description:
-      'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, compliance and financial structuring.',
+      'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, and compliance.',
     primary_email: 'info@ultronfinancials.com',
     secondary_email: 'info@ultronfinancials.com',
-    primary_phone: '+971 4 575 1693',
-    whatsapp_number: '+971 4 575 1693',
+    primary_phone: '+971 52 627 4559',
+    whatsapp_number: '+971 52 627 4559',
     office_address:
       'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
     city: 'Dubai',
@@ -98,18 +98,18 @@ export default function WebsiteSettingsPage() {
     facebook_url: '',
     youtube_url: '',
     twitter_url: '',
-    whatsapp_url: 'https://wa.me/97145751693',
+    whatsapp_url: 'https://wa.me/971526274559',
   });
 
   // Tab 3: Header & Footer
   const [contactDetails, setContactDetails] = useState<ContactDetails>({
-    header_phone: '+971 4 575 1693',
+    header_phone: '+971 52 627 4559',
     header_email: 'info@ultronfinancials.com',
     header_cta_label: 'Book a call',
     header_cta_link: '#contact',
     footer_email: 'info@ultronfinancials.com',
-    footer_phone: '+971 4 575 1693',
-    footer_whatsapp: '+971 4 575 1693',
+    footer_phone: '+971 52 627 4559',
+    footer_whatsapp: '+971 52 627 4559',
     footer_address:
       'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
     footer_working_hours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
@@ -124,7 +124,7 @@ export default function WebsiteSettingsPage() {
     default_cta_destination: '#contact',
     consultation_email_recipient: 'info@ultronfinancials.com',
     form_notification_email: 'info@ultronfinancials.com',
-    whatsapp_cta_number: '97145751693',
+    whatsapp_cta_number: '971526274559',
   });
 
   // Backup for reset

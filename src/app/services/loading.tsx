@@ -21,7 +21,7 @@ export default function ServicesLoading() {
           <div className="absolute inset-0 animate-spin rounded-full border-4 border-[#035551]/10 border-t-[#C9B37E]" />
 
           {/* Central Logo Monogram with a breathing/pulse animation */}
-          <div className="relative h-10 w-10 animate-pulse duration-[1500ms] sm:h-12 sm:w-12">
+          <div className="relative h-9 w-9 translate-x-[1.5px] translate-y-[1px] animate-pulse duration-[1500ms] sm:h-11 sm:w-11 sm:translate-x-[2px] sm:translate-y-[1.5px]">
             <div
               className="absolute inset-0 bg-[#035551]"
               style={{

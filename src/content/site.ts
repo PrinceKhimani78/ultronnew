@@ -24,11 +24,11 @@ export const SITE = {
   /** Sentence-case, used after the page title in the metadata template. */
   tagline: 'UAE company formation, banking and compliance',
   description:
-    'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, compliance and financial structuring.',
+    'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, and compliance.',
   // TODO(client): confirm the live enquiry address before launch.
   email: 'info@ultronfinancials.com',
-  // TODO(client): placeholder from the design. Replace with the real number.
-  telephone: '+971 4 575 1693',
+  telephone: '+971 52 627 4559',
+  whatsapp: '+971 52 627 4559',
   address: {
     // TODO(client): the design carries lorem ipsum here. Replace in full.
     streetAddress:
@@ -75,11 +75,6 @@ export const PRIMARY_NAV: readonly NavItem[] = [
  *
  * `wa.me` needs the number in international format with no `+`, spaces or
  * leading zeros, so the digits are stripped from `SITE.telephone`.
- *
- * ⚠️ MUST NOT SHIP AS-IS. `SITE.telephone` is still the design's placeholder
- * ("98765 43210"), which is not a real or dialable international number — this
- * link currently goes nowhere. TODO(client): supply the business WhatsApp
- * number in full international format; nothing else here changes.
  */
 export const WHATSAPP_URL = `https://wa.me/${SITE.telephone.replace(/\D/g, '')}`;
 

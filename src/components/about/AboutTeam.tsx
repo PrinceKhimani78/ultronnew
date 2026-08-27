@@ -215,7 +215,7 @@ function TeamCard({
   member: TeamMember;
   isDuplicate?: boolean;
 }) {
-  return (
+  const cardContent = (
     <div className="group flex w-[215px] shrink-0 flex-col items-center text-center transition-all duration-300 sm:w-[200px] lg:w-[220px]">
       {/* Circle Image Wrapper */}
       <div className="relative aspect-square w-[135px] rounded-full border border-[#035551]/20 bg-[#FDFBEE] p-1.5 transition-all duration-300 group-hover:scale-[1.04] group-hover:border-[#C9B37E] group-hover:shadow-[0_0_15px_rgba(3,85,81,0.2)] sm:w-[140px] lg:w-[150px]">
@@ -225,7 +225,7 @@ function TeamCard({
             alt={member.name}
             fill
             sizes="(max-width: 640px) 135px, 150px"
-            className="object-cover object-center grayscale transition-transform duration-300"
+            className="object-cover object-center grayscale transition-all duration-300 group-hover:scale-105 group-hover:grayscale-0"
           />
         </div>
       </div>
@@ -235,31 +235,23 @@ function TeamCard({
         <h3 className="font-display text-[15px] font-bold text-black uppercase transition-colors duration-300 group-hover:text-[#035551] sm:text-[17px] lg:text-[18px]">
           {member.name}
         </h3>
-        <p className="mt-0.5 text-[12px] font-medium text-[#5A5A5A] sm:mt-1 sm:text-[13px] lg:text-[14px]">
+        <p className="mt-0.5 text-[12px] font-medium text-[#5A5A5A] transition-colors duration-300 sm:mt-1 sm:text-[13px] lg:text-[14px]">
           {member.role}
         </p>
 
         {/* LinkedIn icon */}
         <div className="mt-1.5 flex h-6 items-center justify-center sm:mt-2">
           {member.linkedinUrl ? (
-            <a
-              href={member.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabIndex={isDuplicate ? -1 : 0}
-              aria-hidden={isDuplicate}
-              onClick={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
+            <span
               className={cn(
                 'flex items-center justify-center rounded-full',
                 'text-[#035551] transition-all duration-300',
-                'hover:scale-[1.08] hover:text-[#C9B37E]',
-                'focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#035551]',
+                'group-hover:scale-[1.15] group-hover:text-[#C9B37E]',
               )}
-              aria-label={`Visit ${member.name}’s LinkedIn profile`}
+              aria-hidden="true"
             >
               <LinkedinGlyph className="h-4 w-4" />
-            </a>
+            </span>
           ) : (
             <span className="h-4 w-4" aria-hidden="true" />
           )}
@@ -267,6 +259,24 @@ function TeamCard({
       </div>
     </div>
   );
+
+  if (member.linkedinUrl) {
+    return (
+      <a
+        href={member.linkedinUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        tabIndex={isDuplicate ? -1 : 0}
+        aria-hidden={isDuplicate}
+        aria-label={`Visit ${member.name}’s LinkedIn profile`}
+        className="block cursor-pointer rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#035551]"
+      >
+        {cardContent}
+      </a>
+    );
+  }
+
+  return cardContent;
 }
 
 function LinkedinGlyph({ className }: { className?: string }) {

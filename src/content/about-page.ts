@@ -90,8 +90,7 @@ export const ABOUT_PAGE = {
         name: 'Raghuveer',
         role: 'Banking Advisor',
         image: '/brand/raghuveer.png',
-        linkedinUrl:
-          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQFszn4r9tqPBwAAAaAPbYmA4-TJvUegc_NkSPSsTnnS8eGx4bFBN6Z6XeR8wgHBnbmEfmUD1iDaCPt_K3QiSCUbYNUHcgIABTlofOY5e1f-qNTwJj8flOtxkLkl1XMcsa9w0Hc=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fraghuveersingh0432',
+        linkedinUrl: 'https://www.linkedin.com/in/raghuveersingh0432',
       },
       {
         id: 'chanchal',
@@ -105,8 +104,7 @@ export const ABOUT_PAGE = {
         name: 'Manoj',
         role: 'Business Development',
         image: '/brand/manoj.jpeg',
-        linkedinUrl:
-          'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQEOXpXN7LSh4AAAAaAPbkjoT1ZKIvhKKhprl1IfgLYobGSaH8eth8L_J492UObjVL6a5FabPbNpiT4TwziulivUZASymjzEpfJ_HefS7kRWmnlWLIFuIA0qeJn1R7y3up4xPvw=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fmanoj-kuchan317',
+        linkedinUrl: 'https://www.linkedin.com/in/manoj-kuchan317',
       },
       {
         id: 'virendra',

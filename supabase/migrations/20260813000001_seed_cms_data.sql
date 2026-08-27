@@ -8,7 +8,7 @@ VALUES
   "business_name": "Ultron Financials",
   "legal_name": "Ultron Financials",
   "tagline": "UAE company formation, banking and compliance",
-  "short_description": "Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, compliance and financial structuring.",
+  "short_description": "Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, and compliance.",
   "primary_email": "info@ultronfinancials.com",
   "secondary_email": "info@ultronfinancials.com",
   "primary_phone": "+971 4 575 1693",

@@ -755,7 +755,7 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
 
     const generatedWhatsappUrl = cleanWhatsapp
       ? `https://wa.me/${cleanWhatsapp}`
-      : 'https://wa.me/97145751693';
+      : 'https://wa.me/971526274559';
 
     return {
       name: companyInfo.business_name || companyInfo.legal_name || SITE.name,

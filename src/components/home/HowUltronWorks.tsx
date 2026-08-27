@@ -147,14 +147,13 @@ export function HowUltronWorks({
         });
 
         // Set initial positions:
-        // Step 1 is active (opacity 1, scale 1, y 0)
-        // Steps 2..N start below (opacity 0, scale 0.98, y 60)
+        // Step 1 is initialized for initial entrance
+        // Steps 2..N start below (opacity 0, y 50)
         validSteps.forEach((s, index) => {
           if (index === 0) {
             gsap.set([s.cardLift, s.imageLift], {
-              opacity: 1,
-              scale: 1,
-              y: 0,
+              opacity: 0,
+              y: 50,
               force3D: true,
             });
             gsap.set(s.dot, {
@@ -164,8 +163,7 @@ export function HowUltronWorks({
           } else {
             gsap.set([s.cardLift, s.imageLift], {
               opacity: 0,
-              scale: 0.98,
-              y: 60,
+              y: 50,
               force3D: true,
             });
             gsap.set(s.dot, {
@@ -193,9 +191,33 @@ export function HowUltronWorks({
           gsap.set(headingRef.current, { y: 0, opacity: 1 });
         }
 
+        // 1. Initial fadeInUp entrance for Step 1 when entering the process section
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top 80%',
+          once: true,
+          onEnter: () => {
+            gsap.to(validSteps[0].cardLift, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: 'power2.out',
+              force3D: true,
+            });
+            gsap.to(validSteps[0].imageLift, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              delay: 0.1,
+              ease: 'power2.out',
+              force3D: true,
+            });
+          },
+        });
+
         // Calculate exact scroll distance from transition count (cards.length - 1)
         const transitionCount = Math.max(totalSteps - 1, 1);
-        const scrollPerStep = window.innerHeight * 0.7;
+        const scrollPerStep = window.innerHeight * 0.75;
         const scrollDistance = transitionCount * scrollPerStep;
 
         // Master ScrollTrigger Timeline
@@ -211,6 +233,17 @@ export function HowUltronWorks({
             invalidateOnRefresh: true,
           },
         });
+
+        // Ensure step 1 is fully active at start of pinned timeline
+        tl.to(
+          [validSteps[0].cardLift, validSteps[0].imageLift],
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.01,
+          },
+          0,
+        );
 
         // 0. Smoothly fade out large heading on scroll start, keeping small eyebrow visible
         if (headingRef.current) {
@@ -262,14 +295,13 @@ export function HowUltronWorks({
             );
           }
 
-          // 3. Current card and image smoothly transition to inactive state
+          // 3. Outgoing card and image smoothly fade and drift upward
           tl.to(
             [current.cardLift, current.imageLift],
             {
-              opacity: 0.2,
-              scale: 0.98,
-              y: -20,
-              duration: TRANSITION_DURATION * 0.75,
+              opacity: 0.15,
+              y: -25,
+              duration: TRANSITION_DURATION * 0.7,
               ease: 'power2.inOut',
               force3D: true,
             },
@@ -288,32 +320,32 @@ export function HowUltronWorks({
             startTime,
           );
 
-          // 4. Next card gently lifts from bottom to position (y: 60 -> 0, opacity: 0 -> 1, scale: 0.98 -> 1)
-          tl.to(
+          // 4. Incoming active card executes fadeInUp (opacity 0 -> 1, y 50 -> 0)
+          tl.fromTo(
             next.cardLift,
+            { opacity: 0, y: 50 },
             {
               opacity: 1,
-              scale: 1,
               y: 0,
               duration: TRANSITION_DURATION,
-              ease: 'power3.out',
+              ease: 'power2.out',
               force3D: true,
             },
-            startTime + 0.1,
+            startTime + 0.05,
           );
 
-          // 5. Next matching image lifts ~0.1s after the card
-          tl.to(
+          // 5. Incoming active image executes fadeInUp with slight stagger
+          tl.fromTo(
             next.imageLift,
+            { opacity: 0, y: 50 },
             {
               opacity: 1,
-              scale: 1,
               y: 0,
               duration: TRANSITION_DURATION,
-              ease: 'power3.out',
+              ease: 'power2.out',
               force3D: true,
             },
-            startTime + 0.2,
+            startTime + 0.15,
           );
 
           // Next dot glows
@@ -325,7 +357,7 @@ export function HowUltronWorks({
               duration: TRANSITION_DURATION * 0.6,
               ease: 'power2.out',
             },
-            startTime + 0.2,
+            startTime + 0.15,
           );
         }
 

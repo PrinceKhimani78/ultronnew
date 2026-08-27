@@ -102,7 +102,7 @@ export default function OpengraphImage() {
       >
         <span>Dubai</span>
         <span>·</span>
-        <span>Banking, company setup, compliance and structuring</span>
+        <span>Banking, company setup, and compliance</span>
       </div>
     </div>,
     size,

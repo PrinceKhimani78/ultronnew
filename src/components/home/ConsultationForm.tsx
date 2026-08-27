@@ -100,22 +100,33 @@ export function ConsultationForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
     setSubmitError(null);
+
+    const submittedPayload = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.company,
+      service: formData.service,
+      message: formData.message,
+      website: formData.website,
+    };
 
     try {
       const response = await fetch('/api/enquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          businessType: formData.company,
-          service: formData.service,
-          message: formData.message,
-          website: formData.website,
+          name: submittedPayload.name,
+          email: submittedPayload.email,
+          phone: submittedPayload.phone,
+          company: submittedPayload.company,
+          businessType: submittedPayload.company,
+          service: submittedPayload.service,
+          message: submittedPayload.message,
+          website: submittedPayload.website,
           formName: formTitle || 'Consultation Form',
           sourcePage:
             typeof window !== 'undefined'
@@ -143,6 +154,21 @@ export function ConsultationForm({
         message: '',
         website: '',
       });
+
+      // Construct pre-filled WhatsApp message
+      const whatsappMessage = [
+        'New Ultron Financials Enquiry',
+        '',
+        `Full Name: ${submittedPayload.name}`,
+        `Email: ${submittedPayload.email}`,
+        `Phone Number: ${submittedPayload.phone}`,
+        `Business Type: ${submittedPayload.company}`,
+        `Service Interested In: ${submittedPayload.service}`,
+        `Message: ${submittedPayload.message}`,
+      ].join('\n');
+
+      const whatsappUrl = `https://wa.me/971526274559?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     } catch (err: unknown) {
       const msg =
         err instanceof Error

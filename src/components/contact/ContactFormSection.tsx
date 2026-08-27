@@ -33,8 +33,8 @@ export function ContactFormSection() {
             </h2>
 
             <p className="mt-4 text-[16px] leading-[150%] font-medium text-[#4B5563]">
-              Whether you need corporate bank account setup, complex financial
-              structuring, or setup guidance, our advisory team provides clear,
+              Whether you need corporate bank account setup, regulatory
+              compliance, or setup guidance, our advisory team provides clear,
               unvarnished feasibility answers before you commit.
             </p>
 

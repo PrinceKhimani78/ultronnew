@@ -68,7 +68,7 @@ export function Hero({ settings }: HeroProps) {
   const cleanPhone = phone.replace(/\D/g, '');
   const whatsappUrl = cleanPhone
     ? `https://wa.me/${cleanPhone}`
-    : 'https://wa.me/97145751693';
+    : 'https://wa.me/971526274559';
   return (
     <section
       id="top"

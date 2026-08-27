@@ -38,6 +38,18 @@ export const metadata: Metadata = {
   applicationName: SITE.name,
   robots: { index: true, follow: true },
   formatDetection: { telephone: false },
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/brand/logo-icon-green.webp', type: 'image/webp' },
+    ],
+    shortcut: ['/icon.png'],
+    apple: [
+      { url: '/apple-icon.png', type: 'image/png' },
+      { url: '/brand/logo-icon-green.webp', type: 'image/webp' },
+    ],
+  },
 };
 
 export default async function RootLayout({

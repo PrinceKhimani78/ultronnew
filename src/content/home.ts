@@ -20,7 +20,7 @@ export const HOME_HERO = {
     { text: 'Possible.', accent: true },
   ] as readonly HeadingSegment[],
 
-  body: "End-to-end business advisory for banking, company setup, compliance and financial structuring in the UAE. We handle what others won't.",
+  body: "End-to-end business advisory for banking, company setup, and compliance in the UAE. We handle what others won't.",
 
   cta: { label: 'Explore', href: '#contact' },
 
