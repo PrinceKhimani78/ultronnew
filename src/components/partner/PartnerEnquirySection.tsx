@@ -159,6 +159,10 @@ export function PartnerEnquirySection() {
 
     setIsSubmitting(true);
 
+    // Pre-open popup tab synchronously to prevent modern browser popup blockers from blocking WhatsApp redirect
+    const wpWindow =
+      typeof window !== 'undefined' ? window.open('about:blank', '_blank') : null;
+
     const submittedPayload = {
       name: formData.name,
       email: formData.email,
@@ -188,6 +192,7 @@ export function PartnerEnquirySection() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
+        if (wpWindow) wpWindow.close();
         throw new Error(
           result.message || 'Submission failed. Please try again.',
         );
@@ -217,10 +222,14 @@ export function PartnerEnquirySection() {
         `Message: ${submittedPayload.message}`,
       ].join('\n');
 
-      // const whatsappUrl = `https://wa.me/971526274559?text=${encodeURIComponent(whatsappMessage)}`;
       const whatsappUrl = `https://wa.me/919924875594?text=${encodeURIComponent(whatsappMessage)}`;
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      if (wpWindow) {
+        wpWindow.location.href = whatsappUrl;
+      } else {
+        window.location.href = whatsappUrl;
+      }
     } catch (err: unknown) {
+      if (wpWindow) wpWindow.close();
       const msg =
         err instanceof Error
           ? err.message
