@@ -27,8 +27,10 @@ export const SITE = {
     'Ultron Financials is a corporate advisory firm in the UAE delivering end-to-end business advisory for banking, company setup, and compliance.',
   // TODO(client): confirm the live enquiry address before launch.
   email: 'info@ultronfinancials.com',
-  telephone: '+971 52 627 4559',
-  whatsapp: '+971 52 627 4559',
+  // telephone: '+971 52 627 4559',
+  // whatsapp: '+971 52 627 4559',
+  telephone: '+91 9924875594',
+  whatsapp: '+91 9924875594',
   address: {
     // TODO(client): the design carries lorem ipsum here. Replace in full.
     streetAddress:

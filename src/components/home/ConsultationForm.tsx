@@ -167,7 +167,8 @@ export function ConsultationForm({
         `Message: ${submittedPayload.message}`,
       ].join('\n');
 
-      const whatsappUrl = `https://wa.me/971526274559?text=${encodeURIComponent(whatsappMessage)}`;
+      // const whatsappUrl = `https://wa.me/971526274559?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappUrl = `https://wa.me/919924875594?text=${encodeURIComponent(whatsappMessage)}`;
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     } catch (err: unknown) {
       const msg =

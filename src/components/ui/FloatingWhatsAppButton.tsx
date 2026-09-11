@@ -22,8 +22,9 @@ export function FloatingWhatsAppButton({
     settings?.cta?.whatsappNumber ||
     settings?.whatsapp ||
     settings?.telephone ||
-    '971526274559';
-  const phoneNumber = rawPhone.replace(/\D/g, '') || '971526274559';
+    // '971526274559';
+    '919924875594';
+  const phoneNumber = rawPhone.replace(/\D/g, '') || '919924875594';
 
   const prefilledMessage = encodeURIComponent(
     `Hello ${settings?.name || 'Ultron Financials'}, I would like to discuss my requirements.`,
