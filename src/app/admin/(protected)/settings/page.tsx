@@ -98,7 +98,8 @@ export default function WebsiteSettingsPage() {
     facebook_url: '',
     youtube_url: '',
     twitter_url: '',
-    whatsapp_url: 'https://wa.me/971526274559',
+    // whatsapp_url: 'https://wa.me/971526274559',
+    whatsapp_url: 'https://wa.me/919924875594',
   });
 
   // Tab 3: Header & Footer
@@ -109,7 +110,8 @@ export default function WebsiteSettingsPage() {
     header_cta_link: '#contact',
     footer_email: 'info@ultronfinancials.com',
     footer_phone: '+971 52 627 4559',
-    footer_whatsapp: '+971 52 627 4559',
+    // footer_whatsapp: '+971 52 627 4559',
+    footer_whatsapp: '+91 9924875594',
     footer_address:
       'Office No. 19-20, 1503, 15th Floor, Fahidi Heights, Khalid Bin Al Waleed Road, Dubai, UAE',
     footer_working_hours: 'Monday – Friday: 9:00 AM – 6:00 PM (GST)',
@@ -124,7 +126,8 @@ export default function WebsiteSettingsPage() {
     default_cta_destination: '#contact',
     consultation_email_recipient: 'info@ultronfinancials.com',
     form_notification_email: 'info@ultronfinancials.com',
-    whatsapp_cta_number: '971526274559',
+    // whatsapp_cta_number: '971526274559',
+    whatsapp_cta_number: '919924875594',
   });
 
   // Backup for reset

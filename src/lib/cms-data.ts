@@ -745,17 +745,11 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
     const contactDetails = settingsMap.contact_details || {};
     const ctaSettings = settingsMap.cta_settings || {};
 
-    const cleanWhatsapp = (
-      contactDetails.footer_whatsapp ||
-      ctaSettings.whatsapp_cta_number ||
-      companyInfo.whatsapp_number ||
-      companyInfo.primary_phone ||
-      SITE.telephone
-    ).replace(/\D/g, '');
+    // Temporary testing override: force cleanWhatsapp to 919924875594
+    // const cleanWhatsapp = (contactDetails.footer_whatsapp || ctaSettings.whatsapp_cta_number || companyInfo.whatsapp_number || companyInfo.primary_phone || SITE.telephone).replace(/\D/g, '');
+    const cleanWhatsapp = '919924875594';
 
-    const generatedWhatsappUrl = cleanWhatsapp
-      ? `https://wa.me/${cleanWhatsapp}`
-      : 'https://wa.me/919924875594'; // Temporary for testing (original: 971526274559)
+    const generatedWhatsappUrl = `https://wa.me/${cleanWhatsapp}`;
 
     return {
       name: companyInfo.business_name || companyInfo.legal_name || SITE.name,
@@ -795,7 +789,7 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
         facebook: socialLinks.facebook_url || undefined,
         youtube: socialLinks.youtube_url || undefined,
         twitter: socialLinks.twitter_url || undefined,
-        whatsapp: socialLinks.whatsapp_url || generatedWhatsappUrl || undefined,
+        whatsapp: generatedWhatsappUrl,
       },
       header: {
         phone:
