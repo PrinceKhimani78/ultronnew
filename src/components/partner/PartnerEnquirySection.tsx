@@ -159,10 +159,6 @@ export function PartnerEnquirySection() {
 
     setIsSubmitting(true);
 
-    // Pre-open popup tab synchronously to prevent modern browser popup blockers from blocking WhatsApp redirect
-    const wpWindow =
-      typeof window !== 'undefined' ? window.open('about:blank', '_blank') : null;
-
     const submittedPayload = {
       name: formData.name,
       email: formData.email,
@@ -192,7 +188,6 @@ export function PartnerEnquirySection() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        if (wpWindow) wpWindow.close();
         throw new Error(
           result.message || 'Submission failed. Please try again.',
         );
@@ -209,27 +204,7 @@ export function PartnerEnquirySection() {
         message: '',
         consent: false,
       });
-
-      // Construct pre-filled WhatsApp message
-      const whatsappMessage = [
-        'New Ultron Financials Enquiry',
-        '',
-        `Full Name: ${submittedPayload.name}`,
-        `Email: ${submittedPayload.email}`,
-        `Phone Number: ${submittedPayload.phone}`,
-        `Business Type: ${submittedPayload.company}`,
-        `Service Interested In: ${submittedPayload.service}`,
-        `Message: ${submittedPayload.message}`,
-      ].join('\n');
-
-      const whatsappUrl = `https://wa.me/919924875594?text=${encodeURIComponent(whatsappMessage)}`;
-      if (wpWindow) {
-        wpWindow.location.href = whatsappUrl;
-      } else {
-        window.location.href = whatsappUrl;
-      }
     } catch (err: unknown) {
-      if (wpWindow) wpWindow.close();
       const msg =
         err instanceof Error
           ? err.message
