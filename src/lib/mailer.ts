@@ -74,7 +74,7 @@ export async function sendEnquiryNotification(
     toSet.add(env.CONTACT_TO_EMAIL.trim());
   }
   toSet.add('info@ultronfinancials.com');
-  toSet.add('het@mutanttechnologies.com');
+  toSet.add('princekhimani186@gmail.com');
 
   const toRecipients = Array.from(toSet);
 
