@@ -264,7 +264,7 @@ Ultron Financials Advisory Lead System
   `.trim();
 
   try {
-    const resendResponse = await fetch('https://api.resend.com/emails', {
+    let resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${env.RESEND_API_KEY}`,
@@ -281,7 +281,31 @@ Ultron Financials Advisory Lead System
       }),
     });
 
-    const resendJson = await resendResponse.json();
+    let resendJson = await resendResponse.json();
+
+    // If Resend returns 403 validation error (e.g. sending to unverified domain recipient on onboarding domain),
+    // automatically fallback to sending directly to verified account owner (princekhimani186@gmail.com)
+    if (!resendResponse.ok && resendResponse.status === 403) {
+      console.warn(
+        `[Mailer] Primary delivery for enquiry ${referenceNumber} returned 403 (unverified domain recipients). Retrying send directly to princekhimani186@gmail.com...`,
+      );
+      resendResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: ['princekhimani186@gmail.com'],
+          reply_to: email,
+          subject,
+          html: htmlContent,
+          text: textContent,
+        }),
+      });
+      resendJson = await resendResponse.json();
+    }
 
     if (!resendResponse.ok) {
       const errorMsg =
