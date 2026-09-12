@@ -265,71 +265,60 @@ Ultron Financials Advisory Lead System
   `.trim();
 
   try {
-    let resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromEmail,
-        to: toRecipients,
-        cc: ccEmails.length > 0 ? ccEmails : undefined,
-        reply_to: email,
-        subject,
-        html: htmlContent,
-        text: textContent,
-      }),
-    });
+    let anySuccess = false;
+    let lastId: string | null = null;
+    let lastError: string | null = null;
 
-    let resendJson = await resendResponse.json();
+    for (const recipient of toRecipients) {
+      try {
+        const resendResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [recipient],
+            reply_to: email,
+            subject,
+            html: htmlContent,
+            text: textContent,
+          }),
+        });
 
-    // If Resend returns 403 validation error (e.g. sending to unverified domain recipient on onboarding domain),
-    // automatically fallback to sending directly to verified account owners (kuldeepca111@gmail.com & princekhimani186@gmail.com)
-    if (!resendResponse.ok && resendResponse.status === 403) {
-      console.warn(
-        `[Mailer] Primary delivery for enquiry ${referenceNumber} returned 403 (unverified domain recipients). Retrying send directly to kuldeepca111@gmail.com & princekhimani186@gmail.com...`,
-      );
-      resendResponse = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          from: fromEmail,
-          to: ['kuldeepca111@gmail.com', 'princekhimani186@gmail.com'],
-          reply_to: email,
-          subject,
-          html: htmlContent,
-          text: textContent,
-        }),
-      });
-      resendJson = await resendResponse.json();
+        const resendJson = await resendResponse.json();
+
+        if (resendResponse.ok && resendJson.id) {
+          anySuccess = true;
+          lastId = resendJson.id;
+          console.warn(
+            `[Mailer] Email notification delivered successfully for enquiry ${referenceNumber} to ${recipient} (ID: ${resendJson.id})`,
+          );
+        } else {
+          lastError = resendJson.message || `Status ${resendResponse.status}`;
+          console.warn(
+            `[Mailer] Delivery skipped/failed for ${recipient}: ${lastError}`,
+          );
+        }
+      } catch (err: unknown) {
+        lastError =
+          err instanceof Error ? err.message : 'Unknown mailer network error';
+      }
     }
 
-    if (!resendResponse.ok) {
-      const errorMsg =
-        resendJson.message ||
-        `Resend API error status ${resendResponse.status}`;
-      console.error(
-        `[Mailer] Resend API delivery failed for enquiry ${referenceNumber}:`,
-        errorMsg,
-      );
+    if (!anySuccess) {
       return {
         success: false,
         externalId: null,
-        lastErrorCode: String(resendResponse.status),
-        errorSummary: errorMsg,
+        lastErrorCode: 'DELIVERY_FAILED',
+        errorSummary: lastError || 'All delivery attempts failed.',
       };
     }
 
-    console.warn(
-      `[Mailer] Email notification delivered successfully for enquiry ${referenceNumber} to ${toRecipients.join(', ')} (ID: ${resendJson.id})`,
-    );
     return {
       success: true,
-      externalId: resendJson.id || null,
+      externalId: lastId,
       lastErrorCode: null,
       errorSummary: null,
     };
