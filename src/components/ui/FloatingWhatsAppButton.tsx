@@ -18,9 +18,12 @@ export function FloatingWhatsAppButton({
     return null;
   }
 
-  // Temporary testing override: force test number 919924875594 (commented out CMS settings lookup)
-  // const rawPhone = settings?.cta?.whatsappNumber || settings?.whatsapp || settings?.telephone || '971526274559';
-  const phoneNumber = '919924875594';
+  const rawPhone =
+    settings?.cta?.whatsappNumber ||
+    settings?.whatsapp ||
+    settings?.telephone ||
+    '971526274559';
+  const phoneNumber = rawPhone.replace(/\D/g, '') || '971526274559';
 
   const prefilledMessage = encodeURIComponent(
     `Hello ${settings?.name || 'Ultron Financials'}, I would like to discuss my requirements.`,
