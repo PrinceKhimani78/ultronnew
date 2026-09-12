@@ -94,6 +94,7 @@ const envSchema = z.object({
   // responds, and delivery is skipped. See src/lib/mailer.ts.
   RESEND_API_KEY: z.string().min(1).optional(),
   INQUIRY_NOTIFICATION_EMAIL: z.string().email().optional(),
+  INQUIRY_CC_EMAIL: z.string().email().optional(),
   INQUIRY_FROM_EMAIL: z.string().optional(),
   CONTACT_TO_EMAIL: z.string().email().optional(),
   CONTACT_FROM_EMAIL: z.string().optional(),
@@ -115,6 +116,7 @@ const parsed = envSchema.safeParse({
   NEXT_PUBLIC_SITE_URL: resolveSiteUrl(),
   RESEND_API_KEY: optional(process.env.RESEND_API_KEY),
   INQUIRY_NOTIFICATION_EMAIL: optional(process.env.INQUIRY_NOTIFICATION_EMAIL),
+  INQUIRY_CC_EMAIL: optional(process.env.INQUIRY_CC_EMAIL),
   INQUIRY_FROM_EMAIL: optional(process.env.INQUIRY_FROM_EMAIL),
   CONTACT_TO_EMAIL: optional(process.env.CONTACT_TO_EMAIL),
   CONTACT_FROM_EMAIL: optional(process.env.CONTACT_FROM_EMAIL),

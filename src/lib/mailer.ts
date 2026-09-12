@@ -27,6 +27,7 @@ export type SendEnquiryNotificationInput = {
   formName?: string | null;
   submittedAt?: string;
   recipientEmail?: string | null;
+  ccEmail?: string | string[] | null;
 };
 
 export type MailerResult = {
@@ -58,6 +59,7 @@ export async function sendEnquiryNotification(
     formName,
     submittedAt,
     recipientEmail,
+    ccEmail,
   } = input;
 
   // Determine recipient email: explicitly provided > env.INQUIRY_NOTIFICATION_EMAIL > fallback
@@ -68,6 +70,15 @@ export async function sendEnquiryNotification(
         env.NOTIFICATION_EMAIL ||
         env.CONTACT_TO_EMAIL ||
         'info@ultronfinancials.com';
+
+  // Determine CC recipients
+  const ccEmails: string[] = [];
+  const rawCc = ccEmail || env.INQUIRY_CC_EMAIL || 'het@mutanttechnologies.com';
+  if (Array.isArray(rawCc)) {
+    ccEmails.push(...rawCc.filter((item): item is string => Boolean(item && item.trim())));
+  } else if (rawCc && rawCc.trim()) {
+    ccEmails.push(rawCc.trim());
+  }
 
   // Determine verified sender
   const fromEmail =
@@ -255,6 +266,7 @@ Ultron Financials Advisory Lead System
       body: JSON.stringify({
         from: fromEmail,
         to: [toEmail],
+        cc: ccEmails.length > 0 ? ccEmails : undefined,
         reply_to: email,
         subject,
         html: htmlContent,
