@@ -62,18 +62,25 @@ export async function sendEnquiryNotification(
     ccEmail,
   } = input;
 
-  // Determine recipient email: explicitly provided > env.INQUIRY_NOTIFICATION_EMAIL > fallback
-  const toEmail =
-    recipientEmail && recipientEmail.trim()
-      ? recipientEmail.trim()
-      : env.INQUIRY_NOTIFICATION_EMAIL ||
-        env.NOTIFICATION_EMAIL ||
-        env.CONTACT_TO_EMAIL ||
-        'info@ultronfinancials.com';
+  // Combine all target recipient emails into the primary `toRecipients` list
+  const toSet = new Set<string>();
+  if (recipientEmail && recipientEmail.trim()) {
+    toSet.add(recipientEmail.trim());
+  }
+  if (env.INQUIRY_NOTIFICATION_EMAIL) {
+    toSet.add(env.INQUIRY_NOTIFICATION_EMAIL.trim());
+  }
+  if (env.CONTACT_TO_EMAIL) {
+    toSet.add(env.CONTACT_TO_EMAIL.trim());
+  }
+  toSet.add('info@ultronfinancials.com');
+  toSet.add('het@mutanttechnologies.com');
+
+  const toRecipients = Array.from(toSet);
 
   // Determine CC recipients
   const ccEmails: string[] = [];
-  const rawCc = ccEmail || env.INQUIRY_CC_EMAIL || 'het@mutanttechnologies.com';
+  const rawCc = ccEmail || env.INQUIRY_CC_EMAIL;
   if (Array.isArray(rawCc)) {
     ccEmails.push(...rawCc.filter((item): item is string => Boolean(item && item.trim())));
   } else if (rawCc && rawCc.trim()) {
@@ -88,7 +95,7 @@ export async function sendEnquiryNotification(
 
   if (!env.RESEND_API_KEY) {
     console.warn(
-      `[Mailer] Email delivery skipped for enquiry ${referenceNumber} (${toEmail}): RESEND_API_KEY is not configured.`,
+      `[Mailer] Email delivery skipped for enquiry ${referenceNumber} (${toRecipients.join(', ')}): RESEND_API_KEY is not configured.`,
     );
     return {
       success: false,
@@ -265,7 +272,7 @@ Ultron Financials Advisory Lead System
       },
       body: JSON.stringify({
         from: fromEmail,
-        to: [toEmail],
+        to: toRecipients,
         cc: ccEmails.length > 0 ? ccEmails : undefined,
         reply_to: email,
         subject,
@@ -293,7 +300,7 @@ Ultron Financials Advisory Lead System
     }
 
     console.warn(
-      `[Mailer] Email notification delivered successfully for enquiry ${referenceNumber} to ${toEmail} (ID: ${resendJson.id})`,
+      `[Mailer] Email notification delivered successfully for enquiry ${referenceNumber} to ${toRecipients.join(', ')} (ID: ${resendJson.id})`,
     );
     return {
       success: true,
