@@ -28,18 +28,16 @@ export default async function AdminDashboardPage() {
   const { data: rawEnquiries } = await supabase
     .from('enquiries')
     .select(
-      'id, reference_number, full_name, email, phone, company_name, business_type, service, status, source_page, form_name, submitted_at, created_at',
+      'id, reference_number, full_name, email, phone, company_name, business_type, service, status, source_page, submitted_at, created_at',
     )
     .is('archived_at', null)
     .order('created_at', { ascending: false });
 
-  const allList = (rawEnquiries || []) as unknown as (EnquiryRecord & {
-    source_page?: string | null;
-    form_name?: string | null;
-  })[];
+  const allList = (rawEnquiries || []) as unknown as EnquiryRecord[];
 
-  const isPartnerLead = (e: (typeof allList)[number]) =>
-    e.source_page === '/partner' || e.form_name === 'Partner Enquiry Form';
+  const isPartnerLead = (e: EnquiryRecord) =>
+    e.source_page === '/partner' ||
+    Boolean(e.source_page && e.source_page.toLowerCase().includes('partner'));
 
   const consultationList = allList.filter((e) => !isPartnerLead(e));
   const partnerList = allList.filter((e) => isPartnerLead(e));

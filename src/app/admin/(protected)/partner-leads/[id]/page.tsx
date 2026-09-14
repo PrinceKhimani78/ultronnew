@@ -250,7 +250,7 @@ export default async function PartnerLeadDetailPage({ params }: Props) {
                   Form Name
                 </span>
                 <span className="font-mono text-slate-700">
-                  {enquiry.form_name || 'Partner Enquiry Form'}
+                  Partner Enquiry Form
                 </span>
               </div>
               <div>

@@ -37,7 +37,7 @@ export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
   let query = supabase.from('enquiries').select('*', { count: 'exact' });
 
   // Filter ONLY Partner With Us submissions
-  query = query.or('source_page.eq./partner,form_name.eq.Partner Enquiry Form');
+  query = query.ilike('source_page', '%partner%');
 
   // Handle Archive filter vs Active
   if (status === 'archived') {

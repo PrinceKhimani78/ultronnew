@@ -37,8 +37,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
   let query = supabase.from('enquiries').select('*', { count: 'exact' });
 
   // Exclude Partner With Us submissions from Consultation Enquiries
-  query = query.or('source_page.is.null,source_page.neq./partner');
-  query = query.or('form_name.is.null,form_name.neq.Partner Enquiry Form');
+  query = query.or('source_page.is.null,source_page.not.ilike.*partner*');
 
   // Handle Archive filter vs Active
   if (status === 'archived') {
