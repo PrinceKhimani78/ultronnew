@@ -2,6 +2,7 @@ import {
   CheckCircle2,
   Clock,
   FileText,
+  Handshake,
   Inbox,
   Layers,
   PlusCircle,
@@ -27,27 +28,50 @@ export default async function AdminDashboardPage() {
   const { data: rawEnquiries } = await supabase
     .from('enquiries')
     .select(
-      'id, reference_number, full_name, email, service, status, submitted_at, created_at',
+      'id, reference_number, full_name, email, phone, company_name, business_type, service, status, source_page, form_name, submitted_at, created_at',
     )
     .is('archived_at', null)
     .order('created_at', { ascending: false });
 
-  const list = (rawEnquiries || []) as unknown as EnquiryRecord[];
+  const allList = (rawEnquiries || []) as unknown as (EnquiryRecord & {
+    source_page?: string | null;
+    form_name?: string | null;
+  })[];
 
-  const total = list.length;
-  const countNew = list.filter((e) => e.status === 'new').length;
-  const countReviewing = list.filter((e) => e.status === 'reviewing').length;
-  const countContacted = list.filter((e) => e.status === 'contacted').length;
-  const countQualified = list.filter((e) => e.status === 'qualified').length;
-  const countConverted = list.filter((e) => e.status === 'converted').length;
+  const isPartnerLead = (e: (typeof allList)[number]) =>
+    e.source_page === '/partner' || e.form_name === 'Partner Enquiry Form';
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const countLast7Days = list.filter(
-    (e) => new Date(e.submitted_at || e.created_at) >= sevenDaysAgo,
-  ).length;
+  const consultationList = allList.filter((e) => !isPartnerLead(e));
+  const partnerList = allList.filter((e) => isPartnerLead(e));
 
-  const recentList = list.slice(0, 8);
+  const getMetrics = (items: typeof allList) => {
+    const total = items.length;
+    const countNew = items.filter((e) => e.status === 'new').length;
+    const countReviewing = items.filter((e) => e.status === 'reviewing').length;
+    const countContacted = items.filter((e) => e.status === 'contacted').length;
+    const countQualified = items.filter((e) => e.status === 'qualified').length;
+    const countConverted = items.filter((e) => e.status === 'converted').length;
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const countLast7Days = items.filter(
+      (e) => new Date(e.submitted_at || e.created_at) >= sevenDaysAgo,
+    ).length;
+    return {
+      total,
+      countNew,
+      countReviewing,
+      countContacted,
+      countQualified,
+      countConverted,
+      countLast7Days,
+    };
+  };
+
+  const consultationMetrics = getMetrics(consultationList);
+  const partnerMetrics = getMetrics(partnerList);
+
+  const recentConsultations = consultationList.slice(0, 5);
+  const recentPartnerLeads = partnerList.slice(0, 5);
 
   // Fetch CMS Content Metrics
   const { data: blogData } = await supabase
@@ -82,157 +106,301 @@ export default async function AdminDashboardPage() {
   const visibleTeam = teamList.filter((t) => t.is_visible).length;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Header Banner */}
       <div>
         <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
           Lead Overview & Performance
         </h2>
         <p className="mt-1 text-sm text-slate-600">
-          Real-time snapshot of consultation enquiries submitted through the
-          Ultron Financials website.
+          Real-time snapshot of consultation requests and partner form
+          submissions.
         </p>
       </div>
 
-      {/* Metrics Cards Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
-        <StatCard
-          label="Total Leads"
-          value={total}
-          icon={Inbox}
-          color="text-slate-700"
-        />
-        <StatCard
-          label="New"
-          value={countNew}
-          icon={Clock}
-          color="text-blue-600"
-        />
-        <StatCard
-          label="Reviewing"
-          value={countReviewing}
-          icon={FileText}
-          color="text-purple-600"
-        />
-        <StatCard
-          label="Contacted"
-          value={countContacted}
-          icon={Users}
-          color="text-amber-600"
-        />
-        <StatCard
-          label="Qualified"
-          value={countQualified}
-          icon={UserCheck}
-          color="text-teal-600"
-        />
-        <StatCard
-          label="Converted"
-          value={countConverted}
-          icon={CheckCircle2}
-          color="text-emerald-600"
-        />
-        <StatCard
-          label="Last 7 Days"
-          value={countLast7Days}
-          icon={TrendingUp}
-          color="text-indigo-600"
-        />
-      </div>
-
-      {/* Recent Enquiries Table */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-xs">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <div>
-            <h3 className="font-display text-base font-bold text-slate-900 uppercase">
-              Recent Submissions
-            </h3>
-            <p className="text-xs text-slate-500">
-              Latest incoming consultation leads across website forms
-            </p>
-          </div>
+      {/* --- Consultation Enquiries Section --- */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-display flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900">
+            <Inbox className="h-5 w-5 text-[#035551]" />
+            Consultation Enquiries Snapshot
+          </h3>
           <Link
             href="/admin/enquiries"
             className="text-xs font-bold text-[#035551] uppercase hover:underline"
           >
-            View All Leads →
+            View All Consultation Enquiries →
           </Link>
         </div>
 
-        {recentList.length === 0 ? (
-          <div className="p-12 text-center text-sm text-slate-500">
-            No enquiries recorded yet. Submissions from the website will appear
-            here.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-600">
-              <thead className="border-b border-slate-200 bg-slate-50/50 text-xs font-bold tracking-wider text-slate-500 uppercase">
-                <tr>
-                  <th scope="col" className="px-6 py-3.5">
-                    Reference
-                  </th>
-                  <th scope="col" className="px-6 py-3.5">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3.5">
-                    Service
-                  </th>
-                  <th scope="col" className="px-6 py-3.5">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3.5">
-                    Submitted
-                  </th>
-                  <th scope="col" className="px-6 py-3.5 text-right">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {recentList.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="transition-colors hover:bg-slate-50/80"
-                  >
-                    <td className="px-6 py-4 font-mono text-xs font-bold text-slate-900">
-                      {item.reference_number}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-slate-900">
-                      {item.full_name}
-                      <span className="block text-xs text-slate-500">
-                        {item.email}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-xs font-semibold text-slate-700">
-                      {item.service || 'General Enquiry'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <EnquiryStatusBadge status={item.status} />
-                    </td>
-                    <td className="px-6 py-4 text-xs text-slate-500">
-                      {new Date(
-                        item.submitted_at || item.created_at,
-                      ).toLocaleDateString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Link
-                        href={`/admin/enquiries/${item.id}`}
-                        className="rounded-md bg-[#035551]/10 px-3 py-1.5 text-xs font-bold text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
-                      >
-                        View Details
-                      </Link>
-                    </td>
+        {/* Consultation Metrics Cards Grid */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+          <StatCard
+            label="Total Consultation"
+            value={consultationMetrics.total}
+            icon={Inbox}
+            color="text-slate-700"
+          />
+          <StatCard
+            label="New"
+            value={consultationMetrics.countNew}
+            icon={Clock}
+            color="text-blue-600"
+          />
+          <StatCard
+            label="Reviewing"
+            value={consultationMetrics.countReviewing}
+            icon={FileText}
+            color="text-purple-600"
+          />
+          <StatCard
+            label="Contacted"
+            value={consultationMetrics.countContacted}
+            icon={Users}
+            color="text-amber-600"
+          />
+          <StatCard
+            label="Qualified"
+            value={consultationMetrics.countQualified}
+            icon={UserCheck}
+            color="text-teal-600"
+          />
+          <StatCard
+            label="Converted"
+            value={consultationMetrics.countConverted}
+            icon={CheckCircle2}
+            color="text-emerald-600"
+          />
+          <StatCard
+            label="Last 7 Days"
+            value={consultationMetrics.countLast7Days}
+            icon={TrendingUp}
+            color="text-indigo-600"
+          />
+        </div>
+
+        {/* Recent Consultation Enquiries Table */}
+        <div className="rounded-xl border border-slate-200 bg-white shadow-xs">
+          {recentConsultations.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-500">
+              No consultation enquiries recorded yet.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-slate-600">
+                <thead className="border-b border-slate-200 bg-slate-50/50 text-xs font-bold tracking-wider text-slate-500 uppercase">
+                  <tr>
+                    <th scope="col" className="px-6 py-3.5">
+                      Reference
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Name / Email
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Service
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Submitted
+                    </th>
+                    <th scope="col" className="px-6 py-3.5 text-right">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {recentConsultations.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="transition-colors hover:bg-slate-50/80"
+                    >
+                      <td className="px-6 py-4 font-mono text-xs font-bold text-slate-900">
+                        {item.reference_number}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-slate-900">
+                        {item.full_name}
+                        <span className="block text-xs text-slate-500">
+                          {item.email}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-xs font-semibold text-slate-700">
+                        {item.service || 'General Enquiry'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <EnquiryStatusBadge status={item.status} />
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-500">
+                        {new Date(
+                          item.submitted_at || item.created_at,
+                        ).toLocaleDateString(undefined, {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Link
+                          href={`/admin/enquiries/${item.id}`}
+                          className="rounded-md bg-[#035551]/10 px-3 py-1.5 text-xs font-bold text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* --- Dedicated Partner Leads Section --- */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-display flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900">
+            <Handshake className="h-5 w-5 text-amber-600" />
+            Partner Leads Snapshot
+          </h3>
+          <Link
+            href="/admin/partner-leads"
+            className="text-xs font-bold text-[#035551] uppercase hover:underline"
+          >
+            View All Partner Leads →
+          </Link>
+        </div>
+
+        {/* Partner Metrics Cards Grid */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+          <StatCard
+            label="Total Partner Leads"
+            value={partnerMetrics.total}
+            icon={Handshake}
+            color="text-amber-700"
+          />
+          <StatCard
+            label="New"
+            value={partnerMetrics.countNew}
+            icon={Clock}
+            color="text-blue-600"
+          />
+          <StatCard
+            label="Reviewing"
+            value={partnerMetrics.countReviewing}
+            icon={FileText}
+            color="text-purple-600"
+          />
+          <StatCard
+            label="Contacted"
+            value={partnerMetrics.countContacted}
+            icon={Users}
+            color="text-amber-600"
+          />
+          <StatCard
+            label="Qualified"
+            value={partnerMetrics.countQualified}
+            icon={UserCheck}
+            color="text-teal-600"
+          />
+          <StatCard
+            label="Converted"
+            value={partnerMetrics.countConverted}
+            icon={CheckCircle2}
+            color="text-emerald-600"
+          />
+          <StatCard
+            label="Last 7 Days"
+            value={partnerMetrics.countLast7Days}
+            icon={TrendingUp}
+            color="text-indigo-600"
+          />
+        </div>
+
+        {/* Recent Partner Leads Table */}
+        <div className="rounded-xl border border-slate-200 bg-white shadow-xs">
+          {recentPartnerLeads.length === 0 ? (
+            <div className="p-8 text-center text-sm text-slate-500">
+              No partner leads recorded yet. Submissions from the Partner With
+              Us form will appear here.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-slate-600">
+                <thead className="border-b border-slate-200 bg-slate-50/50 text-xs font-bold tracking-wider text-slate-500 uppercase">
+                  <tr>
+                    <th scope="col" className="px-6 py-3.5">
+                      Reference
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Partner / Email
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Company / Business
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Service
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Status
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Submitted
+                    </th>
+                    <th scope="col" className="px-6 py-3.5 text-right">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {recentPartnerLeads.map((item) => (
+                    <tr
+                      key={item.id}
+                      className="transition-colors hover:bg-slate-50/80"
+                    >
+                      <td className="px-6 py-4 font-mono text-xs font-bold text-slate-900">
+                        {item.reference_number}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-slate-900">
+                        {item.full_name}
+                        <span className="block text-xs text-slate-500">
+                          {item.email}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-xs font-semibold text-slate-700">
+                        {item.company_name || item.business_type || '—'}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-semibold text-slate-700">
+                        {item.service || 'General Partner'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <EnquiryStatusBadge status={item.status} />
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-500">
+                        {new Date(
+                          item.submitted_at || item.created_at,
+                        ).toLocaleDateString(undefined, {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <Link
+                          href={`/admin/partner-leads/${item.id}`}
+                          className="rounded-md bg-amber-600/10 px-3 py-1.5 text-xs font-bold text-amber-700 uppercase transition-all hover:bg-amber-600 hover:text-white"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Website Content Overview Section */}

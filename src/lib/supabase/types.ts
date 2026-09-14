@@ -78,6 +78,7 @@ export interface Database {
           service: string | null;
           message: string | null;
           source_page: string | null;
+          form_name?: string | null;
           utm_source: string | null;
           utm_medium: string | null;
           utm_campaign: string | null;
@@ -104,6 +105,7 @@ export interface Database {
           service?: string | null;
           message?: string | null;
           source_page?: string | null;
+          form_name?: string | null;
           utm_source?: string | null;
           utm_medium?: string | null;
           utm_campaign?: string | null;

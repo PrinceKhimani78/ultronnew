@@ -1,4 +1,4 @@
-import { Search, X } from 'lucide-react';
+import { Handshake, Search, X } from 'lucide-react';
 import Link from 'next/link';
 
 import { EnquiryPriorityBadge } from '@/components/admin/EnquiryPriorityBadge';
@@ -23,7 +23,7 @@ type Props = {
 
 const PAGE_SIZE = 20;
 
-export default async function AdminEnquiriesPage({ searchParams }: Props) {
+export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
   await requireAdmin();
 
   const { q, status, service, priority, page } = await searchParams;
@@ -36,9 +36,8 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
 
   let query = supabase.from('enquiries').select('*', { count: 'exact' });
 
-  // Exclude Partner With Us submissions from Consultation Enquiries
-  query = query.or('source_page.is.null,source_page.neq./partner');
-  query = query.or('form_name.is.null,form_name.neq.Partner Enquiry Form');
+  // Filter ONLY Partner With Us submissions
+  query = query.or('source_page.eq./partner,form_name.eq.Partner Enquiry Form');
 
   // Handle Archive filter vs Active
   if (status === 'archived') {
@@ -58,12 +57,12 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
     query = query.eq('priority', priority as EnquiryPriority);
   }
 
-  // Handle text search safely escaping PostgREST syntax
+  // Handle text search safely
   if (q && q.trim() !== '') {
     const sanitized = q.trim().replace(/[%_(),]/g, '');
     if (sanitized) {
       query = query.or(
-        `reference_number.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,phone.ilike.%${sanitized}%`,
+        `reference_number.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,phone.ilike.%${sanitized}%,company_name.ilike.%${sanitized}%,business_type.ilike.%${sanitized}%`,
       );
     }
   }
@@ -76,7 +75,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
     .order('created_at', { ascending: false })
     .range(fromIndex, toIndex);
 
-  const enquiries = (rawEnquiries || []) as unknown as EnquiryRecord[];
+  const partnerLeads = (rawEnquiries || []) as unknown as EnquiryRecord[];
 
   const totalRecords = count || 0;
   const totalPages = Math.ceil(totalRecords / PAGE_SIZE);
@@ -86,11 +85,13 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-            Consultation Enquiries
+          <h2 className="font-display flex items-center gap-2.5 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            <Handshake className="h-7 w-7 text-[#035551]" />
+            Partner Leads
           </h2>
           <p className="mt-1 text-sm text-slate-600">
-            Search, filter, and review website consultation requests.
+            Search, filter, and manage submissions from the Partner With Us
+            form.
           </p>
         </div>
       </div>
@@ -99,7 +100,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
         <form
           method="GET"
-          action="/admin/enquiries"
+          action="/admin/partner-leads"
           autoComplete="off"
           data-lpignore="true"
           data-form-type="other"
@@ -114,7 +115,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
               defaultValue={q || ''}
               data-lpignore="true"
               data-form-type="other"
-              placeholder="Search reference, name, email or phone..."
+              placeholder="Search reference, partner name, company, email..."
               className="block w-full rounded-lg border border-slate-300 bg-slate-50/50 py-2 pr-3 pl-9 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#035551] focus:bg-white focus:ring-2 focus:ring-[#035551]/20 focus:outline-hidden"
             />
           </div>
@@ -140,26 +141,20 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
             </select>
           </div>
 
-          {/* Service Dropdown */}
+          {/* Priority Dropdown */}
           <div>
             <select
-              name="service"
-              defaultValue={service || 'all'}
+              name="priority"
+              defaultValue={priority || 'all'}
               data-lpignore="true"
               data-form-type="other"
               className="block w-full rounded-lg border border-slate-300 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 focus:border-[#035551] focus:bg-white focus:ring-2 focus:ring-[#035551]/20 focus:outline-hidden"
             >
-              <option value="all">All Services</option>
-              <option value="Business Banking">Business Banking</option>
-              <option value="Business Setup">Business Setup</option>
-              <option value="Financial Advisory">Financial Advisory</option>
-              <option value="Tax Structuring Advisory">
-                Tax Structuring Advisory
-              </option>
-              <option value="Business Finance">Business Finance</option>
-              <option value="Real Estate Mortgages">
-                Real Estate Mortgages
-              </option>
+              <option value="all">All Priorities</option>
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
             </select>
           </div>
 
@@ -173,7 +168,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
             </button>
             {(q || status || service || priority) && (
               <Link
-                href="/admin/enquiries"
+                href="/admin/partner-leads"
                 className="flex items-center justify-center rounded-lg border border-slate-300 bg-slate-100 p-2 text-slate-600 hover:bg-slate-200"
                 title="Clear Filters"
               >
@@ -188,12 +183,12 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
       <div className="rounded-xl border border-slate-200 bg-white shadow-xs">
         {error ? (
           <div className="p-8 text-center text-sm text-red-600">
-            Error loading enquiries. Please check database permissions or try
-            again.
+            Error loading partner leads. Please check database permissions or
+            try again.
           </div>
-        ) : !enquiries || enquiries.length === 0 ? (
+        ) : !partnerLeads || partnerLeads.length === 0 ? (
           <div className="p-12 text-center text-sm text-slate-500">
-            No enquiries match the selected filters or search terms.
+            No partner leads match the selected filters or search terms.
           </div>
         ) : (
           <>
@@ -206,7 +201,10 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                       Reference
                     </th>
                     <th scope="col" className="px-6 py-3.5">
-                      Name / Email
+                      Partner / Email
+                    </th>
+                    <th scope="col" className="px-6 py-3.5">
+                      Company / Business
                     </th>
                     <th scope="col" className="px-6 py-3.5">
                       Service
@@ -226,7 +224,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
-                  {enquiries.map((item) => (
+                  {partnerLeads.map((item) => (
                     <tr
                       key={item.id}
                       className="transition-colors hover:bg-slate-50/80"
@@ -247,8 +245,13 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-xs font-semibold text-slate-700">
-                        {item.service || 'General Enquiry'}
+                      <td className="px-6 py-4 text-xs font-semibold text-slate-800">
+                        {item.company_name ||
+                          item.business_type ||
+                          'Individual / Not specified'}
+                      </td>
+                      <td className="px-6 py-4 text-xs font-semibold text-[#035551]">
+                        {item.service || 'General Partner'}
                       </td>
                       <td className="px-6 py-4">
                         <EnquiryStatusBadge status={item.status} />
@@ -267,7 +270,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <Link
-                          href={`/admin/enquiries/${item.id}`}
+                          href={`/admin/partner-leads/${item.id}`}
                           className="rounded-md bg-[#035551]/10 px-3 py-1.5 text-xs font-bold text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
                         >
                           View Details
@@ -281,7 +284,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
 
             {/* Mobile Stacked Card View */}
             <div className="divide-y divide-slate-200 md:hidden">
-              {enquiries.map((item) => (
+              {partnerLeads.map((item) => (
                 <div key={item.id} className="space-y-3 p-4">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-bold text-slate-900">
@@ -296,8 +299,13 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                     <p className="text-xs text-slate-600">
                       {item.email} • {item.phone || 'No phone'}
                     </p>
-                    <p className="mt-1 text-xs font-semibold text-[#035551]">
-                      {item.service || 'General Enquiry'}
+                    <p className="mt-1 text-xs font-semibold text-slate-700">
+                      {item.company_name ||
+                        item.business_type ||
+                        'No company listed'}
+                    </p>
+                    <p className="text-xs font-bold text-[#035551]">
+                      {item.service || 'General Partner'}
                     </p>
                   </div>
                   <div className="flex items-center justify-between border-t border-slate-100 pt-2">
@@ -307,7 +315,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                       ).toLocaleDateString()}
                     </span>
                     <Link
-                      href={`/admin/enquiries/${item.id}`}
+                      href={`/admin/partner-leads/${item.id}`}
                       className="rounded-md bg-[#035551] px-3 py-1 text-xs font-bold text-white uppercase"
                     >
                       View Details
@@ -328,7 +336,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                 <div className="flex items-center gap-2">
                   {currentPage > 1 && (
                     <Link
-                      href={`/admin/enquiries?page=${currentPage - 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}`}
+                      href={`/admin/partner-leads?page=${currentPage - 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}${priority ? `&priority=${priority}` : ''}`}
                       className="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
                       Previous
@@ -336,7 +344,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                   )}
                   {currentPage < totalPages && (
                     <Link
-                      href={`/admin/enquiries?page=${currentPage + 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}`}
+                      href={`/admin/partner-leads?page=${currentPage + 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}${priority ? `&priority=${priority}` : ''}`}
                       className="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
                       Next

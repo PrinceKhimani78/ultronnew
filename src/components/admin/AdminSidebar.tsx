@@ -3,6 +3,7 @@
 import {
   BarChart3,
   FileText,
+  Handshake,
   Inbox,
   Layers,
   LogOut,
@@ -22,7 +23,8 @@ type Props = {
 
 const NAV_ITEMS = [
   { label: 'Overview', href: '/admin', icon: BarChart3 },
-  { label: 'Enquiries', href: '/admin/enquiries', icon: Inbox },
+  { label: 'Consultation Enquiries', href: '/admin/enquiries', icon: Inbox },
+  { label: 'Partner Leads', href: '/admin/partner-leads', icon: Handshake },
   { label: 'Blog Posts', href: '/admin/blog', icon: FileText },
   { label: 'Services', href: '/admin/services', icon: Layers },
   { label: 'Team Members', href: '/admin/team', icon: Users },
