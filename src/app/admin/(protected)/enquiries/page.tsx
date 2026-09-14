@@ -267,7 +267,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={`/admin/enquiries/${item.id}`}
-                          className="rounded-md bg-[#035551]/10 px-3 py-1.5 text-xs font-bold text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
+                          className="inline-flex items-center justify-center rounded-lg bg-[#035551]/10 px-3.5 py-1.5 text-xs font-bold whitespace-nowrap text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
                         >
                           View Details
                         </Link>
@@ -307,7 +307,7 @@ export default async function AdminEnquiriesPage({ searchParams }: Props) {
                     </span>
                     <Link
                       href={`/admin/enquiries/${item.id}`}
-                      className="rounded-md bg-[#035551] px-3 py-1 text-xs font-bold text-white uppercase"
+                      className="inline-flex items-center justify-center rounded-md bg-[#035551] px-3 py-1.5 text-xs font-bold whitespace-nowrap text-white uppercase"
                     >
                       View Details
                     </Link>

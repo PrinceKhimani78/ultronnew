@@ -241,7 +241,7 @@ export default async function AdminDashboardPage() {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={`/admin/enquiries/${item.id}`}
-                          className="rounded-md bg-[#035551]/10 px-3 py-1.5 text-xs font-bold text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
+                          className="inline-flex items-center justify-center rounded-lg bg-[#035551]/10 px-3.5 py-1.5 text-xs font-bold whitespace-nowrap text-[#035551] uppercase transition-all hover:bg-[#035551] hover:text-white"
                         >
                           View Details
                         </Link>
@@ -387,7 +387,7 @@ export default async function AdminDashboardPage() {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={`/admin/partner-leads/${item.id}`}
-                          className="rounded-md bg-amber-600/10 px-3 py-1.5 text-xs font-bold text-amber-700 uppercase transition-all hover:bg-amber-600 hover:text-white"
+                          className="inline-flex items-center justify-center rounded-lg bg-amber-600/10 px-3.5 py-1.5 text-xs font-bold whitespace-nowrap text-amber-700 uppercase transition-all hover:bg-amber-600 hover:text-white"
                         >
                           View Details
                         </Link>
