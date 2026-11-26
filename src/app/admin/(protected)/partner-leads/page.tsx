@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { EnquiryPriorityBadge } from '@/components/admin/EnquiryPriorityBadge';
 import { EnquiryStatusBadge } from '@/components/admin/EnquiryStatusBadge';
 import { requireAdmin } from '@/lib/admin/auth';
+import {
+  buildEnquiryPageHref,
+  fetchFilteredEnquiries,
+} from '@/lib/admin/enquiries';
 import { createClient } from '@/lib/supabase/server';
-import type {
-  EnquiryPriority,
-  EnquiryRecord,
-  EnquiryStatus,
-} from '@/lib/supabase/types';
+
+export const dynamic = 'force-dynamic';
 
 type Props = {
   searchParams: Promise<{
@@ -21,64 +22,28 @@ type Props = {
   }>;
 };
 
-const PAGE_SIZE = 20;
-
 export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
   await requireAdmin();
 
   const { q, status, service, priority, page } = await searchParams;
-
-  const currentPage = Math.max(1, parseInt(page || '1', 10));
-  const fromIndex = (currentPage - 1) * PAGE_SIZE;
-  const toIndex = fromIndex + PAGE_SIZE - 1;
-
   const supabase = await createClient();
 
-  let query = supabase.from('enquiries').select('*', { count: 'exact' });
-
-  // Filter ONLY Partner With Us submissions
-  query = query.ilike('source_page', '%partner%');
-
-  // Handle Archive filter vs Active
-  if (status === 'archived') {
-    query = query.not('archived_at', 'is', null);
-  } else {
-    query = query.is('archived_at', null);
-    if (status && status !== 'all') {
-      query = query.eq('status', status as EnquiryStatus);
-    }
-  }
-
-  if (service && service !== 'all') {
-    query = query.eq('service', service);
-  }
-
-  if (priority && priority !== 'all') {
-    query = query.eq('priority', priority as EnquiryPriority);
-  }
-
-  // Handle text search safely
-  if (q && q.trim() !== '') {
-    const sanitized = q.trim().replace(/[%_(),]/g, '');
-    if (sanitized) {
-      query = query.or(
-        `reference_number.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,phone.ilike.%${sanitized}%,company_name.ilike.%${sanitized}%,business_type.ilike.%${sanitized}%`,
-      );
-    }
-  }
-
   const {
-    data: rawEnquiries,
-    count,
+    items: partnerLeads,
+    totalRecords,
+    totalPages,
+    currentPage,
+    fromIndex,
+    toIndex,
     error,
-  } = await query
-    .order('created_at', { ascending: false })
-    .range(fromIndex, toIndex);
-
-  const partnerLeads = (rawEnquiries || []) as unknown as EnquiryRecord[];
-
-  const totalRecords = count || 0;
-  const totalPages = Math.ceil(totalRecords / PAGE_SIZE);
+  } = await fetchFilteredEnquiries(supabase, {
+    kind: 'partner',
+    q,
+    status,
+    service,
+    priority,
+    page,
+  });
 
   return (
     <div className="space-y-6">
@@ -183,8 +148,7 @@ export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
       <div className="rounded-xl border border-slate-200 bg-white shadow-xs">
         {error ? (
           <div className="p-8 text-center text-sm text-red-600">
-            Error loading partner leads. Please check database permissions or
-            try again.
+            Error loading partner leads: {error}
           </div>
         ) : !partnerLeads || partnerLeads.length === 0 ? (
           <div className="p-12 text-center text-sm text-slate-500">
@@ -336,7 +300,11 @@ export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
                 <div className="flex items-center gap-2">
                   {currentPage > 1 && (
                     <Link
-                      href={`/admin/partner-leads?page=${currentPage - 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}${priority ? `&priority=${priority}` : ''}`}
+                      href={buildEnquiryPageHref(
+                        '/admin/partner-leads',
+                        currentPage - 1,
+                        { q, status, service, priority },
+                      )}
                       className="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
                       Previous
@@ -344,7 +312,11 @@ export default async function AdminPartnerLeadsPage({ searchParams }: Props) {
                   )}
                   {currentPage < totalPages && (
                     <Link
-                      href={`/admin/partner-leads?page=${currentPage + 1}${q ? `&q=${q}` : ''}${status ? `&status=${status}` : ''}${service ? `&service=${service}` : ''}${priority ? `&priority=${priority}` : ''}`}
+                      href={buildEnquiryPageHref(
+                        '/admin/partner-leads',
+                        currentPage + 1,
+                        { q, status, service, priority },
+                      )}
                       className="rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
                       Next
