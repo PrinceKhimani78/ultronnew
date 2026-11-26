@@ -16,8 +16,11 @@ import Link from 'next/link';
 import { EnquiryStatusBadge } from '@/components/admin/EnquiryStatusBadge';
 import { StatCard } from '@/components/admin/StatCard';
 import { requireAdmin } from '@/lib/admin/auth';
+import { isPartnerLead } from '@/lib/admin/enquiries';
 import { createClient } from '@/lib/supabase/server';
 import type { EnquiryRecord } from '@/lib/supabase/types';
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
   await requireAdmin();
@@ -34,10 +37,6 @@ export default async function AdminDashboardPage() {
     .order('created_at', { ascending: false });
 
   const allList = (rawEnquiries || []) as unknown as EnquiryRecord[];
-
-  const isPartnerLead = (e: EnquiryRecord) =>
-    e.source_page === '/partner' ||
-    Boolean(e.source_page && e.source_page.toLowerCase().includes('partner'));
 
   const consultationList = allList.filter((e) => !isPartnerLead(e));
   const partnerList = allList.filter((e) => isPartnerLead(e));
